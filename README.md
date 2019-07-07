@@ -1,7 +1,7 @@
 # nuxt-univ-create-gae-hosting 
 ```
 $ npx create-nuxt-app <project-name>
-```
+ 
 create-nuxt-app v2.8.0 
 Generating Nuxt.js project in  D:\develop-github\nuxt\create-nuxt-univ\nuxt-univ-create-gae-hosting\nuxt-univ-gae-app 
 ? Project name nuxt-univ-gae-app 
@@ -14,7 +14,7 @@ Generating Nuxt.js project in  D:\develop-github\nuxt\create-nuxt-univ\nuxt-univ
 ? Choose linting tools ESLint, Prettier 
 ? Choose test framework None 
 ? Choose rendering mode Universal (SSR) 
-
+```
 
 ## Build Setup
 
