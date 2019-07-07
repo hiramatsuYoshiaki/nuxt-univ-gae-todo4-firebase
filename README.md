@@ -1,17 +1,19 @@
-# nuxt-univ-create-gae-hosting
-
-create-nuxt-app v2.8.0
-Generating Nuxt.js project in D:\develop-github\nuxt\create-nuxt-univ\nuxt-univ-create-gae-hosting\nuxt-univ-gae-app
-? Project name nuxt-univ-gae-app
-? Project description My spectacular Nuxt.js project
-? Author name hiramatsu
-? Choose the package manager Npm
-? Choose UI framework None
-? Choose custom server framework None (Recommended)
-? Choose Nuxt.js modules Axios
-? Choose linting tools ESLint, Prettier
-? Choose test framework None
-? Choose rendering mode Universal (SSR)
+# nuxt-univ-create-gae-hosting 
+```
+$ npx create-nuxt-app <project-name>
+```
+create-nuxt-app v2.8.0 
+Generating Nuxt.js project in  D:\develop-github\nuxt\create-nuxt-univ\nuxt-univ-create-gae-hosting\nuxt-univ-gae-app 
+? Project name nuxt-univ-gae-app 
+? Project description My spectacular Nuxt.js project 
+? Author name hiramatsu 
+? Choose the package manager Npm 
+? Choose UI framework None 
+? Choose custom server framework None (Recommended) 
+? Choose Nuxt.js modules Axios 
+? Choose linting tools ESLint, Prettier 
+? Choose test framework None 
+? Choose rendering mode Universal (SSR) 
 
 
 ## Build Setup
