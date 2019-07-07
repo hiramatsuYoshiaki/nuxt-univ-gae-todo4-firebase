@@ -17,8 +17,20 @@
       <p class="subtitle">
         rendering mode Universal (SSR)
       </p>
+      <h3 class="subtitle">
+        How to Deploy Google App Engine
+      </h3>
       <p class="subtitle">
-        deploy test2
+        1.app.yaml設置
+      </p>
+      <p class="subtitle">
+        2.App Engineに新しいプロジェクトを作成する。
+      </p>
+      <p class="subtitle">
+        3.Cloud SDK をインストールし初期化する。
+      </p>
+      <p class="subtitle">
+        4.ビルドしデプロイする。
       </p>
       <div class="links">
         <!-- <a href="https://nuxtjs.org/" target="_blank" class="button--green">

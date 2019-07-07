@@ -1,4 +1,4 @@
-# nuxt-univ-gae-app
+# nuxt-univ-create-gae-hosting
 
 create-nuxt-app v2.8.0
 Generating Nuxt.js project in D:\develop-github\nuxt\create-nuxt-univ\nuxt-univ-create-gae-hosting\nuxt-univ-gae-app
@@ -38,7 +38,7 @@ For detailed explanation on how things work, checkout [Nuxt.js docs](https://nux
 ```
 runtime: nodejs10
 
-instance_class: F2
+instance_class: F1
 
 handlers:
   - url: /_nuxt
