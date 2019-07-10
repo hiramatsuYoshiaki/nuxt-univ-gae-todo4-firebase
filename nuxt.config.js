@@ -6,6 +6,8 @@ export default {
   head: {
     title: process.env.npm_package_name || '',
     meta: [
+      // { name: "google-site-verification",
+      //   content: "TaWpD9i4R5GSPzJjnTc8--t-g8bbDKbfxQX-xxxxxxx" },
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       {
@@ -23,20 +25,56 @@ export default {
   /*
    ** Global CSS
    */
-  css: [],
+  css: [
+    '@/assets/sass/styles.scss'
+  ],
   /*
    ** Plugins to load before mounting the App
    */
+  styleResources: {
+    sass: [
+      '~/assets/sass/variable.scss',
+    ],
+  },
   plugins: [],
   /*
    ** Nuxt.js modules
    */
   modules: [
-    // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    // '@nuxtjs/eslint-module'
+    '@nuxtjs/style-resources',
+    // ['@nuxtjs/google-analytics', { id: 'UA-35511262-5' }],
+    // '@nuxtjs/sitemap',
+    // '@nuxtjs/markdownit',
   ],
-  devModules: ['@nuxtjs/eslint-module'],
+  //devModules: ['@nuxtjs/eslint-module'],
+  // sitemap: {
+  //   hostname: 'https://romantic-kare-6d357c.netlify.com/',
+  //   generate: true,
+  //   routes:[
+  //     "/",
+  //     {
+  //       url: '/works',
+  //       changefreq: 'daily',
+  //       priority: 1,
+  //       lastmodISO: '2017-06-30T13:30:00.000Z'
+  //     },
+  //     "/about",
+  //     "/contact"
+  //   ]
+  // },
+  // markdownit: {
+  //   preset: 'default',
+  //   injected: true, 
+  //   breaks: true, 
+  //   html: true, 
+  //   linkify: true,
+  //   typography: true, 
+  //   xhtmlOut: true,
+  //   langPrefix: 'language-',
+  //   quotes: '“”‘’',
+  //   highlight: function (/*str, lang*/) { return ''; },
+  // },
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
@@ -63,5 +101,13 @@ export default {
         })
       }
     },
+    //autoprefixer
+    // build: {
+    //   postcss: [
+    //     require('autoprefixer')({
+    //       grid: true
+    //     })
+    //   ]
+    // }
   }
 }
