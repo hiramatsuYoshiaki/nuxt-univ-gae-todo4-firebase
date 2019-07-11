@@ -268,8 +268,11 @@ export default {
 importの記述なしで使う。
 1. install 
 ```
-npm install --save-dev @nuxtjs/style-resources
+npm install --save @nuxtjs/style-resources
 ```
+`注意`
+ --save-dev にするとgoogle app engineへデプロイ時にnot foundでエラーになる。package.jsonのdevDependenciesではエラー 
+  
 2. nuxt.config setting 
 ```
 modules: [
@@ -632,7 +635,7 @@ export const mutations = {
 ## GitHubリポジトリをcloneしてローカルプロジェクト作る 
 1. リモートリポジトリをcloneする。 
 ```
-    git clone https://github.com/hiramatsuYoshiaki/vue-cli3-app.git  
+    git clone https://github.com/hiramatsuYoshiaki/nuxt-univ-create-gae-hosting.git  
 ```
 2. インストールする  
 ```

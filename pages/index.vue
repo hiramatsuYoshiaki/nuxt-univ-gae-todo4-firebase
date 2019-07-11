@@ -1,25 +1,24 @@
 <template>
   <div class="container">
-    <div class="content-header">
-      <div class="content con-wraper">
-        <div class="con-hed-logo">
-          <logo />
+    <div class="content con-wraper">
+      <div class="con-hed-logo">
+        <logo />
+      </div>
+      <div class="con-hed-title">
+        <h2 class="title">
+          h-works
+        </h2>
+        <div class="subtitle">
+          <h5>Nuxt.js</h5>
+          <h5>Google Cloud Platform</h5>
+          <h5>App Engine</h5>
         </div>
-        <div class="con-hed-title">
-          <h2 class="title">
-            h-works
-          </h2>
-          <div class="subtitle">
-            <h5>Nuxt.js</h5>
-            <h5>Google Cloud Platform</h5>
-            <h5>App Engine</h5>
-          </div>
-          <div class="subscription">
-            <p>Nuxt Project</p>
-            <p>create-nuxt-app v2.8.0</p>
-            <p>? Choose custom server framework None</p>
-            <p>? Choose rendering mode Universal (SSR)</p>
-            <!-- <p>
+        <div class="subscription">
+          <p>Nuxt Project</p>
+          <p>create-nuxt-app v2.8.0</p>
+          <p>? Choose custom server framework None</p>
+          <p>? Choose rendering mode Universal (SSR)</p>
+          <!-- <p>
               Generating Nuxt.js project in ~\nuxt-univ-gae-app
             </p>
             <p>? Project name nuxt-univ-gae-app</p>
@@ -32,26 +31,10 @@
             <p>? Choose linting tools ESLint, Prettier</p>
             <p>? Choose test framework None</p>
             <p>? Choose rendering mode Universal (SSR)</p> -->
-          </div>
         </div>
       </div>
     </div>
     <div>
-      <!-- <h1 class="title">
-        h-works Base Template
-      </h1>
-      <h1 class="title">
-        nuxt-univ-create-gae-hosting
-      </h1>
-      <h2 class="subtitle">
-        google cloud platform App Engine
-      </h2>
-      <p class="subtitle">
-        custom server framework None
-      </p>
-      <p class="subtitle">
-        rendering mode Universal (SSR)
-      </p> -->
       <div class="links">
         <a
           href="https://nuxt-univ-gae-app.appspot.com/"
@@ -103,10 +86,12 @@ export default {
 .container {
   margin-top: $header-height;
   width: 100vw;
+  min-height: 100vh;
   @extend %center;
   flex-direction: column;
   margin: 0;
   padding: 0;
+  background: linear-gradient(#0452c7, #9dacf0);
 }
 .content {
   width: 100%;
@@ -118,26 +103,21 @@ export default {
     justify-content: flex-start;
     align-items: flex-start;
   }
-  // background: black;
-  // background: linear-gradientrgb(#0d47a1, #05fbff);
-  background: linear-gradient(#0452c7, #9dacf0);
-  // background: linear-gradient(#05fbff, #1e00ff);
 }
 // wraper-----------------------------
 .con-wraper {
-  padding: 8rem 2rem;
+  padding: 8rem 2rem 0rem 2rem;
   @media (min-width: 992px) {
-    padding: 15rem 5rem;
+    padding: 10rem 5rem 0rem 5rem;
   }
 }
 //header-----------------------------
-.content-header {
-  width: 100vw;
-  height: 100vh;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-}
+// .content-header {
+//   width: 100vw;
+//   background-size: cover;
+//   background-repeat: no-repeat;
+//   background-position: center;
+// }
 .con-hed-logo {
   @extend %center;
   width: 100%;
@@ -348,6 +328,7 @@ export default {
 
 .links {
   @extend %center;
+  margin: 2rem;
 }
 .links a {
   display: inline-block;
