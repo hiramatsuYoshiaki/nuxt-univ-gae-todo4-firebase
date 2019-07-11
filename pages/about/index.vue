@@ -53,10 +53,10 @@ export default {
   data() {
     return {
       img: require('~/assets/img/img2722.jpg'),
-      pageTitle: 'About Content',
-      pageSubTitle: 'Demo Site Usage',
-      pageDiscription: 'about setting',
-      pageDiscriptionDetail: 'デモサイトの簡単なセットアップ方法について'
+      pageTitle: 'About GCP',
+      pageSubTitle: 'Nuxt.js Demo Site Hosting',
+      pageDiscription: 'App Engine',
+      pageDiscriptionDetail: 'GCP App Engineを使ってホスティング'
     }
   },
   head() {
@@ -77,15 +77,15 @@ export default {
     page() {
       return this.$store.state.page
     }
+  },
+  methods: {
+    link_commit(linkPath) {
+      this.$store.commit('pagePathSet', linkPath)
+      setTimeout(() => {
+        this.$router.push({ path: linkPath })
+      }, 500)
+    }
   }
-  // methods: {
-  //   link_commit(linkPath) {
-  //     this.$store.commit('pagePathSet', linkPath)
-  //     setTimeout(() => {
-  //       this.$router.push({ path: link_path })
-  //     }, 500)
-  //   }
-  // }
 }
 </script>
 <style scoped lang="scss">

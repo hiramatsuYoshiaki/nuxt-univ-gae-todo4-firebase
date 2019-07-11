@@ -125,10 +125,4 @@ export default {
   @extend %center;
   flex-direction: column;
 }
-
-// .bgImage {
-//   width: 100vw;
-//   height: 100vh;
-//   background-size: 100% auto;
-// }
 </style>

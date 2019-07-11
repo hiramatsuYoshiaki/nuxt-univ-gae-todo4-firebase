@@ -16,7 +16,13 @@ export default {
         content: process.env.npm_package_description || ''
       }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    link: [
+      // { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/h-logo-white.ico' },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto' },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' }
+    ]
+    
   },
   /*
    ** Customize the progress-bar color
@@ -31,11 +37,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  styleResources: {
-    sass: [
-      '~/assets/sass/variable.scss',
-    ],
-  },
+  
   plugins: [],
   /*
    ** Nuxt.js modules
@@ -45,8 +47,13 @@ export default {
     '@nuxtjs/style-resources',
     // ['@nuxtjs/google-analytics', { id: 'UA-35511262-5' }],
     // '@nuxtjs/sitemap',
-    // '@nuxtjs/markdownit',
+    '@nuxtjs/markdownit',
   ],
+  styleResources: {
+    sass: [
+      '~/assets/sass/variable.scss',
+    ],
+  },
   //devModules: ['@nuxtjs/eslint-module'],
   // sitemap: {
   //   hostname: 'https://romantic-kare-6d357c.netlify.com/',
@@ -63,18 +70,18 @@ export default {
   //     "/contact"
   //   ]
   // },
-  // markdownit: {
-  //   preset: 'default',
-  //   injected: true, 
-  //   breaks: true, 
-  //   html: true, 
-  //   linkify: true,
-  //   typography: true, 
-  //   xhtmlOut: true,
-  //   langPrefix: 'language-',
-  //   quotes: '“”‘’',
-  //   highlight: function (/*str, lang*/) { return ''; },
-  // },
+  markdownit: {
+    preset: 'default',
+    injected: true, 
+    breaks: true, 
+    html: true, 
+    linkify: true,
+    typography: true, 
+    xhtmlOut: true,
+    langPrefix: 'language-',
+    quotes: '“”‘’',
+    highlight: function (/*str, lang*/) { return ''; },
+  },
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
