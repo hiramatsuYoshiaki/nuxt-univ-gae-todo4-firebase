@@ -38,17 +38,27 @@ export default {
    ** Plugins to load before mounting the App
    */
   
-  plugins: [],
+  plugins: [
+    '~/plugins/firebase'
+  ],
   /*
    ** Nuxt.js modules
    */
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/style-resources',
-    // ['@nuxtjs/google-analytics', { id: 'UA-35511262-5' }],
+    // ['@nuxtjs/google-analytics', { id: 'UA-xxxxxxxx-5' }],
     // '@nuxtjs/sitemap',
     '@nuxtjs/markdownit',
+    '@nuxtjs/dotenv'
   ],
+  env: {
+    FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
+    FIREBASE_AUTH_DOMAIN: process.env.FIREBASE_AUTH_DOMAIN,
+    FIREBASE_DATABASEURL: process.env.FIREBASE_DATABASEURL,
+    FIREBASE_PROJECTID: process.env.FIREBASE_PROJECTID,
+    FIREBASE_STORAGEBUCKET: process.env.FIREBASE_STORAGEBUCKET,
+  },
   styleResources: {
     sass: [
       '~/assets/sass/variable.scss',

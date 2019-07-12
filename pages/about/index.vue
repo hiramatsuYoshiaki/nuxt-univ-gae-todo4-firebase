@@ -53,10 +53,10 @@ export default {
   data() {
     return {
       img: require('~/assets/img/img2722.jpg'),
-      pageTitle: 'About GCP',
-      pageSubTitle: 'Nuxt.js Demo Site Hosting',
-      pageDiscription: 'App Engine',
-      pageDiscriptionDetail: 'GCP App Engineを使ってホスティング'
+      pageTitle: 'CRUD',
+      pageSubTitle: 'Firebase',
+      pageDiscription: 'Database Strage',
+      pageDiscriptionDetail: 'Todoリストを作成するデモ'
     }
   },
   head() {

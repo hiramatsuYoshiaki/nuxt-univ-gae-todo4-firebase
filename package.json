@@ -19,7 +19,10 @@
     "@nuxtjs/markdownit": "^1.2.5",
     "@nuxtjs/sitemap": "^1.2.0",
     "@nuxtjs/style-resources": "^0.1.2",
-    "nuxt": "^2.0.0"
+    "firebase": "^6.3.0",
+    "nuxt": "^2.0.0",
+    "vue": "^2.6.10",
+    "vuexfire": "^3.0.0-alpha.18"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^0.0.1",

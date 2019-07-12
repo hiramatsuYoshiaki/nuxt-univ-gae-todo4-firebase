@@ -14,37 +14,24 @@
           <h5>App Engine</h5>
         </div>
         <div class="subscription">
-          <p>Nuxt Project</p>
-          <p>create-nuxt-app v2.8.0</p>
-          <p>? Choose custom server framework None</p>
-          <p>? Choose rendering mode Universal (SSR)</p>
-          <!-- <p>
-              Generating Nuxt.js project in ~\nuxt-univ-gae-app
-            </p>
-            <p>? Project name nuxt-univ-gae-app</p>
-            <p>? Project description My spectacular Nuxt.js project</p>
-            <p>? Author name hiramatsu</p>
-            <p>? Choose the package manager Npm</p>
-            <p>? Choose UI framework None</p>
-            <p>? Choose custom server framework None (Recommended)</p>
-            <p>? Choose Nuxt.js modules Axios</p>
-            <p>? Choose linting tools ESLint, Prettier</p>
-            <p>? Choose test framework None</p>
-            <p>? Choose rendering mode Universal (SSR)</p> -->
+          <h5>Firebase</h5>
+          <p>Authentication</p>
+          <p>Database</p>
+          <p>Strage</p>
         </div>
       </div>
     </div>
-    <div>
+    <!-- <div>
       <div class="links">
         <a
-          href="https://nuxt-univ-gae-app.appspot.com/"
+          href="https://nuxt-univ-create-gae-todo.appspot.com/"
           target="_blank"
           class="button--green"
         >
           Demo App (Google App Engine)
         </a>
         <a
-          href="https://github.com/hiramatsuYoshiaki/nuxt-univ-create-gae-hosting"
+          href="https://github.com/hiramatsuYoshiaki/nuxt-univ-create-gae-todo"
           target="_blank"
           class="button--grey"
         >
@@ -68,7 +55,7 @@
       <p class="subtitle">
         4.ビルドしデプロイする。
       </p>
-    </div>
+    </div> -->
   </div>
 </template>
 
