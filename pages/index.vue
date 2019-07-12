@@ -35,7 +35,6 @@
       </div>
     </div>
     <div>
-
       <div class="links">
         <a
           href="https://nuxt-univ-gae-app.appspot.com/"
@@ -52,7 +51,7 @@
           nuxt-univ-create-gae-hosting (GitHub )
         </a>
       </div>
-      <br>
+      <br />
 
       <h3 class="subtitle">
         How to Deploy Google App Engine
@@ -69,7 +68,6 @@
       <p class="subtitle">
         4.ビルドしデプロイする。
       </p>
-      
     </div>
   </div>
 </template>
