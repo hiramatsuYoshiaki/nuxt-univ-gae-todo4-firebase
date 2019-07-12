@@ -310,10 +310,11 @@ export default firebase
 ```
   
 
-## firestone
-参考サイト
-https://qiita.com/h-orito/items/10119bcd202b596b8b6d
-https://qiita.com/wataruoguchi/items/8fdda8e9754658be06be
+## firesbase Vuexfire 
+参考サイト 
+https://qiita.com/h-orito/items/10119bcd202b596b8b6d 
+https://qiita.com/wataruoguchi/items/8fdda8e9754658be06be 
+ 
 1. Firebase と VuexFire をインストールする。
 ```
 $ npm install vue firebase vuexfire@next --save
@@ -361,7 +362,7 @@ export const INIT_TODO = 'INIT_TODO'
 `store/index.js`
 ```
 import firebase from '@/plugins/firebase'
-import { firebaseMutations, firebaseAction } from 'vuexfire'
+import { vuexfireMutations, firebaseAction } from 'vuexfire'
 import { ADD_TODO, REMOVE_TODO, INIT_TODO } from './actionTypes'
 
 const db = firebase.database()
@@ -373,7 +374,7 @@ export const state = () => ({
 })
 
 export const mutations = {
-  ...firebaseMutations
+  ...vuexfireMutations
 }
 
 export const actions = {
