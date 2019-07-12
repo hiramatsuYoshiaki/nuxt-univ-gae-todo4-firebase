@@ -1,4 +1,6 @@
 # nuxt-univ-create-gae-hosting 
+github repository: nuxt-univ-create-gae-todo
+gcp project: nuxt-univ-create-gae-todo
 ```
 $ npx create-nuxt-app <project-name>
  
