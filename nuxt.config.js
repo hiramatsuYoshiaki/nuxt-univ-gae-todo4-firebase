@@ -16,6 +16,9 @@ export default {
         content: process.env.npm_package_description || ''
       }
     ],
+    script: [
+      { src: '//www.instagram.com/embed.js' }
+    ],
     link: [
       // { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
       { rel: 'icon', type: 'image/x-icon', href: '/h-logo-white.ico' },

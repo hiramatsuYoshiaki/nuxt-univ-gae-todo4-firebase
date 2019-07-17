@@ -18,6 +18,7 @@
         :page-discription-detail="pageDiscriptionDetail"
       />
     </div>
+
     <transition name="mainCon" appear>
       <div class="content-main">
         <ConAbout />
@@ -50,6 +51,7 @@ export default {
     ConHeader,
     ContentFooter
   },
+
   data() {
     return {
       img: require('~/assets/img/img2722.jpg'),

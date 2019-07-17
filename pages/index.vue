@@ -60,6 +60,9 @@
 </template>
 
 <script>
+// import axios from 'axios'
+// import { mapState } from 'vuex'
+// import { INIT_TODO } from '~/store/actionTypes'
 import Logo from '~/components/Logo.vue'
 
 export default {
@@ -67,6 +70,17 @@ export default {
   components: {
     Logo
   }
+  // async asyncData({}) {
+  //   const { data } = await axios.get(`https://www.instagram.com/p/BzqBMl3g9vA/`)
+  //   return { title: data.title }
+  // }
+  // computed: {
+  //   ...mapState(['items'])
+  // },
+  // created() {
+  //   console.log('create')
+  //   this.$store.dispatch(INIT_TODO)
+  // }
 }
 </script>
 
