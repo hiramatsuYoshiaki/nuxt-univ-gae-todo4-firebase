@@ -51,11 +51,11 @@ export default {
   data() {
     return {
       img: require('~/assets/img/fuji1.jpg'),
-      pageTitle: 'SETTING',
-      pageSubTitle: 'Nuxt.js Demo Site',
-      pageDiscription: 'Google Cloud Platform',
+      pageTitle: 'Auth',
+      pageSubTitle: 'Firebase',
+      pageDiscription: 'Authentication',
       pageDiscriptionDetail:
-        'Vue.jsのフレームワークNuxt.jsをGoogle App Enginへデプロイしたデモです。'
+        'Vue.jsのフレームワークNuxt.jsでGoogleアカウントで認証するデモ'
     }
   },
   head() {

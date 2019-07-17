@@ -1,248 +1,267 @@
 <template>
   <div class="content">
-    <div class="con-title">
-      <h1>GOOGLE APP ENGINE</h1>
-      <h3>
-        サービス型プラットフォーム
-      </h3>
-      <p>
-        Platform as a Service（PaaS）
-      </p>
-      <p>
-        GCP(Google Cloud
-        Platform)のクラウドコンピューティングプロダクトの一つです。
-      </p>
-    </div>
+    <h6>Firebase CRUD</h6>
+    <h2>
+      Photo Todos
+    </h2>
+    <h6>インスタグラムで見る、次に写真を撮りに行ってみたいスポット</h6>
 
-    <h1>App Engine</h1>
-    <p>
-      App Engine によるマネージド プラットフォームでのビルド
-    </p>
-
-    <div class="quote-block">
-      <blockquote class="quote">
-        <i class="material-icons">
-          format_quote
-        </i>
-        <p>
-          GCP では、マネージドの Platform as a Service（PaaS）を Google App
-          Engine と呼びます。App Engine
-          でウェブサイトを構築すると、ユーザーは機能のコーディングに集中し、それを支えるインフラストラクチャの管理は
-          Google に任せることができます。App Engine
-          には、スケーラビリティ、負荷分散、ロギング、モニタリング、セキュリティを自分で構築したり管理したりするよりも大幅に簡素化できる、幅広い機能が用意されています。App
-          Engine
-          では、さまざまなプログラミング言語でコードを作成できます。また、他のさまざまな
-          GCP サービスを使用することもできます。 App Engine
-          は、アプリを安全なサンドボックス環境で実行できる、スタンダード環境を提供します。App
-          Engine
-          のスタンダード環境では、複数のサーバーにリクエストが分散され、トラフィック需要に合わせてサーバーがスケーリングされます。アプリは、ハードウェア、オペレーティング
-          システムまたはサーバーの物理的な場所に依存しない、独自の安全かつ信頼できる環境内で実行されます。
-        </p>
-        <a
-          href="https://cloud.google.com/solutions/web-serving-overview#app-engine"
-          target="_blank"
-        >
-          <cite>Google Cloud</cite>
-        </a>
-      </blockquote>
-    </div>
-
-    <h1>Node.js ランタイム</h1>
-    <h3>
-      概要
-    </h3>
-    <div class="quote-block">
-      <blockquote class="quote">
-        <i class="material-icons">
-          format_quote
-        </i>
-        <p>
-          Node.js
-          ランタイムは、アプリケーションのコードと依存関係をインストールして実行するソフトウェア
-          スタックです。ランタイムは app.yaml で runtime: nodejs
-          として宣言されます。
-        </p>
-        <p>
-          runtime: nodejs
-        </p>
-        <p>
-          env: flex
-        </p>
-        <p>
-          フレキシブル環境のランタイムは、Docker
-          を使用してビルドされています。Node.js ランタイムは Ubuntu 16.04
-          がベースとなっていて、Node.js ランタイムのソースコードは GitHub
-          で公開されています。
-        </p>
-        <a
-          href="https://cloud.google.com/appengine/docs/flexible/nodejs/runtime"
-          target="_blank"
-        >
-          <cite>Google Cloud</cite>
-        </a>
-      </blockquote>
-    </div>
-    <h3>
-      パッケージ マネージャ
-    </h3>
-    <div class="quote-block">
-      <blockquote class="quote">
-        <i class="material-icons">
-          format_quote
-        </i>
-        <p>
-          デプロイ中には、ランタイムによって、npm または yarn パッケージ
-          マネージャを介して依存関係がインストールされ、アプリケーションが起動されます。パッケージ
-          マネージャは次のロジックに基づいています。
-        </p>
-        <p>
-          ・yarn.lock ファイルがアプリケーションのルート
-          ディレクトリに存在する場合は、ランタイムでは代わりに yarn パッケージ
-          マネージャが使用されます。
-        </p>
-        <p>
-          ・yarn.lock ファイルがアプリケーションのルート
-          ディレクトリに存在する場合は、ランタイムでは代わりに yarn パッケージ
-          マネージャが使用されます。
-        </p>
-        <p>
-          ・package-lock.json と yarn.lock
-          の両方が存在する場合は、エラーが発生してデプロイに失敗します。両方のファイルが必要な場合は、app.yaml
-          ファイルの skip_files
-          セクションにそれらの一方を追加して、どちらのパッケージ
-          マネージャを使用するかを決定できるようにします。
-        </p>
-        <p>
-          フレキシブル環境のランタイムは、Docker
-          を使用してビルドされています。Node.js ランタイムは Ubuntu 16.04
-          がベースとなっていて、Node.js ランタイムのソースコードは GitHub
-          で公開されています。
-        </p>
-        <a
-          href="https://cloud.google.com/appengine/docs/flexible/nodejs/runtime"
-          target="_blank"
-        >
-          <cite>Google Cloud</cite>
-        </a>
-      </blockquote>
-    </div>
-    <h3>
-      アプリケーションの起動
-    </h3>
-    <div class="quote-block">
-      <blockquote class="quote">
-        <i class="material-icons">
-          format_quote
-        </i>
-        <p>
-          ランタイムは npm start
-          を使用してアプリケーションを起動します。ここでは、package.json
-          で指定されたコマンドが使用されます。例:
-        </p>
-        <p>
-          "scripts": {
-        </p>
-        <p>
-          "start": "node app.js"
-        </p>
-        <p>
-          ｝
-        </p>
-        <p>
-          起動スクリプトはウェブサーバーを起動し、それが PORT
-          環境変数で指定されたポート（一般的には 8080）で HTTP
-          リクエストに応答します。
-        </p>
-        <a
-          href="https://cloud.google.com/appengine/docs/flexible/nodejs/runtime"
-          target="_blank"
-        >
-          <cite>Google Cloud</cite>
-        </a>
-      </blockquote>
-    </div>
-
-    <!-- <div class="flex-container select-mode">
-      <div class="two-col">
-        <section>
-          <div class="mode-text">
-            Nuxt.js + SSR
+    <!-- <i class="material-icons">
+      add_circle_outline
+    </i> -->
+    <!-- <pre>items: {{ items }}</pre> -->
+    <section v-if="isAddList" class="new-todo-add">
+      <!-- <h5>Amazing spot I want to go take a picture</h5> -->
+      <div class="add-new-form">
+        <form @submit.prevent="addTodoFirebase">
+          <p>写真を撮りたいスポット</p>
+          <p>
+            <input
+              v-model="text"
+              type="text"
+              placeholder="写真を撮りたいスポット"
+            />
+          </p>
+          <p>インスタグラムの写真のURL</p>
+          <p>
+            <input
+              v-model="insUrl"
+              type="url"
+              placeholder="参考にしたいインスタ写真のURL"
+            />
+          </p>
+          <div class="add-btn">
+            <button type="submit">
+              Todoリストに追加する
+            </button>
           </div>
-          <h5>サーバーサイドレンダリング</h5>
-        </section>
-        <section>
-          <h3>サーバーサイドレンダリング（ユニバーサル SSR）</h3>
-          <p>
-            Nuxt.js をプロジェクトの UI
-            レンダリング全体を担うフレームワークとして使うことができます。nuxt
-            コマンドを実行すると開発サーバーが起動します。このサーバーはホットリローディング及び
-            Vue Server Renderer
-            を備えており、アプリケーションが自動的にサーバーサイドレンダリングするよう設定されています。
-          </p>
-        </section>
-        <section>
-          <h3>静的ファイルの生成</h3>
-          <p>
-            アプリケーションをビルドする際、ルートやストアにあるファイル全てに対し
-            HTML を生成します。
-          </p>
-        </section>
-        <section>
-          <h3>主な機能</h3>
-          <ul>
-            <li><p>Vue ファイルで記述できること（*.vue）</p></li>
-            <li><p>コードを自動的に分割すること</p></li>
-            <li><p>サーバーサイドレンダリング</p></li>
-            <li><p>非同期データをハンドリングするパワフルなルーティング</p></li>
-            <li><p>静的ファイルの配信</p></li>
-            <li><p>ES2015+ のトランスパイレーション</p></li>
-            <li><p>JS と CSS のバンドル及びミニファイ化</p></li>
-            <li><p>head要素の管理</p></li>
-            <li><p>開発モードにおけるホットリローディング</p></li>
-            <li><p>プリプロセッサ: Sass, Less, Stylus など</p></li>
-            <li><p>HTTP/2 push headers ready</p></li>
-            <li><p>モジュール構造で拡張できること</p></li>
-          </ul>
-        </section>
+        </form>
       </div>
-      <div class="two-col">
-        <section>
-          <div class="mode-text">
-            GitHub + netlify
+    </section>
+
+    <section class="todo-list">
+      <span>Photo Todo List </span>
+      <!-- <i class="material-icons add-list">add_box</i> -->
+      <span @click="isAddList = !isAddList">
+        <i class="material-icons add-list function-icon">playlist_add</i>
+      </span>
+
+      <div v-for="item in items" :key="item.key">
+        <div class="ins-group ">
+          <div>
+            {{ item.title }}
+            {{ item.done }}
+
+            <span class="function-icon" @click="isAction = !isAction">
+              <i class="material-icons">photo_camera</i>
+            </span>
+            <span
+              class="function-icon"
+              @click="removeTodoFirebase(item['.key'])"
+            >
+              <i class="material-icons">delete_forever</i>
+            </span>
           </div>
-          <h5>バージョン管理と自動ディプロイ</h5>
-        </section>
-        <section>
-          <h3>バージョン管理</h3>
-          <p>
-            GitHubを利用することで、プロジェクトマネージャと開発者が一箇所で作業を調整、追跡、および更新するので、プロジェクトは透明でスケジュールどおりに維持されます。
-          </p>
+          <!-- <div>{{ item.insUrl }}</div> -->
 
-          <p>
-            GitHubを利用することで、すべての作業を視覚化し、プロジェクトボードを使用してコードと並行して優先順位を付けます。リポジトリ内または組織全体で、どのようなタスクが計画されているか、または進行中かを確認できます。
-          </p>
+          <div class="like-spot">
+            <blockquote
+              class="instagram-media"
+              :data-instgrm-permalink="item.insUrl"
+              data-instgrm-version="12"
+              style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"
+            >
+              <a
+                :href="item.insUrl"
+                style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;"
+                target="_blank"
+              />
+            </blockquote>
+          </div>
+          <div v-if="isAction && !item.done" class="action-spot">
+            <p>私のインスタ写真を載せる</p>
+            <div class="add-done-ins-form">
+              <form @submit.prevent="onCreateMyPhoto(item)">
+                <p>
+                  <input
+                    v-model="insDaneUrl"
+                    type="url"
+                    placeholder="私のインスタ写真URL"
+                  />
+                </p>
 
-          <p>
-            GitHubを利用することで、チームの連携を強化できます。問題を見つけやすくなります。
-          </p>
-        </section>
-        <section>
-          <h3>自動ディプロイ</h3>
-          <p>
-            Netlifyは新しいコミットを検出し、あなたのサイトを自動的に再構築し、そして結果を即時のグローバルアップデートとしてデプロイします。
-          </p>
-        </section>
+                <div>
+                  <div id="app">
+                    <p>私のオリジナル写真を載せる</p>
+                    <img v-show="imageUrl" :src="imageUrl" />
+                    <input type="file" @change="onFileChange" />
+                  </div>
+                  <div>imageUrl:{{ imageUrl }}</div>
+                  <div>image:{{ image }}</div>
+                </div>
+
+                <div class="add-btn">
+                  <button type="submit">
+                    upload Done
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div v-if="item.done" class="action-done">
+            <br />
+            <blockquote
+              class="instagram-media"
+              :data-instgrm-permalink="item.insDaneUrl"
+              data-instgrm-version="12"
+              style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"
+            >
+              <a
+                :href="item.insUrl"
+                style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;"
+                target="_blank"
+              />
+            </blockquote>
+            <!-- <div>title:{{ item.title }}</div>
+            <div>insDaneUrl:{{ item.insDaneUrl }}</div>
+            <div>myPhoto:{{ item.filename }}</div>
+            <div>myPhotoUrl:{{ item.imageUrl }}</div> -->
+            <div class="origin-photo">
+              <img :src="item.imageUrl" alt="img" />
+            </div>
+          </div>
+        </div>
       </div>
-    </div> -->
+    </section>
   </div>
 </template>
 
 <script>
-// export default {
-//   props: {
-//     msg: String
-//   }
-// }
+// import { mapState, mapGetters, mapMutations } from 'vuex'
+import { mapState } from 'vuex'
+import {
+  ADD_TODO,
+  REMOVE_TODO,
+  INIT_TODO,
+  UPDATEDANE_TODO,
+  CREATE_MYPHOTO
+} from '~/store/actionTypes'
+
+// import firebase from '@/plugins/firebase'
+
+export default {
+  // head() {
+  //   return {
+  //     script: [{ src: '//www.instagram.com/embed.js', async: 'true' }]
+  //   }
+  // },
+  // props: {
+  //   msg: {
+  //     type: String,
+  //     default: 'about'
+  //   }
+  // },
+  data() {
+    return {
+      text: '',
+      insUrl: '',
+      insDaneUrl: '',
+      imageUrl: '', // local fiel Adress
+      image: null, // image data
+      isAddList: false,
+      isAction: false
+    }
+  },
+  computed: {
+    // firebase
+    ...mapState(['items'])
+  },
+  created() {
+    // firebase
+    this.$store.dispatch(INIT_TODO)
+  },
+
+  methods: {
+    addTodoFirebase() {
+      // const createDatas = {
+      //   title: this.createTitle,
+      //   filename: this.filename,
+      //   done: false,
+      //   image: this.image
+      // }
+      this.$store.dispatch(ADD_TODO, {
+        title: this.text,
+        done: false,
+        insUrl: this.insUrl,
+        insDaneUrl: '',
+        filename: '',
+        imageUrl: '',
+        shootDate: ''
+      })
+      // this.$store.dispatch(ADD_TODO, createDatas)
+      this.text = ''
+      this.insUrl = ''
+      // this.$store.dispatch(INIT_TODO)
+      location.reload()
+    },
+    removeTodoFirebase(key) {
+      this.$store.dispatch(REMOVE_TODO, key)
+      // this.$store.dispatch(INIT_TODO)
+      location.reload()
+    },
+    updateDoneTodoFirebase(key) {
+      // console.log('updateDaneTodoFirebase')
+      this.$store.dispatch(UPDATEDANE_TODO, key)
+      location.reload()
+    },
+    onFileChange(e) {
+      const files = e.target.files || e.dataTransfer.files
+      if (!files.length) {
+        return
+      }
+      this.filename = files[0].name
+      if (this.filename.lastIndexOf('.') <= 0) {
+        return alert('Please add a valid file')
+      }
+      const fileReader = new FileReader()
+      fileReader.addEventListener('load', () => {
+        this.imageUrl = fileReader.result // ローカルのアドレス
+      })
+      fileReader.readAsDataURL(files[0])
+      this.image = files[0] // イメージデータ
+    },
+
+    removeImage(e) {
+      this.image = ''
+    },
+
+    onCreateMyPhoto(item) {
+      // alert('onCreateMeetup')
+      // alert('key: ' + item['.key'])
+
+      // console.log('insDaneUrl: ' + this.insDaneUrl)
+      // console.log('onCreateMeetup title: ' + this.filename)
+      // console.log(this.imageUrl)
+      // console.log(this.image)
+      const createDatas = {
+        // firebase
+        key: item['.key'],
+        shootDate: '2019-07-20',
+        done: true,
+        title: item.title,
+        insUrl: item.insUrl,
+        insDaneUrl: this.insDaneUrl,
+        filename: this.filename,
+        imageUrl: '',
+        // strage
+        stargeImage: this.image
+      }
+      // console.log(createDatas.insDaneUrl)
+      this.$store.dispatch(CREATE_MYPHOTO, createDatas)
+      location.reload()
+    }
+  }
+}
 </script>
 
 <style scoped lang="scss">
@@ -258,7 +277,6 @@
   @media (min-width: 768px) {
     padding: 8rem 8rem;
   }
-  border: 1px solid rgba(0, 0, 0, 0.2);
 }
 .flex-container {
   width: 100%;
@@ -268,18 +286,6 @@
   align-items: flex-start;
   @media (min-width: 768px) {
     flex-direction: row;
-  }
-}
-.con-title {
-  margin-bottom: 4rem;
-}
-
-.quote-block {
-  padding: 2rem 0.5rem;
-  margin-bottom: 4rem;
-  @media (min-width: 992px) {
-    padding: 2rem 4rem;
-    margin-bottom: 4rem;
   }
 }
 h1 {
@@ -316,78 +322,59 @@ p {
     line-height: 2.6rem;
   }
 }
-// .select-mode {
-//   margin-top: 2rem;
-// }
-// .two-col {
-//   width: 100%;
-//   @media (min-width: 768px) {
-//     width: 50%;
-//     padding-right: 8rem;
-//   }
-//   padding-right: 2rem;
-//   padding-bottom: 2rem;
-//   section {
-//     margin-bottom: 2rem;
-//   }
-//   h3 {
-//     color: #000000;
-//     font-weight: 600;
-//     margin-bottom: 2rem;
-//   }
-//   p {
-//     color: rgb(70, 69, 69);
-//   }
-// }
-// .mode-text {
-//   font-size: 4rem;
-//   font-weight: 700;
-//   color: green;
-//   @media (min-width: 768px) {
-//     font-size: 8rem;
-//   }
-// }
-// a {
-//   color: black;
-// }
-// .word-wrap {
-//   word-break: break-all;
-// }
-// li {
-//   margin-bottom: 2rem;
-// }
-// p {
-//   word-wrap: break-word;
-//   font-size: 1.6rem;
-//   @media (min-width: 768px) {
-//     font-size: 2rem;
-//   }
-// }
-
-blockquote {
-  position: relative;
-  border-left: 3px solid rgb(67, 110, 211);
-  padding-left: 10px;
+input {
+  color: #000;
 }
-i {
-  color: rgb(31, 84, 209);
+button {
+  color: #000;
 }
-// blockquote:before {
-//   position: absolute;
-//   font-family: 'FontAwesome';
-//   content: '\f10d';
-//   font-size: 20px;
-//   color: #da8596;
-// }
-blockquote p {
-  position: relative;
-  padding-left: 30px;
-}
-blockquote cite {
+img {
   display: block;
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: rgb(31, 84, 209);
-  text-align: right;
+  width: 40rem;
+  height: auto;
+  border: 0.3rem solid #000;
+  margin-bottom: 0.5rem;
+}
+.new-todo-add {
+  margin: 2rem 0;
+  padding: 1rem;
+  border: 1px solid gray;
+  // h5 {
+  //   margin: 1rem -1rem;
+  //   color: #000;
+  //   display: inline-block;
+  //   line-height: 3rem;
+  //   background-color: lightseagreen;
+  // }
+}
+.function-icon {
+  cursor: pointer;
+  vertical-align: top;
+}
+.add-list {
+  font-size: 2.5rem;
+  font-weight: 400;
+}
+
+.todo-list {
+  margin: 2rem 0;
+}
+
+.ins-group {
+  border: 1px solid gray;
+  margin-bottom: 2rem;
+  padding: 1rem;
+}
+.like-spot {
+}
+.action-spot {
+}
+.action-done {
+}
+.origin-photo {
+  img {
+    width: 20rem;
+    height: auto;
+  }
 }
 </style>

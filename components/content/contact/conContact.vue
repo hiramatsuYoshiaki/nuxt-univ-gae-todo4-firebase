@@ -17,8 +17,6 @@
                 </a>
               </div>
               <br />
-
-              <br />
               <p>
                 このWEBサイトは、作品をご覧いただき、デザイン、コーディング、プログラミングなどのスキルレベルをご確認いただくために作成しております。
               </p>
@@ -66,7 +64,6 @@
     padding: 8rem 8rem;
   }
   color: #fff;
-
   a {
     color: #fff;
     text-decoration: none;
@@ -101,13 +98,15 @@
   h1 {
     font-size: 2rem;
     @media (min-width: 992px) {
-      font-size: 4rem;
+      font-size: 2.6rem;
+      line-height: 3rem;
+      margin-bottom: 2rem;
     }
   }
   p {
-    font-size: 1.6rem;
+    font-size: 1.2rem;
     @media (min-width: 992px) {
-      font-size: 2rem;
+      font-size: 1.4rem;
     }
   }
 }

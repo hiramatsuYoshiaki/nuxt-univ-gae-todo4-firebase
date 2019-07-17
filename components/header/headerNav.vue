@@ -12,7 +12,7 @@
               :class="{ menu_item_visible: page === '/works' }"
               @click="link_commit('/works')"
             >
-              SETTING
+              Auth
             </div>
             <div class="menu_underline" />
           </div>
@@ -22,7 +22,7 @@
               :class="{ menu_item_visible: page === '/about' }"
               @click="link_commit('/about')"
             >
-              ABOUT
+              CRUD
             </div>
             <div class="menu_underline" />
           </div>
@@ -79,7 +79,7 @@
                 :class="{ menu_item_visible: page === '/works' }"
                 @click="link_commit('/works')"
               >
-                SETTING
+                Auth
               </a>
               <div class="menu_underline" />
             </div>
@@ -89,7 +89,7 @@
                 :class="{ menu_item_visible: page === '/about' }"
                 @click="link_commit('/about')"
               >
-                ABOUT
+                CRUD
               </a>
               <div class="menu_underline" />
             </div>
@@ -173,7 +173,8 @@ export default {
       this.active = true
       this.$store.commit('pagePathSet', linkPath)
       setTimeout(() => {
-        this.$router.push({ path: linkPath })
+        // this.$router.push({ path: linkPath })//non-leload
+        location.href = linkPath // reload
       }, 500)
     }
   }

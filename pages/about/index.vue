@@ -18,6 +18,7 @@
         :page-discription-detail="pageDiscriptionDetail"
       />
     </div>
+
     <transition name="mainCon" appear>
       <div class="content-main">
         <ConAbout />
@@ -50,13 +51,14 @@ export default {
     ConHeader,
     ContentFooter
   },
+
   data() {
     return {
       img: require('~/assets/img/img2722.jpg'),
-      pageTitle: 'About GCP',
-      pageSubTitle: 'Nuxt.js Demo Site Hosting',
-      pageDiscription: 'App Engine',
-      pageDiscriptionDetail: 'GCP App Engineを使ってホスティング'
+      pageTitle: 'CRUD',
+      pageSubTitle: 'Firebase',
+      pageDiscription: 'Database Strage',
+      pageDiscriptionDetail: 'Todoリストを作成するデモ'
     }
   },
   head() {
