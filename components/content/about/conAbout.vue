@@ -38,6 +38,22 @@
         </form>
       </div>
     </section>
+    <section>
+      <blockquote
+        class="instagram-media"
+        data-instgrm-captioned
+        data-instgrm-permalink="https://www.instagram.com/p/Bz-mNvwA6sZ/"
+        data-instgrm-version="12"
+        style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"
+      >
+        <a
+          href="https://www.instagram.com/p/Bz-mNvwA6sZ/"
+          style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;"
+          target="_blank"
+        />
+      </blockquote>
+      <script async src="//www.instagram.com/embed.js" />
+    </section>
 
     <section class="todo-list">
       <span>Photo Todo List </span>
@@ -65,6 +81,7 @@
           <!-- <div>{{ item.insUrl }}</div> -->
 
           <div class="like-spot">
+            <h1>item.insUrlaaaaaaa:{{ item.insUrl }}</h1>
             <blockquote
               class="instagram-media"
               :data-instgrm-permalink="item.insUrl"
@@ -77,6 +94,7 @@
                 target="_blank"
               />
             </blockquote>
+            <script async src="//www.instagram.com/embed.js" />
           </div>
           <div v-if="isAction && !item.done" class="action-spot">
             <p>私のインスタ写真を載せる</p>
@@ -122,6 +140,7 @@
                 target="_blank"
               />
             </blockquote>
+            <script async src="//www.instagram.com/embed.js" />
             <!-- <div>title:{{ item.title }}</div>
             <div>insDaneUrl:{{ item.insDaneUrl }}</div>
             <div>myPhoto:{{ item.filename }}</div>
@@ -179,6 +198,10 @@ export default {
   created() {
     // firebase
     this.$store.dispatch(INIT_TODO)
+  },
+  mounted() {
+    console.log('mounted')
+    // window.instgrm.Embeds.process()
   },
 
   methods: {
