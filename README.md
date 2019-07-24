@@ -1,5 +1,5 @@
-# nuxt-univ-create-gae-todo-base  
-github repository: nuxt-univ-create-gae-todo-base  
+# nuxt-univ-create-gae-todo2 
+github repository: nuxt-univ-create-gae-todo2  
 gcp project: nuxt-univ-create-gae-todo  
   
 ```
