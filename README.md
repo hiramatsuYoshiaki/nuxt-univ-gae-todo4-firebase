@@ -2,6 +2,7 @@
 github repository: nuxt-univ-create-gae-todo2  
 gcp project: nuxt-univ-create-gae-todo  
   
+firebase: authentication database strage 
 ```
 $ npx create-nuxt-app <project-name>
  
@@ -210,18 +211,7 @@ $ gcloud app browse
 ```
 $ gcloud app logs tail -s default
 ```
-
-
-
-
-
-
-
-
-
-
-
-
+    
 # nuxt.config.js setting
 > nuxt.config.jsでの導入時の設定
 # eslint
