@@ -12,17 +12,29 @@ const db = firebase.database()
 
 export const state = () => ({
   page: 'home',
-  items: []
+  items: [],
+  user: null,
+  reloadkey: 0
 })
 export const mutations = {
   pagePathSet(state, payload) {
     state.page = payload
+  },
+  setUser(state, payload) {
+    state.user = payload
+  },
+  setReloadkey(state, payload) {
+    state.reloadkey += 1
   },
   // firebase
   ...vuexfireMutations
 }
 
 export const actions = {
+  setUser({ commit }, payload) {
+    commit('setUser', payload)
+  },
+
   [INIT_TODO]: firebaseAction(({ bindFirebaseRef }) => {
     bindFirebaseRef('items', db.ref('imgdatas'), { wait: true })
   }),
@@ -100,5 +112,9 @@ export const actions = {
       })
   }
 }
-// 変更update
-// ******add    return imgdatasRef.push(imgDatas)
+
+export const getters = {
+  isAuthenticated(state) {
+    return !!state.user
+  }
+}

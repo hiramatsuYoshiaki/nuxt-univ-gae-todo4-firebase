@@ -172,9 +172,13 @@ export default {
     link_commit(linkPath) {
       this.active = true
       this.$store.commit('pagePathSet', linkPath)
+      console.log('linkPath: ' + linkPath)
       setTimeout(() => {
-        // this.$router.push({ path: linkPath })//non-leload
-        location.href = linkPath // reload
+        // if (linkPath === '/about') {
+        //   location.href = linkPath // reload
+        // } else {
+        this.$router.push({ path: linkPath }) // non-leload
+        // }
       }, 500)
     }
   }
@@ -280,7 +284,7 @@ export default {
     width: 100%;
     height: 2px;
     margin-top: 0.2rem;
-    transform: translateX(-101%);
+    transform: translateX(-150%);
   }
 
   &:hover {

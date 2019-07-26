@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="bgImageFull">
+    <!-- <div v-if="false" class="bgImageFull">
       <transition name="bgTran" appear>
         <div
           class="bgImage"
@@ -9,85 +9,94 @@
           <div class="bg_filter" />
         </div>
       </transition>
-    </div>
-    <div class="content-header">
+    </div> -->
+    <!-- <div v-if="false" class="content-header">
       <ConHeader
         :page-title="pageTitle"
         :page-sub-title="pageSubTitle"
         :page-discription="pageDiscription"
         :page-discription-detail="pageDiscriptionDetail"
       />
-    </div>
+    </div> -->
 
     <transition name="mainCon" appear>
       <div class="content-main">
         <ConAbout />
       </div>
     </transition>
-    <transition name="mainCon" appear>
+
+    <!-- <transition v-if="false" name="mainCon" appear>
       <div class="content-footer">
         <ContentFooter />
       </div>
-    </transition>
+    </transition> -->
 
-    <transition appear name="transitionScreen">
+    <!-- <transition v-if="false" appear name="transitionScreen">
       <TransitionScreen v-if="page === '/about'" />
-    </transition>
+    </transition> -->
   </div>
 </template>
 <script>
-import TransitionScreen from '~/components/transition/TransitionScreen.vue'
+// import TransitionScreen from '~/components/transition/TransitionScreen.vue'
 import ConAbout from '~/components/content/about/ConAbout.vue'
 
-import ConHeader from '~/components/content/ConHeader.vue'
-import ContentFooter from '~/components/content/ContentFooter.vue'
-
+// import ConHeader from '~/components/content/ConHeader.vue'
+// import ContentFooter from '~/components/content/ContentFooter.vue'
+// import firebase from '@/plugins/firebase'
 export default {
-  layout: 'topPage',
+  // layout: 'topPage',
   //   transition: 'content-slide',
   components: {
-    TransitionScreen,
-    ConAbout,
-    ConHeader,
-    ContentFooter
+    // TransitionScreen,
+    ConAbout
+    // ConHeader,
+    // ContentFooter
   },
-
   data() {
     return {
-      img: require('~/assets/img/img2722.jpg'),
-      pageTitle: 'CRUD',
-      pageSubTitle: 'Firebase',
-      pageDiscription: 'Database Strage',
-      pageDiscriptionDetail: 'Todoリストを作成するデモ'
-    }
-  },
-  head() {
-    return {
-      title: this.pageTitle,
-      meta: [
-        // `hid` は一意の識別子として使用されます。 `vmid` は動作しないので使わないでください。
-        {
-          hid: 'description',
-          name: 'about by Nuxt.js',
-          content:
-            'このページは、Nuxt.jsアプリケーションのインストールと使い方と設定を紹介しています。'
-        }
-      ]
-    }
-  },
-  computed: {
-    page() {
-      return this.$store.state.page
-    }
-  },
-  methods: {
-    link_commit(linkPath) {
-      this.$store.commit('pagePathSet', linkPath)
-      setTimeout(() => {
-        this.$router.push({ path: linkPath })
-      }, 500)
+      // img: require('~/assets/img/img2722.jpg'),
+      // pageTitle: 'CRUD',
+      // pageSubTitle: 'Firebase',
+      // pageDiscription: 'Database Strage',
+      // pageDiscriptionDetail: 'Todoリストを作成するデモ'
     }
   }
+  // head() {
+  //   return {
+  //     title: this.pageTitle,
+  //     meta: [
+  //       {
+  //         hid: 'description',
+  //         name: 'about by Nuxt.js',
+  //         content:
+  //           'このページは、Nuxt.jsアプリケーションのインストールと使い方と設定を紹介しています。'
+  //       }
+  //     ]
+  //   }
+  // },
+  // computed: {
+  //   page() {
+  //     return this.$store.state.page
+  //   }
+  // },
+  // mounted() {
+  //   console.log('mounted')
+  //   firebase.auth().onAuthStateChanged(async (user) => {
+  //     if (user) {
+  //       await console.log('login')
+  //     } else {
+  //       await console.log('logout')
+  //     }
+  //   })
+  // },
+  // methods: {
+  //   link_commit(linkPath) {
+  //     this.$store.commit('pagePathSet', linkPath)
+  //     setTimeout(() => {
+  //       this.$router.push({ path: linkPath })
+  //     }, 500)
+  //   }
+  // }
 }
 </script>
 <style scoped lang="scss">
@@ -114,25 +123,18 @@ export default {
   @extend %center;
   flex-direction: column;
 }
-.content-header {
-  width: 100vw;
-  height: 35vh;
-  // padding: 1rem 1rem;
-  // border: 1px solid yellow;
-}
+// .content-header {
+//   width: 100vw;
+//   height: 35vh;
+// }
 .content-main {
-  // height: 75vh;
   width: 100vw;
   background-color: $main-contents-color;
   color: $main-contents-text;
-  // padding-bottom:20rem;
-  // padding-left: 2rem;
-  // border: 1px solid orangered;
 }
-.content-footer {
-  width: 100vw;
-  @extend %center;
-  flex-direction: column;
-  // border: 1px solid red;
-}
+// .content-footer {
+//   width: 100vw;
+//   @extend %center;
+//   flex-direction: column;
+// }
 </style>
