@@ -18,55 +18,65 @@
         :page-discription-detail="pageDiscriptionDetail"
       />
     </div>
+
     <transition name="mainCon" appear>
-      <div class="content-main">
-        <conWorks />
-      </div>
+      <nuxt-child />
+      <!-- <div v-if="false" class="content-main">
+        <ConAbout />
+      </div> -->
     </transition>
     <transition name="mainCon" appear>
       <div class="content-footer">
         <ContentFooter />
       </div>
     </transition>
+
     <transition appear name="transitionScreen">
-      <TransitionScreen v-if="page === '/works'" />
+      <TransitionScreen v-if="page === '/about'" />
     </transition>
+    <div v-if="!loaded" class="loading">
+      <h1>loading ...</h1>
+    </div>
   </div>
 </template>
-
 <script>
+import { mapGetters } from 'vuex'
 import TransitionScreen from '~/components/transition/TransitionScreen.vue'
+// import ConAbout from '~/components/content/about/ConAbout.vue'
 
-import conWorks from '~/components/content/works/conWorks.vue'
 import ConHeader from '~/components/content/ConHeader.vue'
 import ContentFooter from '~/components/content/ContentFooter.vue'
+// import firebase from '@/plugins/firebase'
 export default {
   layout: 'topPage',
+  //   transition: 'content-slide',
   components: {
     TransitionScreen,
+    // ConAbout,
     ConHeader,
-    conWorks,
     ContentFooter
   },
+
   data() {
     return {
-      img: require('~/assets/img/fuji1.jpg'),
-      pageTitle: 'Auth',
+      img: require('~/assets/img/img2722.jpg'),
+      pageTitle: 'CRUD',
       pageSubTitle: 'Firebase',
-      pageDiscription: 'Authentication',
-      pageDiscriptionDetail:
-        'Vue.jsのフレームワークNuxt.jsでGoogleアカウントで認証するデモ'
+      pageDiscription: 'Database Strage',
+      pageDiscriptionDetail: 'Todoリストを作成するデモ',
+      loaded: false
     }
   },
   head() {
     return {
       title: this.pageTitle,
       meta: [
+        // `hid` は一意の識別子として使用されます。 `vmid` は動作しないので使わないでください。
         {
           hid: 'description',
-          name: 'Works by Nuxt.js',
+          name: 'about by Nuxt.js',
           content:
-            'このページは、Vue.jsフレームワークのNuxt.jsを使って作成したWebサイトの概略を紹介しています。'
+            'このページは、Nuxt.jsアプリケーションのインストールと使い方と設定を紹介しています。'
         }
       ]
     }
@@ -74,12 +84,30 @@ export default {
   computed: {
     page() {
       return this.$store.state.page
-    }
+    },
+    ...mapGetters(['isAuthenticated'])
+  },
+  mounted() {
+    setTimeout(() => {
+      if (!this.isAuthenticated) {
+        // ログインしていなかったら飛ぶページを設定
+        this.$router.push('/works')
+      }
+      this.loaded = true
+    }, 0)
+    // console.log('mounted')
+    // firebase.auth().onAuthStateChanged(async (user) => {
+    //   if (user) {
+    //     await console.log('login:' + user)
+    //   } else {
+    //     await console.log('logout: ' + user)
+    //     await this.link_commit('works')
+    //   }
+    // })
   },
   methods: {
     link_commit(linkPath) {
       this.$store.commit('pagePathSet', linkPath)
-      console.log('linkPath: ' + linkPath)
       setTimeout(() => {
         this.$router.push({ path: linkPath })
       }, 500)
@@ -114,15 +142,32 @@ export default {
 .content-header {
   width: 100vw;
   height: 35vh;
+  // padding: 1rem 1rem;
+  // border: 1px solid yellow;
 }
 .content-main {
+  // height: 75vh;
   width: 100vw;
   background-color: $main-contents-color;
   color: $main-contents-text;
+  // padding-bottom:20rem;
+  // padding-left: 2rem;
+  // border: 1px solid orangered;
 }
 .content-footer {
   width: 100vw;
   @extend %center;
   flex-direction: column;
+  // border: 1px solid red;
+}
+.loading {
+  @extend %center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #212121;
+  color: #fff;
 }
 </style>

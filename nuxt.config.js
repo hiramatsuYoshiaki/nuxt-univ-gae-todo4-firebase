@@ -3,6 +3,7 @@ export default {
   /*
    ** Headers of the page
    */
+  
   head: {
     title: process.env.npm_package_name || '',
     meta: [
@@ -42,7 +43,8 @@ export default {
    */
   
   plugins: [
-    '~/plugins/firebase'
+    '~/plugins/firebase',
+    { src: "~plugins/persistedstate.js", ssr: false }
   ],
   /*
    ** Nuxt.js modules

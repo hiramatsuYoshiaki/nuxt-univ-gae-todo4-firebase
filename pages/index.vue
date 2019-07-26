@@ -21,6 +21,7 @@
         </div>
       </div>
     </div>
+
     <!-- <div>
       <div class="links">
         <a
@@ -67,6 +68,8 @@ import Logo from '~/components/Logo.vue'
 
 export default {
   layout: 'topPage',
+  // layout: 'default',
+  // layout: 'custom',
   components: {
     Logo
   }

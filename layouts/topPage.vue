@@ -1,5 +1,6 @@
 <template>
-  <div class="topPage">
+  <!-- <div class="topPage"> -->
+  <div>
     <HeaderNav />
     <nuxt />
   </div>
@@ -7,17 +8,16 @@
 <script>
 import HeaderNav from '~/components/header/HeaderNav.vue'
 export default {
-  layout: 'topPage',
   components: {
     HeaderNav
   }
 }
 </script>
 <style scoped lang="scss">
-.topPage {
-  margin: 0;
-  padding: 0;
-  width: auto;
-  min-width: 100vw;
-}
+// .topPage {
+//   margin: 0;
+//   padding: 0;
+//   width: auto;
+//   min-width: 100vw;
+// }
 </style>

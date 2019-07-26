@@ -5,7 +5,9 @@
       Photo Todos
     </h2>
     <h6>インスタグラムで見る、次に写真を撮りに行ってみたいスポット</h6>
-
+    <div @click="reload">
+      reload
+    </div>
     <!-- <i class="material-icons">
       add_circle_outline
     </i> -->
@@ -81,7 +83,6 @@
           <!-- <div>{{ item.insUrl }}</div> -->
 
           <div class="like-spot">
-            <h1>item.insUrlaaaaaaa:{{ item.insUrl }}</h1>
             <blockquote
               class="instagram-media"
               :data-instgrm-permalink="item.insUrl"
@@ -165,9 +166,7 @@ import {
   UPDATEDANE_TODO,
   CREATE_MYPHOTO
 } from '~/store/actionTypes'
-
 // import firebase from '@/plugins/firebase'
-
 export default {
   // head() {
   //   return {
@@ -200,10 +199,9 @@ export default {
     this.$store.dispatch(INIT_TODO)
   },
   mounted() {
-    console.log('mounted')
-    // window.instgrm.Embeds.process()
+    // console.log('mounted')
+    // location.href = '/about'
   },
-
   methods: {
     addTodoFirebase() {
       // const createDatas = {
@@ -282,6 +280,9 @@ export default {
       // console.log(createDatas.insDaneUrl)
       this.$store.dispatch(CREATE_MYPHOTO, createDatas)
       location.reload()
+    },
+    reload() {
+      location.reload(true)
     }
   }
 }

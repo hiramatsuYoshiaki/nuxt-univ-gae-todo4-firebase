@@ -12,6 +12,7 @@
     </div>
     <transition name="mainCon" appear>
       <ConContact />
+      contact
     </transition>
     <transition appear name="transitionScreen">
       <TransitionScreen v-if="page === '/contact'" />

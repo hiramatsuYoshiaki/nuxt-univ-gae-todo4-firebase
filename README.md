@@ -1075,8 +1075,50 @@ export const mutations = {
 ```
   git pull origin master  
 ```
-
-
+   
+# vuex-persistedstateを使う 
+1. インストール
+`
+$ npm install -S vuex-persistedstate
+`
+ 
+2. plugins/persistedstate.jsを作る 
+`persistedstate.js`
+`
+import createPersistedState from "vuex-persistedstate";
+    
+export default ({store, isHMR}) => {
+  // In case of HMR, mutation occurs before nuxReady, so previously saved state
+  // gets replaced with original state received from server. So, we've to skip HMR.
+  // Also nuxtReady event fires for HMR as well, which results multiple registration of
+  // vuex-persistedstate plugin
+  if (isHMR) return;
+    
+  if (process.client) {
+    window.onNuxtReady((nuxt) => {
+      createPersistedState()(store); // vuex plugins can be connected to store, even after creation
+    });
+  }
+};
+ 
+`
+3. nuxt.config.jsを編集
+`nuxt.config.js`
+`
+plugins: [
+    { src: "~plugins/persistedstate.js", ssr: false }
+  ]
+`
+ 
+### localStorageでstoreを永続化する 
+ nuxt.jsで再読込しても入力中の内容を保持できる。
+### localstorageに保存が可能になるとどうなる 
+1. 再読込しても、storeの状態を保つことができます。 
+2. 入力中のフォームの内容や、画面の状態を復元することができます。 
+3. store中のstateはlocalstorageを消し去らないと新しい値とかを追加しても状態が変わらなくなってしまいます。 
+### Nuxtの利点であるSSRもできるという点とは相性が悪い 
+SSR実行時のnodeにはlocalstorageがありませんから、window.localstorageはさわれません。
+そのため、今回のプラグインも{... , ssr; false}として、SSR時は起動しないようにする必要があります。
 
 
 
