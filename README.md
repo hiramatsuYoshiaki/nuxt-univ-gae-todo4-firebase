@@ -1120,6 +1120,9 @@ plugins: [
 SSR実行時のnodeにはlocalstorageがありませんから、window.localstorageはさわれません。
 そのため、今回のプラグインも{... , ssr; false}として、SSR時は起動しないようにする必要があります。
 
+# Vueにコンポーネントの再レンダリングを強制する正しい方法 
+https://michaelnthiessen.com/force-re-render/ 
+
 
 
 

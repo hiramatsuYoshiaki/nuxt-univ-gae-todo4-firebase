@@ -10,10 +10,11 @@
                 <a
                   href="http://tourdehdr.sakuraweb.com/h-works-website/index.html"
                 >
-                  <h5>portfolio site</h5>
-                  <h5>
+                  <h5>Portfolio</h5>
+                  <h5>Site</h5>
+                  <!-- <h5>
                     http://tourdehdr.sakuraweb.com/h-works-website/index.html
-                  </h5>
+                  </h5> -->
                 </a>
               </div>
               <br />
@@ -77,14 +78,14 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
+  justify-content: center;
+  align-items: center;
   @media (min-width: 992px) {
     flex-direction: row;
   }
 }
 .two-col {
-  width: 100%;
+  width: 90vw;
   height: 100%;
   padding: 2rem 2rem;
   @media (min-width: 992px) {
@@ -104,10 +105,24 @@ export default {
     }
   }
   p {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
+    line-height: 2rem;
     @media (min-width: 992px) {
-      font-size: 1.4rem;
+      font-size: 1rem;
     }
+  }
+}
+.col-block {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  @media (min-width: 992px) {
+    text-align: left;
   }
 }
 </style>

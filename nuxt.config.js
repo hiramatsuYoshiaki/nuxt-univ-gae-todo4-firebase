@@ -43,8 +43,10 @@ export default {
    */
   
   plugins: [
+    //firebaseを使う
     '~/plugins/firebase',
-    { src: "~plugins/persistedstate.js", ssr: false }
+    //localStorageでstoreを永続化する
+    { src: '~/plugins/localStorage.js', ssr: false }
   ],
   /*
    ** Nuxt.js modules

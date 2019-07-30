@@ -25,6 +25,7 @@
         <ConAbout />
       </div> -->
     </transition>
+
     <transition name="mainCon" appear>
       <div class="content-footer">
         <ContentFooter />
@@ -40,7 +41,7 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import TransitionScreen from '~/components/transition/TransitionScreen.vue'
 // import ConAbout from '~/components/content/about/ConAbout.vue'
 
@@ -85,13 +86,26 @@ export default {
     page() {
       return this.$store.state.page
     },
-    ...mapGetters(['isAuthenticated'])
+    ...mapGetters(['isAuthenticated']),
+    ...mapState(['regstar']),
+    ...mapState(['items']),
+    ...mapState(['user'])
+  },
+  created() {
+    console.log('pages/about.vue created()')
   },
   mounted() {
+    console.log('pages/about.vue mounted()')
+
     setTimeout(() => {
       if (!this.isAuthenticated) {
         // ログインしていなかったら飛ぶページを設定
         this.$router.push('/works')
+      } else {
+        // alert(this.regstar)
+        // alert(this.items)
+        // alert(this.user.uid)
+        // console.log(this.regstar)
       }
       this.loaded = true
     }, 0)

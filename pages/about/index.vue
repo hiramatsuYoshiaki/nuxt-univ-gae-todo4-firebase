@@ -60,7 +60,7 @@ export default {
       // pageDiscription: 'Database Strage',
       // pageDiscriptionDetail: 'Todoリストを作成するデモ'
     }
-  }
+  },
   // head() {
   //   return {
   //     title: this.pageTitle,
@@ -79,16 +79,19 @@ export default {
   //     return this.$store.state.page
   //   }
   // },
-  // mounted() {
-  //   console.log('mounted')
-  //   firebase.auth().onAuthStateChanged(async (user) => {
-  //     if (user) {
-  //       await console.log('login')
-  //     } else {
-  //       await console.log('logout')
-  //     }
-  //   })
-  // },
+  created() {
+    console.log('pages/about/index.vue created()')
+  },
+  mounted() {
+    console.log('pages/about/index.vue mounted()')
+    //   firebase.auth().onAuthStateChanged(async (user) => {
+    //     if (user) {
+    //       await console.log('login')
+    //     } else {
+    //       await console.log('logout')
+    //     }
+    //   })
+  }
   // methods: {
   //   link_commit(linkPath) {
   //     this.$store.commit('pagePathSet', linkPath)

@@ -26,25 +26,74 @@
           <p>{{ user.email }}でログイン中です。</p>
           <p>e-mail:{{ user.email }}</p>
           <p>uid:{{ user.uid }}</p>
-          <p>displayName:{{ user.dispalyName }}</p>
-
+          <!-- <p>displayName:{{ user.dispalyName }}</p> -->
+          <!-- <p>displayNmame: {{ registar[0].displayName }}</p> -->
           <button @click="logout">
             ログアウト
           </button>
           <a href="/works">CRTU</a>
         </div>
-
         <div v-else>
-          <p><input v-model="email" type="text" /></p>
-          <p><input v-model="password" type="password" /></p>
-          <p>
-            <input id="checkbox" v-model="register" type="checkbox" />
-            <label for="checkbox">新規登録</label>
-          </p>
+          <form novalidate="true" @submit.prevent="loginCheck">
+            <div v-if="authErrors.length">
+              <p>Please correct the following error(s):</p>
+              <ul>
+                <!-- <li v-for="(error, index) in errors" :key="index">
+                  <p>
+                    {{ error }}
+                  </p>
+                </li> -->
+                <li v-for="(error, index) in authErrors" :key="index">
+                  <p>
+                    {{ error }}
+                  </p>
+                </li>
+              </ul>
+            </div>
 
-          <button @click="login">
-            {{ register ? '新規登録' : 'ログイン' }}
-          </button>
+            <p>
+              <input
+                v-model="email"
+                type="text"
+                placeholder="メール"
+                required
+              />
+            </p>
+            <p>
+              <input
+                v-model="password"
+                type="password"
+                placeholder="パスワード"
+                required
+              />
+            </p>
+            <p v-if="register">
+              <input
+                v-model="displayName"
+                type="text"
+                placeholder="ユーザー"
+                required
+              />
+            </p>
+
+            <p>
+              <input id="checkbox" v-model="register" type="checkbox" />
+              <label for="checkbox">新規登録</label>
+            </p>
+            <!-- <div v-if="register">
+              <button type="submit" :disabled="!formIsValidSignin">
+                新規登録
+              </button>
+            </div>
+            <div v-else>
+              <button type="submit" :disabled="!formIsValidLogin">
+                ログイン
+              </button>
+            </div> -->
+            <button type="submit">
+              {{ register ? '新規登録' : 'ログイン' }}
+            </button>
+          </form>
         </div>
       </div>
     </div>
@@ -52,7 +101,7 @@
 </template>
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
-// import { mapState, mapGetters } from 'vuex'
+import { ADD_REGISTORY, GET_REGISTORY } from '~/store/actionTypes'
 import firebase from '@/plugins/firebase'
 export default {
   //   props: {
@@ -63,28 +112,49 @@ export default {
   //   }
   data() {
     return {
-      email: '',
-      password: '',
+      errors: [],
+      email: null,
+      password: null,
+      displayName: null,
       isWaiting: false,
-      register: ''
+      register: null
     }
   },
   computed: {
     ...mapState(['user']),
+    ...mapState(['regstar']),
+    ...mapState(['authErrors']),
+    // ...mapState(['isAuthError']),
     ...mapGetters(['isAuthenticated'])
+
+    // ...mapGetters(['isAuthError'])
+    // formIsValidSignin() {
+    //   return (
+    //     this.email !== null &&
+    //     this.password !== null &&
+    //     this.displayName !== null
+    //   )
+    // },
+    // formIsValidLogin() {
+    //   return this.email !== null && this.password !== null
+    // }
   },
   mounted() {
+    this.$store.commit('clearAuthError')
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        console.log('uid: ' + user.uid)
-        console.log('email: ' + user.email)
-        console.log('displayName: ' + user.displayName)
+        // console.log('uid: ' + user.uid)
+        // console.log('email: ' + user.email)
+        // console.log('displayName: ' + user.displayName)
         const loginUser = {
           uid: user.uid,
           email: user.email,
-          displayName: user.displayName
+          displayName: null
         }
-        this.setUser(loginUser)
+        this.$store.commit('setUser', loginUser)
+        // this.setUser(loginUser)
+        this.$store.dispatch(GET_REGISTORY, loginUser)
+
         console.log('not setTimeout: ' + this.user) // ここだと取得できない
         setTimeout(() => {
           console.log('setTimeout: ' + this.user.email) // ここだと取得できる
@@ -95,40 +165,122 @@ export default {
   },
   methods: {
     ...mapActions(['setUser']),
-    // ...mapActions(['setUser']),
+    loginCheck(e) {
+      this.$store.commit('clearAuthError')
+      // alert('loginCheck')
+      // this.$store.commit('clearAuthError')
+
+      // this.$store.commit('setAuthError', 'passowrd required.')
+      // this.$store.commit('setAuthError', 'Email required.')
+
+      // alert(this.isAuthError)
+
+      // this.errors = []
+      if (!this.password) {
+        this.$store.commit('setAuthError', 'パスワードは必須です。')
+      } else if (this.password.length < 8) {
+        this.$store.commit('setAuthError', 'パスワードは８文字以上です。')
+      }
+      if (!this.email) {
+        this.$store.commit('setAuthError', 'メールは必須です。')
+        // this.errors.push('Email required.')
+      } else if (!this.validEmail(this.email)) {
+        this.$store.commit('setAuthError', '無効なメール形式です。')
+        // this.errors.push('Valid email required.')
+      }
+      // if (email.length < 4) {
+      //     alert('Please enter an email address.');
+      //     return;
+      //   }
+      if (this.register) {
+        // if (this.displayName) this.errors.push('displayName required.')
+        if (this.displayName) {
+          this.$store.commit('setAuthError', 'ユーザー名は必須です。')
+        }
+      }
+      // console.log('error' + this.errors)
+      // if (this.errors.length) this.login()
+      // this.login()
+
+      if (this.authErrors.length) {
+        alert('error')
+      } else {
+        alert('normal')
+        this.login()
+      }
+      e.preventDefault()
+    },
     login() {
+      console.log('login')
+      // if (!this.formIsValidSignin) {
+      //   return
+      // }
+      // if (!this.formIsValidLogin) {
+      //   return
+      // }
+      // if (!this.image) {
+      //   return
+      // }
       this.isWaiting = true
       if (this.register) {
+        console.log('signin')
         firebase
           .auth()
           .createUserWithEmailAndPassword(this.email, this.password)
+          .then((res) => {
+            console.log('createUserWithEmailAndPassword')
+            const user = firebase.auth().currentUser
+            console.log('uid: ' + user.uid)
+            console.log('email: ' + user.email)
+            console.log('displayName: ' + this.displayName)
+            return user
+          })
           .then((user) => {
-            // ログインしたら飛ぶページを指定
-            // this.$router.push('/about')
+            console.log('firebase auth add user')
+            console.log('uid: ' + user.uid)
+            console.log('email: ' + user.email)
+            console.log('displayName: ' + this.displayName)
+            this.$store.dispatch(ADD_REGISTORY, {
+              uid: user.uid,
+              email: user.email,
+              displayName: this.displayName
+            })
+          })
+          .then((user) => {
             const lp = '/about'
             this.link_commit(lp)
             this.isWaiting = false
           })
           .catch((error) => {
-            alert('login error' + error)
+            alert('signin error' + error)
+            console.log('signin error' + error)
             this.isWaiting = false
+            this.$store.commit('setAuthError', error)
           })
       } else {
+        console.log('login email pass')
         firebase
           .auth()
           .signInWithEmailAndPassword(this.email, this.password)
           .then((user) => {
-            // ログインしたら飛ぶページを指定
-            // this.$router.push('/about')
             const lp = '/about'
             this.link_commit(lp)
             this.isWaiting = false
           })
           .catch((error) => {
             alert('login error' + error)
+            console.log('login error' + error)
             this.isWaiting = false
+            // this.errors.push('Invalid email .')
+            this.$store.commit('setAuthError', error)
           })
       }
+    },
+    validEmail: (email) => {
+      /* eslint-disable */
+      const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      /* eslint-disable */
+      return re.test(email)
     },
     logout() {
       console.log('logout')
@@ -136,7 +288,8 @@ export default {
         .auth()
         .signOut()
         .then(() => {
-          this.setUser(null)
+          this.$store.commit('setUser', null)
+          // this.setUser(null)
         })
         .catch((error) => {
           alert('logout error' + error)
@@ -145,7 +298,6 @@ export default {
     link_commit(linkPath) {
       this.active = true
       this.$store.commit('pagePathSet', linkPath)
-      console.log('linkPath: ' + linkPath)
       setTimeout(() => {
         this.$router.push({ path: linkPath })
       }, 500)

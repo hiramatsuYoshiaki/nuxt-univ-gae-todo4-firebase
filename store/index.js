@@ -4,7 +4,9 @@ import {
   REMOVE_TODO,
   INIT_TODO,
   UPDATEDANE_TODO,
-  CREATE_MYPHOTO
+  CREATE_MYPHOTO,
+  ADD_REGISTORY,
+  GET_REGISTORY
 } from './actionTypes'
 import firebase from '@/plugins/firebase'
 
@@ -14,7 +16,10 @@ export const state = () => ({
   page: 'home',
   items: [],
   user: null,
-  reloadkey: 0
+  reloadkey: 0,
+  regstar: [],
+  authErrors: []
+  // isAuthError: false
 })
 export const mutations = {
   pagePathSet(state, payload) {
@@ -23,34 +28,80 @@ export const mutations = {
   setUser(state, payload) {
     state.user = payload
   },
+  // no use
   setReloadkey(state, payload) {
     state.reloadkey += 1
+  },
+  setAuthError(state, payload) {
+    state.authErrors.push(payload)
+    // state.isAuthError = true
+  },
+  clearAuthError(state) {
+    state.authErrors = []
+    // state.isAuthError = false
   },
   // firebase
   ...vuexfireMutations
 }
 
 export const actions = {
-  setUser({ commit }, payload) {
-    commit('setUser', payload)
-  },
+  // setUser({ commit }, payload) {
+  //   commit('setUser', payload)
+  // },
 
-  [INIT_TODO]: firebaseAction(({ bindFirebaseRef }) => {
-    bindFirebaseRef('items', db.ref('imgdatas'), { wait: true })
+  [ADD_REGISTORY]: firebaseAction((context, user) => {
+    console.log('dispatch ADD_REGISTORY')
+    console.log('disp uid: ' + user.uid)
+    console.log('disp email: ' + user.email)
+    console.log('disp name: ' + user.displayName)
+    db.ref('todoUser')
+      .child(user.uid)
+      .push(user)
   }),
-  [ADD_TODO]: firebaseAction((context, text) => {
-    db.ref('imgdatas').push(text)
+  [GET_REGISTORY]: firebaseAction(({ bindFirebaseRef }, user) => {
+    console.log('GET_REGISTORY uid: ' + user.uid)
+    bindFirebaseRef('regstar', db.ref('todoUser/' + user.uid), {
+      wait: true
+    })
+    console.log('GET_REGISTORY')
   }),
-  [REMOVE_TODO]: firebaseAction((context, key) => {
-    db.ref('imgdatas')
-      .child(key)
+
+  [INIT_TODO]: firebaseAction(({ bindFirebaseRef }, user) => {
+    console.log('INIT_TODO uid: ' + user)
+    bindFirebaseRef('items', db.ref('imgdatas').child(user), {
+      wait: true
+    })
+  }),
+  [ADD_TODO]: firebaseAction((context, insdata) => {
+    db.ref('imgdatas/' + insdata.user).push(insdata)
+  }),
+  [REMOVE_TODO]: firebaseAction((context, keydata) => {
+    db.ref('imgdatas/' + keydata.user)
+      .child(keydata.key)
       .remove()
   }),
-  [UPDATEDANE_TODO]: firebaseAction((context, key) => {
-    db.ref('imgdatas')
-      .child(key)
+  [UPDATEDANE_TODO]: firebaseAction((context, keydata) => {
+    db.ref('imgdatas' + keydata.user)
+      .child(keydata.key)
       .update({ done: true })
   }),
+  // [INIT_TODO]: firebaseAction(({ bindFirebaseRef }) => {
+  //   bindFirebaseRef('items', db.ref('imgdatas'), { wait: true })
+  // }),
+  // [ADD_TODO]: firebaseAction((context, text) => {
+  //   db.ref('imgdatas').push(text)
+  // }),
+  // [REMOVE_TODO]: firebaseAction((context, key) => {
+  //   db.ref('imgdatas')
+  //     .child(key)
+  //     .remove()
+  // }),
+  // [UPDATEDANE_TODO]: firebaseAction((context, key) => {
+  //   db.ref('imgdatas')
+  //     .child(key)
+  //     .update({ done: true })
+  // }),
+
   [CREATE_MYPHOTO]: (context, createDatas) => {
     console.log('CREATE_MYPHOTO')
     // firebase
@@ -85,9 +136,9 @@ export const actions = {
     //   }
     // }
     const filename = createDatas.filename
-    alert(filename)
-    alert(createDatas.stargeImage)
-    alert(imgDatas.title)
+    // alert(filename)
+    // alert(createDatas.stargeImage)
+    // alert(imgDatas.title)
     firebase
       .storage()
       .ref('images/' + filename)
@@ -103,7 +154,10 @@ export const actions = {
         // const updates = {}
         // updates['imgdatas/' + createDatas.key] = imgDatas
         // db.ref().update(updates)
-        db.ref('imgdatas')
+        // db.ref('imgdatas')
+        //   .child(createDatas.key)
+        //   .update(imgDatas)
+        db.ref('imgdatas/' + createDatas.user)
           .child(createDatas.key)
           .update(imgDatas)
       })
@@ -117,4 +171,8 @@ export const getters = {
   isAuthenticated(state) {
     return !!state.user
   }
+  // getUser(state) {
+  //   console.log('getUser uid: ' + state.regstar.displayName)
+  //   return !!state.regstar
+  // }
 }
