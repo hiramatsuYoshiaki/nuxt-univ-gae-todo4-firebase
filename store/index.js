@@ -6,7 +6,8 @@ import {
   UPDATEDANE_TODO,
   CREATE_MYPHOTO,
   ADD_REGISTORY,
-  GET_REGISTORY
+  GET_REGISTORY,
+  EDIT_TODO
 } from './actionTypes'
 import firebase from '@/plugins/firebase'
 
@@ -80,10 +81,27 @@ export const actions = {
       .child(keydata.key)
       .remove()
   }),
+
   [UPDATEDANE_TODO]: firebaseAction((context, keydata) => {
-    db.ref('imgdatas' + keydata.user)
+    db.ref('imgdatas/' + keydata.user)
       .child(keydata.key)
       .update({ done: true })
+  }),
+  [EDIT_TODO]: firebaseAction((context, keydata) => {
+    // console.log('EDIT_TODO')
+    // console.log('user: ' + keydata.user)
+    // console.log('key: ' + keydata.key)
+    // console.log('title: ' + keydata.title)
+
+    db.ref('imgdatas/' + keydata.user)
+      .child(keydata.key)
+      .update({ title: keydata.title })
+      .then((res) => {
+        console.log('firebase update: ' + res)
+      })
+      .catch((err) => {
+        console.log('firebase error code: ' + err)
+      })
   }),
   // [INIT_TODO]: firebaseAction(({ bindFirebaseRef }) => {
   //   bindFirebaseRef('items', db.ref('imgdatas'), { wait: true })

@@ -20,10 +20,10 @@
     </div>
 
     <transition name="mainCon" appear>
-      <nuxt-child />
-      <!-- <div v-if="false" class="content-main">
-        <ConAbout />
-      </div> -->
+      <div class="content-main">
+        <!-- <ConAbout /> -->
+        <nuxt-child />
+      </div>
     </transition>
 
     <transition name="mainCon" appear>

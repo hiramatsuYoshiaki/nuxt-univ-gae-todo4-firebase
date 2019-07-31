@@ -77,15 +77,17 @@
           <div v-if="!item.done" class="ins-group ">
             <div class="like-spot">
               <div class="like-spot-header">
-                <!-- {{ item.title }}
-                {{ item.done }} -->
-
-                <!-- <span class="function-icon" @click="isAction = !isAction"> -->
                 <span class="function-icon" @click="addActionPhoto(index)">
                   <i class="material-icons">add_a_photo</i>
                 </span>
                 <span class="like-spot-title">
                   {{ item.title }}
+                </span>
+                <span
+                  class="function-icon"
+                  @click="editActionPhoto(index, item)"
+                >
+                  <i class="material-icons">edit</i>
                 </span>
                 <span
                   class="function-icon"
@@ -112,10 +114,10 @@
               v-if="isAction && !item.done && index === selectIndex"
               class="action-spot"
             >
-              <p>私のインスタ写真を載せる</p>
               <div class="action-spot-wrap">
                 <div class="add-done-ins-form">
                   <form @submit.prevent="onCreateMyPhoto(item)">
+                    <p>私のインスタ写真を載せる</p>
                     <p>
                       <input
                         v-model="insDaneUrl"
@@ -123,24 +125,200 @@
                         placeholder="私のインスタ写真URL"
                       />
                     </p>
-
                     <div>
                       <div id="app">
                         <p>私のオリジナル写真を載せる</p>
                         <img v-show="imageUrl" :src="imageUrl" />
-                        <input type="file" @change="onFileChange" />
+                        <input
+                          type="file"
+                          class="selectBtn"
+                          @change="onFileChange"
+                        />
                       </div>
-                      <div>imageUrl:{{ imageUrl }}</div>
-                      <div>image:{{ image }}</div>
+                      <!-- <div>imageUrl:{{ imageUrl }}</div>
+                      <div>image:{{ image }}</div> -->
                     </div>
 
                     <div class="add-btn">
-                      <button type="submit">
+                      <button type="submit" class="selectBtn">
                         upload Done
                       </button>
                     </div>
                   </form>
                   <div class="modal-close" @click="isAction = false">
+                    <i class="material-icons">
+                      close
+                    </i>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              v-if="isEdit && !item.done && index === selectIndexEdit"
+              class="action-spot"
+            >
+              <div class="action-spot-wrap">
+                <div class="add-done-ins-form">
+                  <form @submit.prevent="deitTodoFirebase(item)">
+                    <p>編集する</p>
+                    <p>
+                      <input
+                        v-model="editSpotName"
+                        type="text"
+                        :placeholder="item.title"
+                      />
+                    </p>
+                    <div class="add-btn">
+                      <button type="submit" class="selectBtn">
+                        Edit Done
+                      </button>
+                    </div>
+                  </form>
+                  <div class="modal-close" @click="isEdit = false">
+                    <i class="material-icons">
+                      close
+                    </i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div v-if="item.done" class="action-done">
+              <br />
+              <blockquote
+                class="instagram-media"
+                :data-instgrm-permalink="item.insDaneUrl"
+                data-instgrm-version="12"
+                style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"
+              >
+                <a
+                  :href="item.insUrl"
+                  style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;"
+                  target="_blank"
+                />
+              </blockquote>
+              <script async src="//www.instagram.com/embed.js" />
+              <!-- <div>title:{{ item.title }}</div>
+            <div>insDaneUrl:{{ item.insDaneUrl }}</div>
+            <div>myPhoto:{{ item.filename }}</div>
+            <div>myPhotoUrl:{{ item.imageUrl }}</div> -->
+              <div class="origin-photo">
+                <img :src="item.imageUrl" alt="img" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- done################################################## -->
+      <div class="todo-list-header">
+        <span>Done Photo </span>
+        <!-- <span @click="isAddList = !isAddList">
+          <i class="material-icons add-list function-icon">playlist_add</i>
+        </span> -->
+      </div>
+      <div class="flex-container ">
+        <div v-for="(item, index) in items" :key="item.key">
+          <div v-if="item.done" class="ins-group ">
+            <div class="like-spot">
+              <div class="like-spot-header">
+                <span class="function-icon" @click="addActionPhoto(index)">
+                  <i class="material-icons">add_a_photo</i>
+                </span>
+                <span class="like-spot-title">
+                  {{ item.title }}
+                </span>
+                <span
+                  class="function-icon"
+                  @click="editActionPhoto(index, item)"
+                >
+                  <i class="material-icons">edit</i>
+                </span>
+                <span
+                  class="function-icon"
+                  @click="removeTodoFirebase(item['.key'])"
+                >
+                  <i class="material-icons">delete_forever</i>
+                </span>
+              </div>
+              <blockquote
+                class="instagram-media"
+                :data-instgrm-permalink="item.insUrl"
+                data-instgrm-version="12"
+                style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"
+              >
+                <a
+                  :href="item.insUrl"
+                  style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;"
+                  target="_blank"
+                />
+              </blockquote>
+              <script async src="//www.instagram.com/embed.js" />
+            </div>
+            <div
+              v-if="isAction && !item.done && index === selectIndex"
+              class="action-spot"
+            >
+              <div class="action-spot-wrap">
+                <div class="add-done-ins-form">
+                  <form @submit.prevent="onCreateMyPhoto(item)">
+                    <p>私のインスタ写真を載せる</p>
+                    <p>
+                      <input
+                        v-model="insDaneUrl"
+                        type="url"
+                        placeholder="私のインスタ写真URL"
+                      />
+                    </p>
+                    <div>
+                      <div id="app">
+                        <p>私のオリジナル写真を載せる</p>
+                        <img v-show="imageUrl" :src="imageUrl" />
+                        <input
+                          type="file"
+                          class="selectBtn"
+                          @change="onFileChange"
+                        />
+                      </div>
+                      <!-- <div>imageUrl:{{ imageUrl }}</div>
+                      <div>image:{{ image }}</div> -->
+                    </div>
+
+                    <div class="add-btn">
+                      <button type="submit" class="selectBtn">
+                        upload Done
+                      </button>
+                    </div>
+                  </form>
+                  <div class="modal-close" @click="isAction = false">
+                    <i class="material-icons">
+                      close
+                    </i>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              v-if="isEdit && !item.done && index === selectIndexEdit"
+              class="action-spot"
+            >
+              <div class="action-spot-wrap">
+                <div class="add-done-ins-form">
+                  <form @submit.prevent="deitTodoFirebase(item)">
+                    <p>編集する</p>
+                    <p>
+                      <input
+                        v-model="editSpotName"
+                        type="text"
+                        :placeholder="item.title"
+                      />
+                    </p>
+                    <div class="add-btn">
+                      <button type="submit" class="selectBtn">
+                        Edit Done
+                      </button>
+                    </div>
+                  </form>
+                  <div class="modal-close" @click="isEdit = false">
                     <i class="material-icons">
                       close
                     </i>
@@ -176,7 +354,7 @@
         </div>
       </div>
     </section>
-    <section v-if="isAddList || isAction" class="modal-bg" />
+    <section v-if="isAddList || isAction || isEdit" class="modal-bg" />
   </div>
 </template>
 
@@ -190,7 +368,8 @@ import {
   INIT_TODO,
   UPDATEDANE_TODO,
   CREATE_MYPHOTO,
-  GET_REGISTORY
+  GET_REGISTORY,
+  EDIT_TODO
 } from '~/store/actionTypes'
 // import firebase from '@/plugins/firebase'
 export default {
@@ -216,6 +395,12 @@ export default {
       image: null, // image data
       isAddList: false,
       isAction: false,
+      selectIndex: 0,
+      isEdit: false,
+      selectIndexEdit: 0,
+      // editItem: null,
+      // editKey: '',
+      editSpotName: '',
       insActive: false,
       uid: '',
       email: ''
@@ -351,9 +536,10 @@ export default {
       // location.reload()
     },
     removeTodoFirebase(key) {
-      // this.$store.dispatch(REMOVE_TODO, key)
-      // this.$store.dispatch(REMOVE_TODO, { key: key, user: this.regstar[0].uid })
-      this.$store.dispatch(REMOVE_TODO, { key: key, user: this.user.uid })
+      const result = window.confirm('削除しますか？')
+      if (result) {
+        this.$store.dispatch(REMOVE_TODO, { key: key, user: this.user.uid })
+      }
       // this.$store.dispatch(INIT_TODO)
       // location.reload()
     },
@@ -367,6 +553,7 @@ export default {
       })
       // location.reload()
     },
+
     onFileChange(e) {
       const files = e.target.files || e.dataTransfer.files
       if (!files.length) {
@@ -415,9 +602,28 @@ export default {
       this.$store.dispatch(CREATE_MYPHOTO, createDatas)
       // location.reload()
     },
+
     addActionPhoto(idx) {
       this.isAction = !this.isAction
       this.selectIndex = idx
+    },
+    editActionPhoto(idx, item) {
+      this.isEdit = !this.isEdit
+      this.selectIndexEdit = idx
+      this.editSpotName = item.title
+    },
+    deitTodoFirebase(item) {
+      const result = window.confirm('修正しますか？')
+      if (result) {
+        const editDatas = {
+          // firebase
+          key: item['.key'],
+          title: this.editSpotName,
+          user: this.user.uid
+        }
+        this.$store.dispatch(EDIT_TODO, editDatas)
+      }
+      this.isEdit = false
     }
     // reload() {
     //   location.reload(true)
@@ -430,18 +636,20 @@ export default {
 <style scoped lang="scss">
 .content {
   position: relative;
-  width: 100%;
+  width: 100vw;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  padding: 2rem 0.5rem;
+  padding: 2rem 1rem;
   @media (min-width: 768px) {
     padding: 8rem 8rem;
   }
 }
 .flex-container {
+  display: relative;
+  overflow: hidden;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -556,7 +764,7 @@ img {
     font-size: 1.2rem;
     line-height: 1.4rem;
   }
-  width: 80%;
+  width: 70%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -566,7 +774,7 @@ img {
   width: 10rem;
   height: auto;
 }
-.origin-photo {
+.origin-photo img {
   width: 20rem;
   height: auto;
 }
