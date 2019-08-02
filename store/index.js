@@ -19,7 +19,9 @@ export const state = () => ({
   user: null,
   reloadkey: 0,
   regstar: [],
-  authErrors: []
+  authErrors: [],
+  addTodoErrors: [],
+  message: ''
   // isAuthError: false
 })
 export const mutations = {
@@ -35,11 +37,21 @@ export const mutations = {
   },
   setAuthError(state, payload) {
     state.authErrors.push(payload)
-    // state.isAuthError = true
   },
   clearAuthError(state) {
     state.authErrors = []
-    // state.isAuthError = false
+  },
+  setAddTodoError(state, payload) {
+    state.addTodoErrors.push(payload)
+  },
+  clearAddTodoError(state) {
+    state.addTodoErrors = []
+  },
+  setMessage(state, payload) {
+    state.message = payload
+  },
+  clearMessage(state) {
+    state.message = ''
   },
   // firebase
   ...vuexfireMutations
@@ -75,6 +87,8 @@ export const actions = {
   }),
   [ADD_TODO]: firebaseAction((context, insdata) => {
     db.ref('imgdatas/' + insdata.user).push(insdata)
+    context.commit('setMessage', '追加しました。')
+    console.log('add todo')
   }),
   [REMOVE_TODO]: firebaseAction((context, keydata) => {
     db.ref('imgdatas/' + keydata.user)
