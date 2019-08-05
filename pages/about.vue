@@ -19,12 +19,12 @@
       />
     </div>
 
-    <transition name="mainCon" appear>
-      <div class="content-main">
-        <!-- <ConAbout /> -->
-        <nuxt-child />
-      </div>
-    </transition>
+    <!-- <transition name="mainCon" appear> -->
+    <div class="content-main">
+      <!-- <ConAbout /> -->
+      <nuxt-child />
+    </div>
+    <!-- </transition> -->
 
     <transition name="mainCon" appear>
       <div class="content-footer">
@@ -36,7 +36,7 @@
       <TransitionScreen v-if="page === '/about'" />
     </transition>
     <div v-if="!loaded" class="loading">
-      <h1>loading ...</h1>
+      <!-- <h1>login ...</h1> -->
     </div>
   </div>
 </template>
@@ -95,7 +95,7 @@ export default {
     console.log('pages/about.vue created()')
   },
   mounted() {
-    console.log('pages/about.vue mounted()')
+    // console.log('pages/about.vue mounted()')
 
     setTimeout(() => {
       if (!this.isAuthenticated) {
@@ -106,8 +106,8 @@ export default {
         // alert(this.items)
         // alert(this.user.uid)
         // console.log(this.regstar)
+        // this.loaded = true
       }
-      this.loaded = true
     }, 0)
     // console.log('mounted')
     // firebase.auth().onAuthStateChanged(async (user) => {
@@ -118,6 +118,9 @@ export default {
     //     await this.link_commit('works')
     //   }
     // })
+    // setTimeout(() => {
+    this.loaded = true
+    // }, 1000)
   },
   methods: {
     link_commit(linkPath) {
@@ -180,8 +183,11 @@ export default {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
-  background-color: #212121;
+  height: 100%;
+  background-color: $body-color;
   color: #fff;
+  margin: 0;
+  padding: 0;
+  z-index: 1000;
 }
 </style>

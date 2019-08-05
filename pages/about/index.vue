@@ -19,11 +19,11 @@
       />
     </div> -->
 
-    <transition name="mainCon" appear>
-      <div class="content-main">
-        <ConAbout />
-      </div>
-    </transition>
+    <!-- <transition name="mainCon" appear> -->
+    <div class="content-main">
+      <ConAbout />
+    </div>
+    <!-- </transition> -->
 
     <!-- <transition v-if="false" name="mainCon" appear>
       <div class="content-footer">

@@ -203,9 +203,9 @@ export default {
       // this.login()
 
       if (this.authErrors.length) {
-        alert('error')
+        // alert('error')
       } else {
-        alert('normal')
+        // alert('normal')
         this.login()
       }
       e.preventDefault()
@@ -252,7 +252,7 @@ export default {
             this.isWaiting = false
           })
           .catch((error) => {
-            alert('signin error' + error)
+            // alert('signin error' + error)
             console.log('signin error' + error)
             this.isWaiting = false
             this.$store.commit('setAuthError', error)
@@ -268,7 +268,7 @@ export default {
             this.isWaiting = false
           })
           .catch((error) => {
-            alert('login error' + error)
+            // alert('login error' + error)
             console.log('login error' + error)
             this.isWaiting = false
             // this.errors.push('Invalid email .')
@@ -292,7 +292,7 @@ export default {
           // this.setUser(null)
         })
         .catch((error) => {
-          alert('logout error' + error)
+          // alert('logout error' + error)
         })
     },
     link_commit(linkPath) {

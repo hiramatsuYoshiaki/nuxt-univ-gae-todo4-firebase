@@ -1,133 +1,81 @@
 <template>
   <div class="content">
-    <div v-for="(reg, index) in regstar" :key="index">
-      <p>{{ reg.displayName }}</p>
-    </div>
-    <p>e-mail:{{ email }}</p>
-    <p>uid:{{ uid }}</p>
+    <!-- <p>e-mail:{{ email }}</p>
+    <p>uid:{{ uid }}</p> -->
 
     <h6>Firebase CRUD</h6>
     <h2>
       Photo Todos
     </h2>
-    <h6>インスタグラムで見る、次に写真を撮りに行ってみたいスポット</h6>
+    <h6>インスタグラムで見る、こんな写真を撮ってみたい！</h6>
+    <div v-for="(reg, index) in regstar" :key="index">
+      <p>{{ reg.displayName }}</p>
+    </div>
     <!-- <button @click="reload">
-      reload
+      インスタグラムを読み込む
     </button> -->
-    <!-- <div v-if="isAddList" class="new-todo-add">
-      <div class="new-todo-add-wrap">
-        <div class="add-new-form">
-          <p>新しいスポットを追加する</p>
-          <form novalidate @submit.prevent="addTodo">
-            <div v-if="addTodoErrors.length">
-              <p>Please correct the following error(s):</p>
-              <ul>
-                <li v-for="(error, index) in addTodoErrors" :key="index">
-                  <p>
-                    {{ error }}
-                  </p>
-                </li>
-              </ul>
-            </div>
-            <p>写真を撮りたいスポット</p>
-            <p>
-              <input
-                v-model="text"
-                type="text"
-                placeholder="写真を撮りたいスポット"
-              />
-            </p>
-            <p>インスタグラムの写真のURL</p>
-            <p>
-              <input
-                v-model="insUrl"
-                type="url"
-                placeholder="参考にしたいインスタ写真のURL"
-              />
-            </p>
-            <div class="add-btn">
-              <button type="submit">
-                Todoリストに追加する
-              </button>
-            </div>
-          </form>
-          <div class="modal-close" @click="isAddList = false">
-            <i class="material-icons">
-              close
-            </i>
-          </div>
-        </div>
-      </div>
-    </div> -->
 
     <section class="todo-list">
       <div class="todo-list-header">
-        <span>Photo Todo List </span>
+        <span>Todo List </span>
         <!-- <span @click="isAddList = !isAddList"> -->
         <span @click="addTodoList()">
           <i class="material-icons add-list function-icon">playlist_add</i>
         </span>
       </div>
-      <!-- <div v-if="isAddList" class="new-todo-add">
-        <div class="new-todo-add-wrap">
-          <div class="add-new-form">
-            <p>新しいスポットを追加する</p>
-            <div class="modal-close" @click="isAddList = false">
-              <i class="material-icons">
-                close
-              </i>
-            </div>
-          </div>
-        </div>
-      </div> -->
-      <div v-if="isAddList" class="new-todo-add">
-        <div class="new-todo-add-wrap">
-          <div class="add-new-form">
-            <p>新しいスポットを追加する</p>
-            <form novalidate @submit.prevent="addTodo">
-              <div v-if="addTodoErrors.length">
-                <p>Please correct the following error(s):</p>
-                <ul>
-                  <li v-for="(error, index) in addTodoErrors" :key="index">
-                    <p>
-                      {{ error }}
+
+      <transition name="fade05">
+        <div v-if="isAddList" class="new-todo-add">
+          <div class="new-todo-add-wrap">
+            <div class="add-new-form">
+              <p class="modal-title">
+                TODO LIST に追加する
+              </p>
+              <form novalidate @submit.prevent="addTodo">
+                <div v-if="addTodoErrors.length" class="error-grp">
+                  <p class="error-title">
+                    入力項目を確認してください。
+                  </p>
+                  <ul>
+                    <li v-for="(error, index) in addTodoErrors" :key="index">
+                      <p class="error-msg">
+                        {{ error }}
+                      </p>
+                    </li>
+                  </ul>
+                </div>
+                <p class="modal-msg">
+                  {{ message }}
+                </p>
+                <p>写真を撮りたいスポット</p>
+                <p>
+                  <input v-model="text" type="text" placeholder="スポット" />
+                </p>
+                <p>インスタグラムの写真のURL</p>
+                <p>
+                  <input
+                    v-model="insUrl"
+                    type="url"
+                    placeholder="インスタ写真のURL"
+                  />
+                </p>
+                <div class="add-btn">
+                  <button type="submit">
+                    <p class="modai-button">
+                      Todoリストに追加する
                     </p>
-                  </li>
-                </ul>
+                  </button>
+                </div>
+              </form>
+              <div class="modal-close" @click="isAddList = false">
+                <i class="material-icons">
+                  close
+                </i>
               </div>
-              <!-- <div v-if="message"> -->
-              <p>{{ message }}</p>
-              <!-- </div> -->
-              <p>写真を撮りたいスポット</p>
-              <p>
-                <input
-                  v-model="text"
-                  type="text"
-                  placeholder="写真を撮りたいスポット"
-                />
-              </p>
-              <p>インスタグラムの写真のURL</p>
-              <p>
-                <input
-                  v-model="insUrl"
-                  type="url"
-                  placeholder="参考にしたいインスタ写真のURL"
-                />
-              </p>
-              <div class="add-btn">
-                <button type="submit">
-                  Todoリストに追加する
-                </button>
-              </div>
-            </form>
-            <div class="modal-close" @click="isAddList = false">
-              <i class="material-icons">
-                close
-              </i>
             </div>
           </div>
         </div>
-      </div>
+      </transition>
 
       <div class="flex-container ">
         <div v-for="(item, index) in items" :key="item.key">
@@ -143,36 +91,38 @@
                 >
                   <i class="material-icons">more_vert</i>
                 </span>
-                <div v-if="isMore && selectMore === index" class="more-vert">
-                  <span class="function-icon" @click="addActionPhoto(index)">
-                    <i class="material-icons">add_a_photo</i>
-                    <span class="function-text">新規追加</span>
-                  </span>
-                  <span
-                    class="function-icon"
-                    @click="editActionPhoto(index, item)"
-                  >
-                    <i class="material-icons">edit</i>
-                    <span class="function-text">編集</span>
-                  </span>
-                  <span
-                    class="function-icon"
-                    @click="removeTodoFirebase(item['.key'])"
-                  >
-                    <i class="material-icons">delete_forever</i>
-                    <span class="function-text">削除</span>
-                  </span>
-                  <span
-                    v-if="item.done"
-                    class="function-icon"
-                    @click="fullActive(index)"
-                  >
-                    <i class="material-icons">
-                      fullscreen
-                    </i>
-                    <span class="function-text">画像拡大</span>
-                  </span>
-                </div>
+                <transition name="fade05">
+                  <div v-if="isMore && selectMore === index" class="more-vert">
+                    <span class="function-icon" @click="addActionPhoto(index)">
+                      <i class="material-icons">add_a_photo</i>
+                      <span class="function-text">新規追加</span>
+                    </span>
+                    <span
+                      class="function-icon"
+                      @click="editActionPhoto(index, item)"
+                    >
+                      <i class="material-icons">edit</i>
+                      <span class="function-text">編集</span>
+                    </span>
+                    <span
+                      class="function-icon"
+                      @click="removeTodoFirebase(item['.key'])"
+                    >
+                      <i class="material-icons">delete_forever</i>
+                      <span class="function-text">削除</span>
+                    </span>
+                    <span
+                      v-if="item.done"
+                      class="function-icon"
+                      @click="fullActive(index)"
+                    >
+                      <i class="material-icons">
+                        fullscreen
+                      </i>
+                      <span class="function-text">画像拡大</span>
+                    </span>
+                  </div>
+                </transition>
               </div>
               <blockquote
                 class="instagram-media"
@@ -188,80 +138,126 @@
               </blockquote>
               <script async src="//www.instagram.com/embed.js" />
             </div>
-            <div
-              v-if="isAction && !item.done && index === selectIndex"
-              class="action-spot"
-            >
-              <div class="action-spot-wrap">
-                <div class="add-done-ins-form">
-                  <form @submit.prevent="onCreateMyPhoto(item)">
-                    <p>私のインスタ写真を載せる</p>
-                    <p>
-                      <input
-                        v-model="insDaneUrl"
-                        type="url"
-                        placeholder="私のインスタ写真URL"
-                      />
-                    </p>
-                    <div>
-                      <div id="app">
-                        <p>私のオリジナル写真を載せる</p>
-                        <img v-show="imageUrl" :src="imageUrl" />
-                        <input
-                          type="file"
-                          class="selectBtn"
-                          @change="onFileChange"
-                        />
+            <transition name="fade05">
+              <div v-if="isAction && index === selectIndex" class="action-spot">
+                <div class="action-spot-wrap">
+                  <div class="add-done-ins-form">
+                    <form novalidate @submit.prevent="onCreate(item)">
+                      <p class="modal-title">
+                        DONE LIST に追加する
+                      </p>
+                      <div v-if="addTodoErrors.length" class="error-grp">
+                        <p class="error-title">
+                          入力項目を確認してください。
+                        </p>
+                        <ul>
+                          <li
+                            v-for="(error, index) in addTodoErrors"
+                            :key="index"
+                          >
+                            <p class="error-msg">
+                              {{ error }}
+                            </p>
+                          </li>
+                        </ul>
                       </div>
-                      <!-- <div>imageUrl:{{ imageUrl }}</div>
-                      <div>image:{{ image }}</div> -->
-                    </div>
+                      <p class="modal-msg">
+                        {{ message }}
+                      </p>
+                      <p>私のインスタ写真を載せる</p>
+                      <p>
+                        <input
+                          v-model="insDaneUrl"
+                          type="url"
+                          placeholder="私のインスタ写真URL"
+                          size="15"
+                        />
+                      </p>
+                      <div>
+                        <div id="app">
+                          <p>私のオリジナル写真を載せる</p>
 
-                    <div class="add-btn">
-                      <button type="submit" class="selectBtn">
-                        upload Done
-                      </button>
+                          <input
+                            type="file"
+                            class="selectBtn"
+                            @change="onFileChange"
+                          />
+                          <img
+                            v-show="imageUrl"
+                            :src="imageUrl"
+                            class="my-photo"
+                          />
+                        </div>
+                      </div>
+                      <div class="add-btn">
+                        <button type="submit" class="selectBtn">
+                          私のインスタを追加する。
+                        </button>
+                      </div>
+                    </form>
+                    <div class="modal-close" @click="isAction = false">
+                      <i class="material-icons">
+                        close
+                      </i>
                     </div>
-                  </form>
-                  <div class="modal-close" @click="isAction = false">
-                    <i class="material-icons">
-                      close
-                    </i>
                   </div>
                 </div>
               </div>
-            </div>
-            <div
-              v-if="isEdit && !item.done && index === selectIndexEdit"
-              class="action-spot"
-            >
-              <div class="action-spot-wrap">
-                <div class="add-done-ins-form">
-                  <form @submit.prevent="deitTodoFirebase(item)">
-                    <p>編集する</p>
-                    <p>
-                      <input
-                        v-model="editSpotName"
-                        type="text"
-                        :placeholder="item.title"
-                      />
-                    </p>
-                    <div class="add-btn">
-                      <button type="submit" class="selectBtn">
-                        Edit Done
-                      </button>
+            </transition>
+            <!-- edit -->
+            <transition name="fade05">
+              <div
+                v-if="isEdit && index === selectIndexEdit"
+                class="action-spot"
+              >
+                <div class="action-spot-wrap">
+                  <div class="add-done-ins-form">
+                    <form novalidate @submit.prevent="editTodo(item)">
+                      <p class="modal-title">
+                        LIST 修正する
+                      </p>
+                      <div v-if="addTodoErrors.length" class="error-grp">
+                        <p class="error-title">
+                          入力項目を確認してください。
+                        </p>
+                        <ul>
+                          <li
+                            v-for="(error, index) in addTodoErrors"
+                            :key="index"
+                          >
+                            <p class="error-msg">
+                              {{ error }}
+                            </p>
+                          </li>
+                        </ul>
+                      </div>
+                      <p class="modal-msg">
+                        {{ message }}
+                      </p>
+                      <p>撮りたいスポット</p>
+                      <p>
+                        <input
+                          v-model="editSpotName"
+                          type="text"
+                          :placeholder="item.title"
+                        />
+                      </p>
+                      <div class="add-btn">
+                        <button type="submit" class="selectBtn">
+                          修正
+                        </button>
+                      </div>
+                    </form>
+                    <div class="modal-close" @click="isEdit = false">
+                      <i class="material-icons">
+                        close
+                      </i>
                     </div>
-                  </form>
-                  <div class="modal-close" @click="isEdit = false">
-                    <i class="material-icons">
-                      close
-                    </i>
                   </div>
                 </div>
               </div>
-            </div>
-
-            <div v-if="item.done" class="action-done">
+            </transition>
+            <!-- <div v-if="item.done" class="action-done">
               <br />
               <blockquote
                 class="instagram-media"
@@ -276,25 +272,26 @@
                 />
               </blockquote>
               <script async src="//www.instagram.com/embed.js" />
-              <!-- <div>title:{{ item.title }}</div>
-            <div>insDaneUrl:{{ item.insDaneUrl }}</div>
-            <div>myPhoto:{{ item.filename }}</div>
-            <div>myPhotoUrl:{{ item.imageUrl }}</div> -->
-              <div class="origin-photo">
-                <img :src="item.imageUrl" alt="img" />
-              </div>
-            </div>
+
+              <transition name="fade05">
+                <div class="origin-photo">
+                  <img :src="item.imageUrl" alt="img" />
+                </div>
+              </transition>
+            </div> -->
           </div>
         </div>
       </div>
+
       <!-- done################################################## -->
       <div class="todo-list-header">
-        <span>Done Photo </span>
-        <!-- <span @click="isAddList = !isAddList">
-          <i class="material-icons add-list function-icon">playlist_add</i>
-        </span> -->
+        <span>Done List</span>
+        <span class="function-icon" @click="foldDoneList">
+          <i v-if="doneInsta" class="material-icons">unfold_less</i>
+          <i v-if="!doneInsta" class="material-icons">unfold_more</i>
+        </span>
       </div>
-      <div class="flex-container ">
+      <div v-if="doneInsta" class="flex-container ">
         <div v-for="(item, index) in items" :key="item.key">
           <div v-if="item.done" class="ins-group ">
             <div class="like-spot">
@@ -308,37 +305,95 @@
                 >
                   <i class="material-icons">more_vert</i>
                 </span>
-                <div v-if="isMore && selectMore === index" class="more-vert">
-                  <span class="function-icon" @click="addActionPhoto(index)">
-                    <i class="material-icons">add_a_photo</i>
-                    <span class="function-text">新規追加</span>
-                  </span>
-                  <span
-                    class="function-icon"
-                    @click="editActionPhoto(index, item)"
-                  >
-                    <i class="material-icons">edit</i>
-                    <span class="function-text">編集</span>
-                  </span>
-                  <span
-                    class="function-icon"
-                    @click="removeTodoFirebase(item['.key'])"
-                  >
-                    <i class="material-icons">delete_forever</i>
-                    <span class="function-text">削除</span>
-                  </span>
-                  <span
-                    v-if="item.done"
-                    class="function-icon"
-                    @click="fullActive(index)"
-                  >
-                    <i class="material-icons">
-                      fullscreen
-                    </i>
-                    <span class="function-text">画像拡大</span>
-                  </span>
-                </div>
+                <transition name="fade05">
+                  <div v-if="isMore && selectMore === index" class="more-vert">
+                    <span
+                      v-if="!item.done"
+                      class="function-icon"
+                      @click="addActionPhoto(index)"
+                    >
+                      <i class="material-icons">add_a_photo</i>
+                      <span class="function-text">新規追加</span>
+                    </span>
+                    <span
+                      class="function-icon"
+                      @click="editActionPhoto(index, item)"
+                    >
+                      <i class="material-icons">edit</i>
+                      <span class="function-text">編集</span>
+                    </span>
+                    <span
+                      class="function-icon"
+                      @click="removeTodoFirebase(item['.key'])"
+                    >
+                      <i class="material-icons">delete_forever</i>
+                      <span class="function-text">削除</span>
+                    </span>
+                    <span
+                      v-if="item.done"
+                      class="function-icon"
+                      @click="fullActive(index)"
+                    >
+                      <i class="material-icons">
+                        fullscreen
+                      </i>
+                      <span class="function-text">画像拡大</span>
+                    </span>
+                  </div>
+                </transition>
               </div>
+              <!-- done edit %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+              <transition name="fade05">
+                <div
+                  v-if="isEdit && index === selectIndexEdit"
+                  class="action-spot"
+                >
+                  <div class="action-spot-wrap">
+                    <div class="add-done-ins-form">
+                      <form novalidate @submit.prevent="editTodo(item)">
+                        <p>編集する</p>
+                        <div v-if="addTodoErrors.length">
+                          <p class="error-title">
+                            入力項目を確認してください。
+                          </p>
+                          <ul>
+                            <li
+                              v-for="(error, index) in addTodoErrors"
+                              :key="index"
+                            >
+                              <p class="error-msg">
+                                {{ error }}
+                              </p>
+                            </li>
+                          </ul>
+                        </div>
+                        <p class="modal-msg">
+                          {{ message }}
+                        </p>
+                        <p>撮りたいスポット</p>
+                        <p>
+                          <input
+                            v-model="editSpotName"
+                            type="text"
+                            :placeholder="item.title"
+                          />
+                        </p>
+                        <div class="add-btn">
+                          <button type="submit" class="selectBtn">
+                            修正
+                          </button>
+                        </div>
+                      </form>
+                      <div class="modal-close" @click="isEdit = false">
+                        <i class="material-icons">
+                          close
+                        </i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </transition>
+
               <!-- my insta -->
               <blockquote
                 class="instagram-media"
@@ -354,6 +409,7 @@
               </blockquote>
               <script async src="//www.instagram.com/embed.js" />
               <!-- like insta -->
+              <!-- <p>私がリスペクトした写真</p> -->
               <blockquote
                 class="instagram-media"
                 :data-instgrm-permalink="item.insUrl"
@@ -368,89 +424,11 @@
               </blockquote>
               <script async src="//www.instagram.com/embed.js" />
             </div>
-            <!-- <div
-              v-if="isAction && !item.done && index === selectIndex"
-              class="action-spot"
-             > -->
-            <!-- <div class="action-spot">
-              <div class="action-spot-wrap">
-                <div class="add-done-ins-form"> -->
-            <div v-if="isFull && index === selectFull" class="origin-photo">
-              <div class="origin-photo-wrap">
-                <img :src="item.imageUrl" alt="img" />
-                <div class="modal-close-img" @click="isFull = false">
-                  <i class="material-icons">
-                    close
-                  </i>
-                </div>
-              </div>
-            </div>
-
-            <!-- </div>
-              </div>
-            </div> -->
-
-            <!-- <div
-              v-if="isEdit && !item.done && index === selectIndexEdit"
-              class="action-spot"
-             >
-              <div class="action-spot-wrap">
-                <div class="add-done-ins-form">
-                  <form @submit.prevent="deitTodoFirebase(item)">
-                    <p>編集する</p>
-                    <p>
-                      <input
-                        v-model="editSpotName"
-                        type="text"
-                        :placeholder="item.title"
-                      />
-                    </p>
-                    <div class="add-btn">
-                      <button type="submit" class="selectBtn">
-                        Edit Done
-                      </button>
-                    </div>
-                  </form>
-                  <div class="modal-close" @click="isEdit = false">
-                    <i class="material-icons">
-                      close
-                    </i>
-                  </div>
-                </div>
-              </div>
-            </div> -->
-
-            <!-- <div v-if="item.done" class="action-done"> -->
-            <!-- <br /> -->
-            <!-- <blockquote
-                class="instagram-media"
-                :data-instgrm-permalink="item.insDaneUrl"
-                data-instgrm-version="12"
-                style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"
-              >
-                <a
-                  :href="item.insUrl"
-                  style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;"
-                  target="_blank"
-                />
-              </blockquote>
-              <script async src="//www.instagram.com/embed.js" /> -->
-            <!-- <div>title:{{ item.title }}</div>
-              <div>insDaneUrl:{{ item.insDaneUrl }}</div>
-              <div>myPhoto:{{ item.filename }}</div>
-              <div>myPhotoUrl:{{ item.imageUrl }}</div> -->
-            <!-- <div class="origin-photo">
-                <img :src="item.imageUrl" alt="img" />
-              </div> -->
-            <!-- </div> -->
           </div>
         </div>
       </div>
     </section>
-    <section
-      v-if="isAddList || isAction || isEdit || isFull"
-      class="modal-bg"
-    />
+    <div v-if="isAddList || isAction || isEdit || isFull" class="modal-bg" />
   </div>
 </template>
 
@@ -494,8 +472,6 @@ export default {
       selectIndex: 0,
       isEdit: false,
       selectIndexEdit: 0,
-      // editItem: null,
-      // editKey: '',
       editSpotName: '',
       insActive: false,
       uid: '',
@@ -504,6 +480,7 @@ export default {
       selectMore: 0,
       isFull: false,
       selectFull: 0
+      // isfoldeDoneList: false
     }
   },
   computed: {
@@ -511,30 +488,27 @@ export default {
     ...mapState(['items']),
     ...mapState(['regstar']),
     ...mapState(['addTodoErrors']),
-    ...mapState(['message'])
+    ...mapState(['message']),
+    ...mapState(['doneInsta'])
   },
   created() {
     // firebase
     // this.$store.dispatch(INIT_TODO)
-    console.log('conponents/content/about/conAbout.vue created()')
-
+    // console.log('conponents/content/about/conAbout.vue created()')
     // if (process.browser) {
     // window.addEventListener('scroll', this.handleScroll)
     // }
-
     // sample code1-----------------------------------
     // var iframe = document.createElement('iframe');
     // iframe.onload = function() { alert('myframe is loaded'); }; // before setting 'src'
     // iframe.src = '...';
     // document.body.appendChild(iframe); // add it to wherever you need it in the document
     // sample code1-----------------------------------
-
     // sample code2-----------------------------------
     //   var iframe = document.createElement('iframe');
     // iframe.addEventListener('load', function() { console.log('loaded!'); });
     // document.getElementsByTagName('body')[0].appendChild(iframe);
     // sample code2-----------------------------------
-
     // test code
     // const iframe = document.createElement('iframe')
     // iframe.addEventListener('load', this.iframeLoaded)
@@ -555,13 +529,14 @@ export default {
   // },
   mounted() {
     this.$store.commit('clearAddTodoError')
-    console.log('conponents/content/about/conAbout.vue mounteded()')
+    this.$store.commit('clearMessage')
+    // console.log('conponents/content/about/conAbout.vue mounteded()')
     // this.$store.commit('clearAuthError')
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         console.log('login')
-        console.log('about uid: ' + user.uid)
-        console.log('about email: ' + user.email)
+        // console.log('about uid: ' + user.uid)
+        // console.log('about email: ' + user.email)
         // console.log('displayName: ' + user.displayName)
         const loginUser = {
           uid: user.uid,
@@ -616,6 +591,7 @@ export default {
     },
     addTodo() {
       this.$store.commit('clearAddTodoError')
+      this.$store.commit('clearMessage')
       if (!this.text) {
         this.$store.commit('setAddTodoError', 'スポットは必須です。')
       } else if (this.text.length > 20) {
@@ -628,9 +604,9 @@ export default {
       }
 
       if (this.addTodoErrors.length) {
-        alert('validation error')
+        // alert('validation error')
       } else {
-        alert('validation ok')
+        // alert('validation ok')
         this.addTodoFirebase()
       }
     },
@@ -662,16 +638,19 @@ export default {
       // this.$store.dispatch(ADD_TODO, createDatas)
       this.text = ''
       this.insUrl = ''
-      // this.$store.dispatch(INIT_TODO)
-      // location.reload()
+      this.isAddList = false
+      location.reload(true)
+      // location.href = '/about'
     },
     removeTodoFirebase(key) {
       const result = window.confirm('削除しますか？')
       if (result) {
         this.$store.dispatch(REMOVE_TODO, { key: key, user: this.user.uid })
+        this.isMore = false
+        location.reload(true)
       }
       // this.$store.dispatch(INIT_TODO)
-      // location.reload()
+      
     },
     updateDoneTodoFirebase(key) {
       // console.log('updateDaneTodoFirebase')
@@ -681,7 +660,8 @@ export default {
         // user: this.regstar[0].uid
         user: this.user.uid
       })
-      // location.reload()
+      location.reload(true)
+      // location.href = '/about'
     },
 
     onFileChange(e) {
@@ -704,9 +684,35 @@ export default {
     removeImage(e) {
       this.image = ''
     },
+    onCreate(item) {
+      // alert('onCreate my photo check error')
+      this.$store.commit('clearAddTodoError')
+      this.$store.commit('clearMessage')
+      // if (!this.text) {
+      //   this.$store.commit('setAddTodoError', 'スポットは必須です。')
+      // } else if (this.text.length > 20) {
+      //   this.$store.commit('setAddTodoError', 'スポットは２０文字以下です。')
+      // }
+      if (!this.insDaneUrl) {
+        this.$store.commit('setAddTodoError', 'URLは必須です。')
+      } else if (!this.validUrl(this.insDaneUrl)) {
+        this.$store.commit('setAddTodoError', '無効なURL形式です。')
+      }
+      if(!this.image) {
+         this.$store.commit('setAddTodoError', 'オリジナルイメージは必須です。')
+      }
+
+      if (this.addTodoErrors.length) {
+        // alert('validation error')
+      } else {
+        // alert('validation ok')
+        this.onCreateMyPhoto(item)
+      }
+      
+    }, 
 
     onCreateMyPhoto(item) {
-      // alert('onCreateMeetup')
+      alert('onCreateMeetup')
       // alert('key: ' + item['.key'])
 
       // console.log('insDaneUrl: ' + this.insDaneUrl)
@@ -729,15 +735,28 @@ export default {
         user: this.user.uid
       }
       // console.log(createDatas.insDaneUrl)
+
+      
+      // this. createFile()
       this.$store.dispatch(CREATE_MYPHOTO, createDatas)
-      // location.reload()
+
+      alert('dispatch(CREATE_MYPHOTO, createDatas)')
+      this.text = ''
+      this.insUrl = ''
+      this.isAction = false
+      // location.reload(true);
+      // location.href = '/about'
+      location.reload(true)
     },
+ 
+
+
     addTodoList(){
       this.isAddList = !this.isAddList
       this.text = ''
       this.insUrl = ''
-      alert('clearAddTodoError')
       this.$store.commit('clearAddTodoError')
+      this.$store.commit('clearMessage')
     },
     
     moreActive(idx) {
@@ -747,17 +766,46 @@ export default {
     fullActive(idx) {
       this.isFull = !this.isFull
       this.selectFull = idx
+      this.isMore = false
     },
     addActionPhoto(idx) {
       this.isAction = !this.isAction
       this.selectIndex = idx
+      this.insDaneUrl
+      this.image = ''
+      this.$store.commit('clearAddTodoError')
+      this.$store.commit('clearMessage')
+      this.isMore = false
     },
+    foldDoneList(){
+      this.$store.commit('setDoneInsta')
+      location.reload(true)   
+   },
     editActionPhoto(idx, item) {
       this.isEdit = !this.isEdit
       this.selectIndexEdit = idx
       this.editSpotName = item.title
+      this.isMore = false
+      this.$store.commit('clearAddTodoError')
+      this.$store.commit('clearMessage')
     },
-    deitTodoFirebase(item) {
+    editTodo(item){
+      alert('editTodo')
+      this.$store.commit('clearAddTodoError')
+      this.$store.commit('clearMessage')
+      if (!this.editSpotName) {
+        this.$store.commit('setAddTodoError', 'スポットは必須です。')
+      } else if (this.editSpotName.length > 20) {
+        this.$store.commit('setAddTodoError', 'スポットは２０文字以下です。')
+      }
+      if (this.addTodoErrors.length) {
+        alert('editTodo validation error')
+      } else {
+        alert('editTodo validation ok')
+        this.editTodoFirebase(item)
+      }
+    },
+    editTodoFirebase(item) {
       const result = window.confirm('修正しますか？')
       if (result) {
         const editDatas = {
@@ -789,22 +837,24 @@ export default {
   align-items: flex-start;
   padding: 2rem 1rem;
   @media (min-width: 768px) {
-    padding: 8rem 8rem;
+    padding: 2rem 8rem;
   }
 }
 .flex-container {
   display: relative;
-  overflow: hidden;
+  // overflow: hidden;
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
   flex-wrap:wrap;
+  // flex-grow: 2;
   @media (min-width: 768px) {
     flex-direction: row;
     justify-content: flex-start;
   }
+  // border: 1px solid red;
 }
 // h1 {
 //   margin-bottom: 2rem;
@@ -828,18 +878,18 @@ export default {
 //     line-height: 2.2rem;
 //   }
 // }
-p {
-  color: #212121;
-  word-wrap: break-word;
-  font-weight: 400;
-  font-size: 1.4rem;
-  line-height: 1.8rem;
-  @media (min-width: 992px) {
-    font-weight: 400;
-    font-size: 2rem;
-    line-height: 2.6rem;
-  }
-}
+// p {
+//   color: #212121;
+//   word-wrap: break-word;
+//   font-weight: 400;
+//   font-size: 1.4rem;
+//   line-height: 1.8rem;
+//   @media (min-width: 992px) {
+//     font-weight: 400;
+//     font-size: 2rem;
+//     line-height: 2.6rem;
+//   }
+// }
 input {
   color: #000;
 }
@@ -853,18 +903,6 @@ img {
   border: 0.3rem solid #000;
   margin-bottom: 0.5rem;
 }
-// .new-todo-add {
-// margin: 2rem 0;
-// padding: 1rem;
-// border: 1px solid gray;
-// h5 {
-//   margin: 1rem -1rem;
-//   color: #000;
-//   display: inline-block;
-//   line-height: 3rem;
-//   background-color: lightseagreen;
-// }
-// }
 .function-icon {
   cursor: pointer;
   vertical-align: top;
@@ -894,10 +932,10 @@ img {
 .like-spot {
   width: 326px;
   position:relative;
-}
+  // border: 1px solid green;
 
+}
 .like-spot-header {
-  
   width: 326px;
 }
 .like-spot-title {
@@ -922,7 +960,6 @@ img {
   position: absolute;
   top: 0;
   right: 0;
-  
   margin-top:.2rem;
   cursor: pointer;
 }
@@ -934,9 +971,9 @@ img {
   width:12rem;
   height: 12rem;
   position: absolute;
-  
   top: 0;
   right: 0;
+  z-index:1;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -1027,23 +1064,133 @@ img {
 .new-todo-add-wrap,
 .action-spot-wrap {
   position: relative;
+  width: 100%;
+  height: 100%;
   margin: 2rem 2rem;
   padding: 1rem;
   border: 1px solid gray;
   background-color: rgba(250, 250, 250, 1);
   box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.5);
-  overflow: hidden;
+  // overflow: hidden;
+  margin-top: 15rem;
   padding: 2rem;
   width: 90%;
+  height: 100%;
   @media (min-width: 992px) {
+    margin-top: 5rem;
     width: 50%;
+    height: 80%;
+    // min-height:50%;
   }
+}
+.add-new-form, 
+.add-done-ins-form, 
+.add-done-ins-form{
+  width: 100%;
+  height: 100%;
+  padding: 0rem;
+  @media (min-width: 992px) {
+  border: 1px solid gray;
+  padding: 2rem;
+  }
+}
+.add-new-form, 
+.add-done-ins-form, 
+.add-done-ins-form{
+  p{
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1rem;
+    @media (min-width: 992px) {
+      font-weight: 400;
+      font-size: 1rem;
+      line-height: 1rem;
+    }
+  }
+  
+}
+.error-grp{
+  margin-bottom: 2rem;
+}
+.modal-title{
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1rem;
+    margin-bottom: 2rem;
+    color: $footer-color-color;
+  @media (min-width: 992px) {
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1rem;
+  }
+}
+.error-title{
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1rem;
+    margin-bottom: 1rem;
+    color: rgb(2, 2, 2);
+  @media (min-width: 992px) {
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1rem;
+  }
+}
+.error-msg{
+  font-weight: 600;
+    font-size: 1rem;
+    line-height: 1rem;
+    margin-bottom: 1rem;
+    color: rgb(190, 29, 29);
+    margin-left: 1rem;
+  @media (min-width: 992px) {
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1rem;
+  }
+}
+.modal-msg{
+  font-weight: 600;
+    font-size: 1rem;
+    line-height: 1rem;
+    margin-bottom: 1rem;
+    color: rgb(3, 146, 46);
+    margin-left: 1rem;
+  @media (min-width: 992px) {
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1rem;
+  }
+}
+.add-btn button{
+    border: none;
+    background-color: $footer-color-color;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    color: #fff;
+     margin-top: 1em;
+     outline: 0;
+}
+.modai-button{
+ margin-top: .5rem;
+}
+.add-new-form, .add-done-ins-form{
+  input{
+    width: 100%;
+    @media (min-width: 992px) {
+     width: 100%; 
+    }
+  }
+}
+
+.add-done-ins-form{
+  height:100%;
+  width: 100%;
 }
 
 .modal-close {
   position: absolute;
-  top: 0.2rem;
-  right: 0.2rem;
+  top: 0.4rem;
+  right: 0.4rem;
   cursor: pointer;
   border: 1px solid #212121;
   border-radius: 3px;
@@ -1069,4 +1216,13 @@ img {
 .selectBtn {
   font-size: 1rem;
 }
+.my-photo{
+  display: block;
+  width: 5rem;
+  height: auto;
+  border: 1px solid #212121;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+ 
+}
+
 </style>

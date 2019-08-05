@@ -145,7 +145,7 @@
 </template>
 <script>
 export default {
-  transition: 'a-slide',
+  // transition: 'a-slide',
   //   props: {
   //     msg: {
   //       type: String,
@@ -174,11 +174,11 @@ export default {
       this.$store.commit('pagePathSet', linkPath)
       console.log('linkPath: ' + linkPath)
       setTimeout(() => {
-        // if (linkPath === '/about') {
-        //   location.href = linkPath // reload
-        // } else {
-        this.$router.push({ path: linkPath }) // non-leload
-        // }
+        if (linkPath === '/about') {
+          location.href = linkPath // reload
+        } else {
+          this.$router.push({ path: linkPath }) // non-leload
+        }
       }, 500)
     }
   }
@@ -206,9 +206,9 @@ export default {
   left: 0;
   width: 100vw;
   z-index: 1000;
-  border-bottom: 1px solid rgba(250, 250, 250, 0.1);
+  // border-bottom: 1px solid rgba(250, 250, 250, 0.1);
   // background-color: $footer-color-color;
-  background-color: #212121;
+  // background-color: #212121;
   margin: 0;
   padding: 0;
 }
@@ -221,6 +221,8 @@ export default {
   height: $header-height;
   display: flex;
   flex-direction: row;
+  // border: 1px border red;
+  background-color: $footer-color-color;
 }
 
 .nav-menu .left-block {
