@@ -55,7 +55,7 @@ export default {
       pageSubTitle: 'Firebase',
       pageDiscription: 'Authentication',
       pageDiscriptionDetail:
-        'Vue.jsのフレームワークNuxt.jsでGoogleアカウントで認証するデモ'
+        'Vue.jsのフレームワークNuxt.jsでFirebaseを使って認証するデモ'
     }
   },
   head() {

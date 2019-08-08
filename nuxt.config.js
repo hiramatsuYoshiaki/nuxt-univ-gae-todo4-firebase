@@ -57,7 +57,7 @@ export default {
     // ['@nuxtjs/google-analytics', { id: 'UA-xxxxxxxx-5' }],
     // '@nuxtjs/sitemap',
     '@nuxtjs/markdownit',
-    '@nuxtjs/dotenv'
+    '@nuxtjs/dotenv',
   ],
   env: {
     FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,

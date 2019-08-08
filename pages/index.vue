@@ -14,15 +14,18 @@
           <h5>App Engine</h5>
         </div>
         <div class="subscription">
-          <h5>Firebase</h5>
-          <p>Authentication</p>
-          <p>Database</p>
-          <p>Strage</p>
+          <div class="menu_link todo-demo" @click="link_commit('/about')">
+            <h3>TODOS<span>DEMOを見る</span></h3>
+            <div class="line" />
+            <p>Authentication</p>
+            <p>Database</p>
+            <p>Strage</p>
+            <div>Used: Firebase</div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- <div>
+      <!-- <div>
       <div class="links">
         <a
           href="https://nuxt-univ-create-gae-todo.appspot.com/"
@@ -57,6 +60,17 @@
         4.ビルドしデプロイする。
       </p>
     </div> -->
+    </div>
+    <div class="sub-content sub-con-wraper">
+      <div class="overview">
+        <h5>App概要</h5>
+        <span class="small-p">
+          Todosリストの試作デモです。
+          Vue.jsのフレームワークNuxt.jsでSSRを想定し, google Cloud
+          Platformでホスティングしています。Firebaseを使って、認証とデータと画像を記録しています。
+        </span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -72,7 +86,7 @@ export default {
   // layout: 'custom',
   components: {
     Logo
-  }
+  },
   // async asyncData({}) {
   //   const { data } = await axios.get(`https://www.instagram.com/p/BzqBMl3g9vA/`)
   //   return { title: data.title }
@@ -84,6 +98,20 @@ export default {
   //   console.log('create')
   //   this.$store.dispatch(INIT_TODO)
   // }
+  methods: {
+    link_commit(linkPath) {
+      this.active = true
+      this.$store.commit('pagePathSet', linkPath)
+      console.log('linkPath: ' + linkPath)
+      setTimeout(() => {
+        if (linkPath === '/about') {
+          location.href = linkPath // reload
+        } else {
+          this.$router.push({ path: linkPath }) // non-leload
+        }
+      }, 500)
+    }
+  }
 }
 </script>
 
@@ -132,6 +160,25 @@ export default {
     padding: 10rem 5rem 0rem 5rem;
   }
 }
+.sub-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  @media (min-width: 992px) {
+    flex-direction: row;
+  }
+}
+.sub-con-wraper {
+  padding: 0rem 2rem 0rem 2rem;
+  @media (min-width: 992px) {
+    padding: 0rem 5rem 0rem 5rem;
+  }
+  h5 {
+    margin-bottom: 1rem;
+  }
+}
 //header-----------------------------
 // .content-header {
 //   width: 100vw;
@@ -155,197 +202,46 @@ export default {
     justify-content: flex-start;
     align-items: flex-start;
   }
-  h2 {
-    font-size: 3rem;
-    font-weight: 700;
-    line-height: 3.5rem;
-  }
-  h5 {
-    font-size: 2rem;
-    font-weight: 500;
-    line-height: 2.5rem;
-  }
-  p {
-    font-size: 2rem;
-    font-weight: 500;
-    line-height: 2.5rem;
-  }
-  // .sign-in-text {
-  //   font-size: 1.6rem;
-  //   font-weight: 500;
-  //   line-height: 2.1rem;
-  // }
-  @media (min-width: 992px) {
-    width: 70%;
-    h2 {
-      font-size: 8rem;
-      font-weight: 700;
-      line-height: 8.5rem;
-    }
-    h5 {
-      font-size: 3rem;
-      font-weight: 400;
-      line-height: 3.2rem;
-    }
-    p {
-      font-size: 2rem;
-      font-weight: 500;
-      line-height: 2.2rem;
-    }
-    // .sign-in-text {
-    //   font-size: 2rem;
-    //   font-weight: 500;
-    //   line-height: 2.5rem;
-    // }
-  }
-  // .btn-box {
-  //   width: 30rem;
-  //   margin-top: 2rem;
-  //   padding: 1rem 3rem;
-  //   border: 2px solid #fff;
-  //   border-radius: 5px;
-  //   cursor: pointer;
-  //   display: flex;
-  //   justify-content: center;
-  //   align-items: center;
-  //   @media (min-width: 992px) {
-  //     justify-content: flex-start;
-  //     align-items: flex-start;
-  //   }
-  // }
-  // .image-mask {
-  //   border-radius: 50%;
-  //   width: 5rem;
-  //   height: 5rem;
-  // }
 }
 
-// content-header-second-------------------------
-// .content-header-second {
-//   @extend %center;
-//   flex-direction: column;
-//   width: 100%;
-// }
-// content-main-title----------------------------
-// .content-main-tec {
-//   width: 100vw;
-//   height: 100%;
-//   @media (min-width: 992px) {
-//     height: 100vh;
-//   }
-//   background-size: cover;
-//   background-repeat: no-repeat;
-//   background-position: center;
-// }
-// .con-mein-top {
-//   justify-content: space-between;
-//   align-items: stretch;
-// }
-// .con-main-sec {
-//   position: relative;
-//   width: 100%;
-//   padding: 2rem 2rem 6rem 2rem;
-//   margin-bottom: 2rem;
-//   @media (min-width: 992px) {
-//     width: 20%;
-//   }
-//   background-color: #fff;
-//   color: #212121;
-//   border: 2px solid rgba(0, 0, 0, 0.3);
-//   border-radius: 5px;
-// }
-// .con-main-sec {
-//   h1 {
-//     font-size: 3rem;
-//     font-weight: 700;
-//     line-height: 3.5rem;
-//   }
-//   h2 {
-//     font-size: 2rem;
-//     font-weight: 500;
-//     line-height: 2.5rem;
-//   }
-//   p {
-//     font-size: 1.2rem;
-//     font-weight: 500;
-//     line-height: 1.4rem;
-//   }
-//   @media (min-width: 992px) {
-//     h1 {
-//       font-size: 6rem;
-//       font-weight: 700;
-//       line-height: 6.5rem;
-//     }
-//     h2 {
-//       font-size: 4rem;
-//       font-weight: 400;
-//       line-height: 4.5rem;
-//     }
-//     p {
-//       font-size: 2rem;
-//       font-weight: 400;
-//       line-height: 2.5rem;
-//     }
-//   }
-// }
-// .con-main-line {
-//   width: 100%;
-//   height: 1px;
-//   background-color: #212121;
-//   margin: 2rem 0;
-// }
-// .page-link {
-//   position: absolute;
-//   bottom: 0;
-//   right: 0;
-//   text-align: right;
-//   color: rgb(6, 140, 250);
-//   font-weight: 700;
-//   width: 100%;
-//   cursor: pointer;
-//   display: block;
-//   margin: 2rem;
-// }
-// main inpliment------------------------------
-// .content-main-implement {
-//   width: 100vw;
-//   background-color: rgb(230, 230, 230);
-//   color: #212121;
-//   border-top: rega(0, 0, 0, 0.2);
-// }
-// .content-main-title {
-//   @extend %center;
-//   flex-direction: column;
-//   width: 100%;
-//   padding: 5rem 0 0 0;
-// }
-// .con-mein-project {
-//   justify-content: space-between;
-// }
-// .con-main-imp {
-//   width: 100%;
-//   padding: 2rem;
-//   background-color: rgb(170, 170, 170);
-//   @media (min-width: 992px) {
-//     width: 30%;
-//   }
-//   border-radius: 5px;
-//   margin-bottom: 2rem;
-// }
-// .con-main-impList {
-//   padding: 2rem;
-//   background-color: rgb(230, 230, 230);
-//   margin: 2rem 0;
-//   border-radius: 5px;
-// }
-// .gitHub-link {
-//   text-align: left;
-//   color: #212121;
-//   font-weight: 700;
-//   width: 100%;
-//   cursor: pointer;
-//   display: block;
-// }
+.menu_link {
+  display: inline-block;
+  opacity: 0.75;
+  color: #fff;
+  // text-transform: uppercase;
+  font-size: $nav_font_size;
+  font-weight: $nav_font_weight;
+  cursor: pointer;
+  &:hover {
+    opacity: 1;
+  }
+}
+.todo-demo {
+  margin: 0rem 0 2rem 0;
+  color: darkblue;
+  border: 2px solid #1a237e;
+  border-radius: 4px;
+  padding: 1rem 2rem;
+
+  // margin: 2rem 0;
+  span {
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 2.5rem;
+    margin-left: 1rem;
+    vertical-align: bottom;
+    @media (min-width: 992px) {
+      font-size: 1.2rem;
+      line-height: 4.5rem;
+    }
+  }
+  .line {
+    width: 100%;
+    height: 1px;
+    border: 1px solid#1a237e;
+    margin-bottom: 1rem;
+  }
+}
 
 .links {
   @extend %center;
@@ -356,31 +252,103 @@ export default {
   margin: 0 2rem;
   cursor: pointer;
 }
-// .word-wrap {
-//   word-wrap: break-word;
-// }
+
 .title {
   margin: 2rem 0 1rem 0;
   color: #fff;
 }
 .subtitle {
-  margin: 0rem 0 4rem 0;
+  margin: 0rem 0 2rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   color: #fff;
+  @media (min-width: 992px) {
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
 }
 .subscription {
-  margin-bottom: 2rem;
-  color: rgb(25, 25, 25);
+  margin: 0rem 0 2rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: #424242;
+  @media (min-width: 992px) {
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
 }
-// .content-footer {
-//   width: 100vw;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   flex-direction: column;
-//   margin-bottom: -5rem;
-// }
+.overview {
+  width: 90%;
+  @media (min-width: 992px) {
+    width: 50%;
+  }
+  margin: 0rem 0 2rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: #212121;
+  // @media (min-width: 992px) {
+  //   justify-content: flex-start;
+  //   align-items: flex-start;
+  // }
+}
+h2 {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 3.5rem;
+}
+h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 2.5rem;
+}
+h5 {
+  font-size: 1.2rem;
+  font-weight: 500;
+  line-height: 1.5rem;
+}
 
-// .done {
-//   text-decoration: line-through;
-// }
+p {
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.75rem;
+}
+.small-p {
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 2rem;
+}
+@media (min-width: 992px) {
+  width: 70%;
+  h2 {
+    font-size: 6rem;
+    font-weight: 700;
+    line-height: 6.5rem;
+  }
+  h3 {
+    font-size: 4rem;
+    font-weight: 700;
+    line-height: 4.5rem;
+  }
+  h5 {
+    font-size: 2.4rem;
+    font-weight: 400;
+    line-height: 2.9rem;
+  }
+  p {
+    font-size: 2.2rem;
+    font-weight: 500;
+    line-height: 1.9rem;
+  }
+  .small-p {
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 2rem;
+  }
+}
 </style>

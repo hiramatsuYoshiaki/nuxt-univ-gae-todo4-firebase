@@ -7,9 +7,9 @@
     <h2>
       Photo Todos
     </h2>
-    <h6>インスタグラムで見る、こんな写真を撮ってみたい！</h6>
+    <p>インスタグラムで見る、こんな写真を撮ってみたい！</p>
     <div v-for="(reg, index) in regstar" :key="index">
-      <p>{{ reg.displayName }}</p>
+      <p>{{ reg.displayName }}さんのTodosリスト</p>
     </div>
     <!-- <button @click="reload">
       インスタグラムを読み込む
@@ -49,7 +49,12 @@
                 </p>
                 <p>写真を撮りたいスポット</p>
                 <p>
-                  <input v-model="text" type="text" placeholder="スポット" />
+                  <input
+                    v-model="text"
+                    type="text"
+                    placeholder="スポット"
+                    :style="{ background: error.testBg }"
+                  />
                 </p>
                 <p>インスタグラムの写真のURL</p>
                 <p>
@@ -57,6 +62,7 @@
                     v-model="insUrl"
                     type="url"
                     placeholder="インスタ写真のURL"
+                    :style="{ background: error.insUrlBg }"
                   />
                 </p>
                 <div class="add-btn">
@@ -170,18 +176,23 @@
                           v-model="insDaneUrl"
                           type="url"
                           placeholder="私のインスタ写真URL"
-                          size="15"
+                          :style="{ background: error.insDaneUrlBg }"
                         />
                       </p>
-                      <div>
+                      <div class="origin-photo-grp">
                         <div id="app">
                           <p>私のオリジナル写真を載せる</p>
+                          <div
+                            class="origin-photo-add"
+                            :style="{ background: error.fileBg }"
+                          >
+                            <input
+                              type="file"
+                              class="selectBtn"
+                              @change="onFileChange"
+                            />
+                          </div>
 
-                          <input
-                            type="file"
-                            class="selectBtn"
-                            @change="onFileChange"
-                          />
                           <img
                             v-show="imageUrl"
                             :src="imageUrl"
@@ -240,6 +251,7 @@
                           v-model="editSpotName"
                           type="text"
                           :placeholder="item.title"
+                          :style="{ background: error.editSpotNameBg }"
                         />
                       </p>
                       <div class="add-btn">
@@ -287,11 +299,11 @@
       <div class="todo-list-header">
         <span>Done List</span>
         <span class="function-icon" @click="foldDoneList">
-          <i v-if="doneInsta" class="material-icons">unfold_less</i>
-          <i v-if="!doneInsta" class="material-icons">unfold_more</i>
+          <i v-if="doneInsta" class="material-icons unfold">unfold_less</i>
+          <i v-if="!doneInsta" class="material-icons unfold">unfold_more</i>
         </span>
       </div>
-      <div v-if="doneInsta" class="flex-container ">
+      <div v-show="doneInsta" class="flex-container ">
         <div v-for="(item, index) in items" :key="item.key">
           <div v-if="item.done" class="ins-group ">
             <div class="like-spot">
@@ -342,7 +354,6 @@
                   </div>
                 </transition>
               </div>
-              <!-- done edit %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
               <transition name="fade05">
                 <div
                   v-if="isEdit && index === selectIndexEdit"
@@ -376,6 +387,7 @@
                             v-model="editSpotName"
                             type="text"
                             :placeholder="item.title"
+                            :style="{ background: error.editSpotNameBg }"
                           />
                         </p>
                         <div class="add-btn">
@@ -410,6 +422,17 @@
               <script async src="//www.instagram.com/embed.js" />
               <!-- like insta -->
               <!-- <p>私がリスペクトした写真</p> -->
+              <div class="my-data">
+                <!-- <i class="material-icons">update</i>
+                <i class="material-icons">category</i> -->
+              </div>
+              <div class="respect">
+                <i class="material-icons">pageview</i>
+                <span class="like-spot-title">
+                  リスペクトした写真
+                </span>
+              </div>
+
               <blockquote
                 class="instagram-media"
                 :data-instgrm-permalink="item.insUrl"
@@ -428,6 +451,7 @@
         </div>
       </div>
     </section>
+
     <div v-if="isAddList || isAction || isEdit || isFull" class="modal-bg" />
   </div>
 </template>
@@ -479,8 +503,15 @@ export default {
       isMore: false,
       selectMore: 0,
       isFull: false,
-      selectFull: 0
+      selectFull: 0,
       // isfoldeDoneList: false
+      error: {
+        testBg: '#e3f2fd',
+        insUrlBg: '#e3f2fd',
+        insDaneUrlBg: '#e3f2fd',
+        fileBg: '#e3f2fd',
+        editSpotNameBg: '#e3f2fd'
+      }
     }
   },
   computed: {
@@ -592,15 +623,22 @@ export default {
     addTodo() {
       this.$store.commit('clearAddTodoError')
       this.$store.commit('clearMessage')
+      this.error.testBg = '#e3f2fd'
+      this.error.insUrlBg = '#e3f2fd'
+
       if (!this.text) {
         this.$store.commit('setAddTodoError', 'スポットは必須です。')
+        this.error.testBg = '#f8bbd0'
       } else if (this.text.length > 20) {
         this.$store.commit('setAddTodoError', 'スポットは２０文字以下です。')
+        this.error.testBg = '#f8bbd0'
       }
       if (!this.insUrl) {
         this.$store.commit('setAddTodoError', 'URLは必須です。')
+        this.error.insUrlBg = '#f8bbd0'
       } else if (!this.validUrl(this.insUrl)) {
         this.$store.commit('setAddTodoError', '無効なURL形式です。')
+        this.error.insUrlBg = '#f8bbd0'
       }
 
       if (this.addTodoErrors.length) {
@@ -617,14 +655,10 @@ export default {
       /* eslint-disable */
       return re.test(insUrl)
     },
-    addTodoFirebase() {
-      // const createDatas = {
-      //   title: this.createTitle,
-      //   filename: this.filename,
-      //   done: false,
-      //   image: this.image
-      // }
-      this.$store.dispatch(ADD_TODO, {
+
+    async addTodoFirebase() {
+
+      const addTodoNew = await this.$store.dispatch(ADD_TODO, {
         title: this.text,
         done: false,
         insUrl: this.insUrl,
@@ -632,16 +666,35 @@ export default {
         filename: '',
         imageUrl: '',
         shootDate: '',
-        // user: this.regstar[0].uid
         user: this.user.uid
       })
-      // this.$store.dispatch(ADD_TODO, createDatas)
+      console.log('dispatch(ADD_TODO)')
       this.text = ''
       this.insUrl = ''
       this.isAddList = false
-      location.reload(true)
-      // location.href = '/about'
+      await location.reload(true)
+      console.log('location.reload(true)')
+      
     },
+    // addTodoFirebase() {
+
+    //   this.$store.dispatch(ADD_TODO, {
+    //     title: this.text,
+    //     done: false,
+    //     insUrl: this.insUrl,
+    //     insDaneUrl: '',
+    //     filename: '',
+    //     imageUrl: '',
+    //     shootDate: '',
+    //     user: this.user.uid
+    //   })
+
+    //   this.text = ''
+    //   this.insUrl = ''
+    //   this.isAddList = false
+    //   location.reload(true)
+      
+    // },
     removeTodoFirebase(key) {
       const result = window.confirm('削除しますか？')
       if (result) {
@@ -681,25 +734,26 @@ export default {
       this.image = files[0] // イメージデータ
     },
 
-    removeImage(e) {
-      this.image = ''
-    },
+    // removeImage(e) {
+    //   this.image = ''
+    // },
     onCreate(item) {
       // alert('onCreate my photo check error')
       this.$store.commit('clearAddTodoError')
       this.$store.commit('clearMessage')
-      // if (!this.text) {
-      //   this.$store.commit('setAddTodoError', 'スポットは必須です。')
-      // } else if (this.text.length > 20) {
-      //   this.$store.commit('setAddTodoError', 'スポットは２０文字以下です。')
-      // }
+      this.error.insDaneUrlBg = '#e3f2fd'
+      this.error.fileBg = '#e3f2fd'
+      
       if (!this.insDaneUrl) {
         this.$store.commit('setAddTodoError', 'URLは必須です。')
+        this.error.insDaneUrlBg = '#f8bbd0'
       } else if (!this.validUrl(this.insDaneUrl)) {
         this.$store.commit('setAddTodoError', '無効なURL形式です。')
+        this.error.insDaneUrlBg = '#f8bbd0'
       }
       if(!this.image) {
          this.$store.commit('setAddTodoError', 'オリジナルイメージは必須です。')
+         this.error.fileBg = '#f8bbd0'
       }
 
       if (this.addTodoErrors.length) {
@@ -711,18 +765,16 @@ export default {
       
     }, 
 
-    onCreateMyPhoto(item) {
-      alert('onCreateMeetup')
-      // alert('key: ' + item['.key'])
-
-      // console.log('insDaneUrl: ' + this.insDaneUrl)
-      // console.log('onCreateMeetup title: ' + this.filename)
-      // console.log(this.imageUrl)
-      // console.log(this.image)
+    async onCreateMyPhoto(item) {
+      let dt = new Date()
+      let year = dt.getFullYear() //年
+      let month = dt.getMonth()+1 //1月が0、12月が11。そのため+1をする。
+      let date = dt.getDate() //日
+      let today = year + '-' + month + '-' + date
       const createDatas = {
         // firebase
         key: item['.key'],
-        shootDate: '2019-07-20',
+        shootDate: today,
         done: true,
         title: item.title,
         insUrl: item.insUrl,
@@ -738,15 +790,18 @@ export default {
 
       
       // this. createFile()
-      this.$store.dispatch(CREATE_MYPHOTO, createDatas)
-
-      alert('dispatch(CREATE_MYPHOTO, createDatas)')
+      const createPhoto = await this.$store.dispatch(CREATE_MYPHOTO, createDatas)
+      console.log('CREATE_MYPHOTO dispach firebase update end')
+      // alert('dispatch(CREATE_MYPHOTO, createDatas)')
       this.text = ''
       this.insUrl = ''
       this.isAction = false
-      // location.reload(true);
       // location.href = '/about'
-      location.reload(true)
+      // location.reload(true)
+      await this.openDone()
+      console.log('openDone()')
+      // alert('dispatch(CREATE_MYPHOTO, createDatas)')
+      await location.reload(true)
     },
  
 
@@ -757,6 +812,8 @@ export default {
       this.insUrl = ''
       this.$store.commit('clearAddTodoError')
       this.$store.commit('clearMessage')
+      this.error.testBg = '#e3f2fd'
+      this.error.insUrlBg = '#e3f2fd'
     },
     
     moreActive(idx) {
@@ -771,16 +828,26 @@ export default {
     addActionPhoto(idx) {
       this.isAction = !this.isAction
       this.selectIndex = idx
-      this.insDaneUrl
+      this.insDaneUrl = ''
       this.image = ''
+      this.imageUrl = ''
       this.$store.commit('clearAddTodoError')
       this.$store.commit('clearMessage')
+      this.error.insDaneUrlBg = '#e3f2fd'
+      this.error.fileBg = '#e3f2fd'
       this.isMore = false
     },
     foldDoneList(){
       this.$store.commit('setDoneInsta')
       location.reload(true)   
    },
+   openDone(){
+     console.log('openDone')
+     this.$store.commit('openDoneInsta')
+      // location.reload(true)   
+   },
+
+
     editActionPhoto(idx, item) {
       this.isEdit = !this.isEdit
       this.selectIndexEdit = idx
@@ -788,24 +855,27 @@ export default {
       this.isMore = false
       this.$store.commit('clearAddTodoError')
       this.$store.commit('clearMessage')
+      this.error.editSpotNameBg = '#e3f2fd'
     },
     editTodo(item){
-      alert('editTodo')
       this.$store.commit('clearAddTodoError')
       this.$store.commit('clearMessage')
+      this.error.editSpotNameBg = '#e3f2fd'
+
       if (!this.editSpotName) {
         this.$store.commit('setAddTodoError', 'スポットは必須です。')
+        this.error.editSpotNameBg = '#f8bbd0'
       } else if (this.editSpotName.length > 20) {
         this.$store.commit('setAddTodoError', 'スポットは２０文字以下です。')
+        this.error.editSpotNameBg = '#f8bbd0'
       }
       if (this.addTodoErrors.length) {
-        alert('editTodo validation error')
+
       } else {
-        alert('editTodo validation ok')
         this.editTodoFirebase(item)
       }
     },
-    editTodoFirebase(item) {
+    async editTodoFirebase(item) {
       const result = window.confirm('修正しますか？')
       if (result) {
         const editDatas = {
@@ -814,9 +884,10 @@ export default {
           title: this.editSpotName,
           user: this.user.uid
         }
-        this.$store.dispatch(EDIT_TODO, editDatas)
+        const edit = await this.$store.dispatch(EDIT_TODO, editDatas)
       }
       this.isEdit = false
+      location.reload(true)
     }
     // reload() {
     //   location.reload(true)
@@ -992,7 +1063,7 @@ img {
     display: inline-block;
     font-size: 1rem;
     font-weight: 500;
-    color:gray;
+    color:#212121;
     line-height: .8rem;
     padding-top:.8rem;
     vertical-align: top;
@@ -1001,6 +1072,9 @@ img {
 .action-spot-photo {
   width: 10rem;
   height: auto;
+}
+.respect{
+  margin-top: 2rem;
 }
 .origin-photo {
   position: fixed;
@@ -1064,23 +1138,16 @@ img {
 .new-todo-add-wrap,
 .action-spot-wrap {
   position: relative;
-  width: 100%;
-  height: 100%;
-  margin: 2rem 2rem;
-  padding: 1rem;
-  border: 1px solid gray;
+  margin: 5rem 2rem 0 2rem;
+  padding: 2rem;
   background-color: rgba(250, 250, 250, 1);
   box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.5);
-  // overflow: hidden;
-  margin-top: 15rem;
-  padding: 2rem;
+  border-radius: 4px;
   width: 90%;
-  height: 100%;
+  height: 70%;
   @media (min-width: 992px) {
-    margin-top: 5rem;
     width: 50%;
-    height: 80%;
-    // min-height:50%;
+    height: 50%;
   }
 }
 .add-new-form, 
@@ -1088,7 +1155,8 @@ img {
 .add-done-ins-form{
   width: 100%;
   height: 100%;
-  padding: 0rem;
+  overflow: scroll;
+  padding: 1rem;
   @media (min-width: 992px) {
   border: 1px solid gray;
   padding: 2rem;
@@ -1216,13 +1284,37 @@ img {
 .selectBtn {
   font-size: 1rem;
 }
+.origin-photo-grp{
+  margin-top: 1rem;
+}
+.origin-photo-add{
+  margin-top: 0rem;
+  padding: .2rem  .2rem .5rem .2rem;
+  border-top: 2px solid rgb(170, 170, 170);
+  border-left: 2px solid rgb(170, 170, 170);
+  border-right: 1px solid rgb(170, 170, 170);
+  border-bottom: 1px solid rgb(170, 170, 170);
+
+  // background-color:#e3f2fd;
+}
 .my-photo{
   display: block;
   width: 5rem;
+  margin: 1rem 0;
+  @media (min-width: 992px) {
+     width: 8rem; 
+  }
   height: auto;
   border: 1px solid #212121;
   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
  
+}
+.unfold{
+  font-size: 2rem;
+  line-height: 2rem;
+  vertical-align: top;
+  margin-top: .2rem;
+  margin-left:-.2rem;
 }
 
 </style>

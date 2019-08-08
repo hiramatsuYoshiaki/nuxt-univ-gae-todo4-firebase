@@ -22,7 +22,7 @@
             :class="{ menu_item_visible: page === '/works' }"
             @click="link_commit('/works')"
           >
-            SETTING
+            AUTH
           </a>
           <div class="menu_underline" />
         </div>
@@ -33,7 +33,7 @@
             :class="{ menu_item_visible: page === '/about' }"
             @click="link_commit('/about')"
           >
-            ABOUT
+            CRUD
           </a>
           <div class="menu_underline" />
         </div>
@@ -99,6 +99,12 @@ export default {
   height: 20rem;
   padding: 0rem;
 }
+.footer-menu {
+  position: relative;
+  width: 100%;
+  // height: 20rem;
+  // padding: 0rem;
+}
 //logo ----------------------------------------
 .logo-wrap {
   cursor: pointer;
@@ -108,8 +114,8 @@ export default {
   align-items: center;
 }
 .logo-img {
-  width: 15rem;
-  height: auto;
+  width: 6rem;
+  height: 3rem;
 }
 //sepalater-------------------------------------
 .footer-sepalater {
@@ -157,12 +163,23 @@ export default {
     }
   }
 }
+// .menu_link {
+//   display: inline-block;
+//   opacity: 0.5;
+//   text-transform: uppercase;
+//   &:hover {
+//     opacity: 0.75;
+//   }
+// }
 .menu_link {
   display: inline-block;
-  opacity: 0.5;
+  opacity: 0.75;
+  color: #fff;
   text-transform: uppercase;
+  font-size: $nav_font_size;
+  font-weight: $nav_font_weight;
   &:hover {
-    opacity: 0.75;
+    opacity: 1;
   }
 }
 .menu_item_visible {
@@ -202,6 +219,8 @@ export default {
   }
 }
 .footer-bottom-wrap .copy-light {
+  font-size: $nav_font_size;
+  font-weight: $nav_font_weight;
   flex-basis: auto;
   @media (min-width: 992px) {
     flex-basis: 50%;
@@ -210,5 +229,7 @@ export default {
 .top {
   color: #fff;
   text-decoration: none;
+  font-size: $nav_font_size;
+  font-weight: $nav_font_weight;
 }
 </style>

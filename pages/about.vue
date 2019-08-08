@@ -82,6 +82,7 @@ export default {
       ]
     }
   },
+
   computed: {
     page() {
       return this.$store.state.page
@@ -100,6 +101,7 @@ export default {
     setTimeout(() => {
       if (!this.isAuthenticated) {
         // ログインしていなかったら飛ぶページを設定
+        this.$store.commit('pagePathSet', '/works')
         this.$router.push('/works')
       } else {
         // alert(this.regstar)

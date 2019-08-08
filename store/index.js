@@ -58,6 +58,9 @@ export const mutations = {
   setDoneInsta(state) {
     state.doneInsta = !state.doneInsta
   },
+  openDoneInsta(state) {
+    state.doneInsta = true
+  },
   // firebase
   ...vuexfireMutations
 }
@@ -67,51 +70,56 @@ export const actions = {
   //   commit('setUser', payload)
   // },
 
-  [ADD_REGISTORY]: firebaseAction((context, user) => {
-    console.log('dispatch ADD_REGISTORY')
-    console.log('disp uid: ' + user.uid)
-    console.log('disp email: ' + user.email)
-    console.log('disp name: ' + user.displayName)
-    db.ref('todoUser')
+  [ADD_REGISTORY]: firebaseAction(async (context, user) => {
+    // console.log('dispatch ADD_REGISTORY')
+    // console.log('disp uid: ' + user.uid)
+    // console.log('disp email: ' + user.email)
+    // console.log('disp name: ' + user.displayName)
+    await db
+      .ref('todoUser')
       .child(user.uid)
       .push(user)
   }),
   [GET_REGISTORY]: firebaseAction(({ bindFirebaseRef }, user) => {
-    console.log('GET_REGISTORY uid: ' + user.uid)
+    // console.log('GET_REGISTORY uid: ' + user.uid)
     bindFirebaseRef('regstar', db.ref('todoUser/' + user.uid), {
       wait: true
     })
-    console.log('GET_REGISTORY')
   }),
 
   [INIT_TODO]: firebaseAction(({ bindFirebaseRef }, user) => {
-    console.log('INIT_TODO uid: ' + user)
+    // console.log('INIT_TODO uid: ' + user)
     bindFirebaseRef('items', db.ref('imgdatas').child(user), {
       wait: true
     })
   }),
-  [ADD_TODO]: firebaseAction((context, insdata) => {
-    db.ref('imgdatas/' + insdata.user).push(insdata)
-    context.commit('setMessage', '追加しました。')
+  [ADD_TODO]: firebaseAction(async (context, insdata) => {
+    console.log('ADD_TODO firebase push')
+    await db.ref('imgdatas/' + insdata.user).push(insdata)
+    console.log('ADD_TODO setMessage')
+    await context.commit('setMessage', '追加しました。')
   }),
-  [REMOVE_TODO]: firebaseAction((context, keydata) => {
-    db.ref('imgdatas/' + keydata.user)
+  [REMOVE_TODO]: firebaseAction(async (context, keydata) => {
+    await db
+      .ref('imgdatas/' + keydata.user)
       .child(keydata.key)
       .remove()
   }),
 
-  [UPDATEDANE_TODO]: firebaseAction((context, keydata) => {
-    db.ref('imgdatas/' + keydata.user)
+  [UPDATEDANE_TODO]: firebaseAction(async (context, keydata) => {
+    await db
+      .ref('imgdatas/' + keydata.user)
       .child(keydata.key)
       .update({ done: true })
   }),
-  [EDIT_TODO]: firebaseAction((context, keydata) => {
+  [EDIT_TODO]: firebaseAction(async (context, keydata) => {
     // console.log('EDIT_TODO')
     // console.log('user: ' + keydata.user)
     // console.log('key: ' + keydata.key)
     // console.log('title: ' + keydata.title)
 
-    db.ref('imgdatas/' + keydata.user)
+    await db
+      .ref('imgdatas/' + keydata.user)
       .child(keydata.key)
       .update({ title: keydata.title })
       .then((res) => {
@@ -138,8 +146,8 @@ export const actions = {
   //     .update({ done: true })
   // }),
 
-  [CREATE_MYPHOTO]: (context, createDatas) => {
-    console.log('CREATE_MYPHOTO')
+  [CREATE_MYPHOTO]: async (context, createDatas) => {
+    console.log('CREATE_MYPHOTO start')
     // firebase
     // key: item['.key'],
     // shootDate: '2019-07-20',
@@ -175,17 +183,20 @@ export const actions = {
     // alert(filename)
     // alert(createDatas.stargeImage)
     // alert(imgDatas.title)
-    firebase
+    console.log('CREATE_MYPHOTO strage upload')
+    await firebase
       .storage()
       .ref('images/' + filename)
       .put(createDatas.stargeImage)
       .then((fileData) => {
+        console.log('CREATE_MYPHOTO strage getURL')
         return firebase
           .storage()
           .ref('images/' + filename)
           .getDownloadURL()
       })
       .then((url) => {
+        console.log('CREATE_MYPHOTO database update')
         imgDatas.imageUrl = url
         // const updates = {}
         // updates['imgdatas/' + createDatas.key] = imgDatas

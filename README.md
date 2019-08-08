@@ -1,7 +1,16 @@
 # nuxt-univ-create-gae-todo-base  
 github repository: nuxt-univ-create-gae-todo-base  
-gcp project: nuxt-univ-create-gae-todo  
+gcp project: nuxt-univ-create-gae-todo2  
   
+### アプリケーションの概要
+ 
+ Todosアプリケーション
+ Vue.jsのフレームワークNuxt.js
+ firebaseを使用する
+ Google認証する(email password)
+ firebase databaseを使用
+ firbase strageを使用
+ インスタグラムの埋め込みコードを使用
 ```
 $ npx create-nuxt-app <project-name>
  
@@ -210,17 +219,7 @@ $ gcloud app browse
 ```
 $ gcloud app logs tail -s default
 ```
-
-
-
-
-
-
-
-
-
-
-
+  
 
 # nuxt.config.js setting
 > nuxt.config.jsでの導入時の設定
@@ -1122,6 +1121,16 @@ SSR実行時のnodeにはlocalstorageがありませんから、window.localstor
 
 # Vueにコンポーネントの再レンダリングを強制する正しい方法 
 https://michaelnthiessen.com/force-re-render/ 
+
+# @nuxtjs/date-fns 
+データフォーマト 
+https://github.com/nuxt-community/date-fns-module 
+
+# Instagram 埋め込みコードの構造を解析してみた
+ インスタグラムの埋め込みコードを使った、ウェブサイトへの表示
+ https://qiita.com/h5y1m141@github/items/403dee38e88570185949
+ 
+
 
 
 

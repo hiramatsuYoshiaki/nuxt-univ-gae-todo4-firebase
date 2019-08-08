@@ -22,65 +22,68 @@
     </div>
     <div v-else>
       <div class="auth">
+        <div class="auth-title">
+          <h6>Firebase Authentication</h6>
+          <h2>Photo Todos</h2>
+        </div>
         <div v-if="isAuthenticated">
           <p>{{ user.email }}でログイン中です。</p>
-          <p>e-mail:{{ user.email }}</p>
-          <p>uid:{{ user.uid }}</p>
-          <!-- <p>displayName:{{ user.dispalyName }}</p> -->
-          <!-- <p>displayNmame: {{ registar[0].displayName }}</p> -->
-          <button @click="logout">
-            ログアウト
-          </button>
-          <a href="/works">CRTU</a>
+          <!-- <p>e-mail:{{ user.email }}</p> -->
+          <div class="add-btn">
+            <button @click="logout">
+              ログアウト
+            </button>
+          </div>
+          <!-- <a href="/works">CRTU</a> -->
         </div>
         <div v-else>
-          <form novalidate="true" @submit.prevent="loginCheck">
-            <div v-if="authErrors.length">
-              <p>Please correct the following error(s):</p>
-              <ul>
-                <!-- <li v-for="(error, index) in errors" :key="index">
-                  <p>
-                    {{ error }}
-                  </p>
-                </li> -->
-                <li v-for="(error, index) in authErrors" :key="index">
-                  <p>
-                    {{ error }}
-                  </p>
-                </li>
-              </ul>
-            </div>
+          <div class="login-form">
+            <form novalidate @submit.prevent="loginCheck">
+              <div v-if="authErrors.length">
+                <p class="error-title">
+                  入力項目を確認してください。
+                </p>
+                <ul>
+                  <li v-for="(error, index) in authErrors" :key="index">
+                    <p class="error-msg">
+                      {{ error }}
+                    </p>
+                  </li>
+                </ul>
+              </div>
+              <p>
+                <input
+                  v-model="email"
+                  type="text"
+                  placeholder="メール"
+                  required
+                  :style="{ background: error.emailBg }"
+                />
+              </p>
+              <p>
+                <input
+                  v-model="password"
+                  type="password"
+                  placeholder="パスワード"
+                  required
+                  :style="{ background: error.passwordBg }"
+                />
+              </p>
+              <p v-if="register">
+                <input
+                  v-model="displayName"
+                  type="text"
+                  placeholder="ユーザー"
+                  required
+                  :style="{ background: error.displayNameBg }"
+                />
+              </p>
 
-            <p>
-              <input
-                v-model="email"
-                type="text"
-                placeholder="メール"
-                required
-              />
-            </p>
-            <p>
-              <input
-                v-model="password"
-                type="password"
-                placeholder="パスワード"
-                required
-              />
-            </p>
-            <p v-if="register">
-              <input
-                v-model="displayName"
-                type="text"
-                placeholder="ユーザー"
-                required
-              />
-            </p>
-
-            <p>
-              <input id="checkbox" v-model="register" type="checkbox" />
-              <label for="checkbox">新規登録</label>
-            </p>
-            <!-- <div v-if="register">
+              <p>
+                <input id="checkbox" v-model="register" type="checkbox" />
+                <label for="checkbox">新規登録</label>
+              </p>
+              <!-- <div v-if="register">
               <button type="submit" :disabled="!formIsValidSignin">
                 新規登録
               </button>
@@ -90,10 +93,19 @@
                 ログイン
               </button>
             </div> -->
-            <button type="submit">
-              {{ register ? '新規登録' : 'ログイン' }}
-            </button>
-          </form>
+              <div class="add-btn">
+                <button type="submit">
+                  {{ register ? '新規登録' : 'ログイン' }}
+                </button>
+              </div>
+            </form>
+          </div>
+          <div class="auth-guid">
+            <h5>Demoでログインしてみる。</h5>
+            <p>デモユーザーでログインする場合は、以下を入力してください。</p>
+            <p>メール：demo@gmail.com</p>
+            <p>パスワード：demo1111</p>
+          </div>
         </div>
       </div>
     </div>
@@ -117,27 +129,19 @@ export default {
       password: null,
       displayName: null,
       isWaiting: false,
-      register: null
+      register: null,
+      error: {
+        emailBg: '#e3f2fd',
+        passwordBg: '#e3f2fd',
+        displayNameBg: '#e3f2fd'
+      }
     }
   },
   computed: {
     ...mapState(['user']),
     ...mapState(['regstar']),
     ...mapState(['authErrors']),
-    // ...mapState(['isAuthError']),
     ...mapGetters(['isAuthenticated'])
-
-    // ...mapGetters(['isAuthError'])
-    // formIsValidSignin() {
-    //   return (
-    //     this.email !== null &&
-    //     this.password !== null &&
-    //     this.displayName !== null
-    //   )
-    // },
-    // formIsValidLogin() {
-    //   return this.email !== null && this.password !== null
-    // }
   },
   mounted() {
     this.$store.commit('clearAuthError')
@@ -149,7 +153,7 @@ export default {
         const loginUser = {
           uid: user.uid,
           email: user.email,
-          displayName: null
+          displayName: ''
         }
         this.$store.commit('setUser', loginUser)
         // this.setUser(loginUser)
@@ -167,6 +171,9 @@ export default {
     ...mapActions(['setUser']),
     loginCheck(e) {
       this.$store.commit('clearAuthError')
+      this.error.emailBg = '#e3f2fd'
+      this.error.passwordBg = '#e3f2fd'
+      this.error.displayNameBg = '#e3f2fd'
       // alert('loginCheck')
       // this.$store.commit('clearAuthError')
 
@@ -178,24 +185,31 @@ export default {
       // this.errors = []
       if (!this.password) {
         this.$store.commit('setAuthError', 'パスワードは必須です。')
+        this.error.passwordBg = '#f8bbd0'
       } else if (this.password.length < 8) {
         this.$store.commit('setAuthError', 'パスワードは８文字以上です。')
+        this.error.passwordBg = '#f8bbd0'
       }
       if (!this.email) {
         this.$store.commit('setAuthError', 'メールは必須です。')
-        // this.errors.push('Email required.')
+        this.error.emailBg = '#f8bbd0'
       } else if (!this.validEmail(this.email)) {
         this.$store.commit('setAuthError', '無効なメール形式です。')
-        // this.errors.push('Valid email required.')
+        this.error.emailBg = '#f8bbd0'
       }
       // if (email.length < 4) {
       //     alert('Please enter an email address.');
       //     return;
       //   }
       if (this.register) {
-        // if (this.displayName) this.errors.push('displayName required.')
-        if (this.displayName) {
+        alert('reg')
+        if (!this.displayName) {
+          alert('reg error')
           this.$store.commit('setAuthError', 'ユーザー名は必須です。')
+          this.error.displayNameBg = '#f8bbd0'
+        } else if (this.displayName.length > 31) {
+          this.$store.commit('setAuthError', 'ユーザー名は３０文字以下です。')
+          this.error.displayNameBg = '#f8bbd0'
         }
       }
       // console.log('error' + this.errors)
@@ -324,50 +338,58 @@ $duration: 1.4s;
 .auth {
   padding: 2rem;
 }
-// .flex-container {
-//   width: 100%;
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: center;
-//   align-items: flex-start;
-//   @media (min-width: 768px) {
-//     flex-direction: row;
-//   }
-// }
-// h1 {
-//   margin-bottom: 2rem;
-//   color: rgb(31, 84, 209);
-//   font-weight: 600;
-//   font-size: 2rem;
-//   line-height: 2.2rem;
-//   @media (min-width: 992px) {
-//     font-size: 4rem;
-//     line-height: 4.2rem;
-//   }
-// }
-// h3 {
-//   color: rgb(67, 110, 211);
-//   margin-bottom: 2rem;
-//   font-weight: 400;
-//   font-size: 2rem;
-//   line-height: 2.2rem;
-//   @media (min-width: 992px) {
-//     font-size: 2rem;
-//     line-height: 2.2rem;
-//   }
-// }
-// p {
-//   color: #212121;
-//   word-wrap: break-word;
-//   font-weight: 400;
-//   font-size: 1.4rem;
-//   line-height: 1.8rem;
-//   @media (min-width: 992px) {
-//     font-weight: 400;
-//     font-size: 2rem;
-//     line-height: 2.6rem;
-//   }
-// }
+.auth-title{
+margin-bottom: 2rem;
+}
+.auth-guid{
+  margin-top: 2rem;
+}
+.add-btn button{
+    border: none;
+    background-color: $footer-color-color;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    color: #fff;
+     margin-top: 1em;
+     outline: 0;
+}
+.login-form{
+  width: 100%;
+  height: 100%;
+  // overflow: scroll;
+  padding: 1rem;
+  @media (min-width: 992px) {
+  border: 1px solid gray;
+  padding: 2rem;
+}
+}
+
+.error-title{
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1rem;
+    margin-bottom: 1rem;
+    color: rgb(2, 2, 2);
+  @media (min-width: 992px) {
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1rem;
+  }
+}
+.error-msg{
+  font-weight: 600;
+    font-size: 1rem;
+    line-height: 1rem;
+    margin-bottom: 1rem;
+    color: rgb(190, 29, 29);
+    margin-left: 1rem;
+  @media (min-width: 992px) {
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1rem;
+  }
+}
+
+
 .spinner {
   animation: rotator $duration linear infinite;
 }
