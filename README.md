@@ -1,11 +1,10 @@
 
-# nuxt-univ-create-gae-todo2 
+# nuxt-univ-gae-todo2-firebase 
 clone 
-github repository: nuxt-univ-create-gae-todo-base 
+github repository: nuxt-univ-gae-todo2 
  
 host  
-
-gcp project: nuxt-univ-create-gae-todo2  
+gcp project: nuxt-univ-create-gae-todo2-firebase  
   
 ### アプリケーションの概要
  Todosアプリケーション

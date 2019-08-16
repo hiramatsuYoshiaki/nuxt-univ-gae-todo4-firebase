@@ -6,7 +6,7 @@
       </div>
       <div class="con-hed-title">
         <h2 class="title">
-          h-works
+          h-works Firebas
         </h2>
         <div class="subtitle">
           <h5>Nuxt.js</h5>
@@ -24,42 +24,6 @@
           </div>
         </div>
       </div>
-
-      <!-- <div>
-      <div class="links">
-        <a
-          href="https://nuxt-univ-create-gae-todo.appspot.com/"
-          target="_blank"
-          class="button--green"
-        >
-          Demo App (Google App Engine)
-        </a>
-        <a
-          href="https://github.com/hiramatsuYoshiaki/nuxt-univ-create-gae-todo"
-          target="_blank"
-          class="button--grey"
-        >
-          nuxt-univ-create-gae-hosting (GitHub )
-        </a>
-      </div>
-      <br />
-
-      <h3 class="subtitle">
-        How to Deploy Google App Engine
-      </h3>
-      <p class="subtitle">
-        1.app.yaml設置
-      </p>
-      <p class="subtitle">
-        2.App Engineに新しいプロジェクトを作成する。
-      </p>
-      <p class="subtitle">
-        3.Cloud SDK をインストールし初期化する。
-      </p>
-      <p class="subtitle">
-        4.ビルドしデプロイする。
-      </p>
-    </div> -->
     </div>
     <div class="sub-content sub-con-wraper">
       <div class="overview">
@@ -69,6 +33,26 @@
           Vue.jsのフレームワークNuxt.jsでSSRを想定し, google Cloud
           Platformでホスティングしています。Firebaseを使って、認証とデータと画像を記録しています。
         </span>
+      </div>
+    </div>
+    <div class="sub-content sub-con-wraper">
+      <div class="overview">
+        <div class="links">
+          <a
+            href="https://nuxt-univ-gae-app.appspot.com/"
+            target="_blank"
+            class="button--green"
+          >
+            Setting
+          </a>
+          <a
+            href="https://github.com/hiramatsuYoshiaki/nuxt-univ-gae-todo2-firebase"
+            target="_blank"
+            class="button--grey"
+          >
+            GitHub
+          </a>
+        </div>
       </div>
     </div>
   </div>
