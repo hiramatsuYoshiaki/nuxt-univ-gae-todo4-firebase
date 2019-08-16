@@ -4,7 +4,10 @@ import {
   REMOVE_TODO,
   INIT_TODO,
   UPDATEDANE_TODO,
-  CREATE_MYPHOTO
+  CREATE_MYPHOTO,
+  ADD_REGISTORY,
+  GET_REGISTORY,
+  EDIT_TODO
 } from './actionTypes'
 import firebase from '@/plugins/firebase'
 
@@ -14,7 +17,13 @@ export const state = () => ({
   page: 'home',
   items: [],
   user: null,
-  reloadkey: 0
+  reloadkey: 0,
+  regstar: [],
+  authErrors: [],
+  addTodoErrors: [],
+  message: '',
+  doneInsta: false
+  // isAuthError: false
 })
 export const mutations = {
   pagePathSet(state, payload) {
@@ -23,36 +32,122 @@ export const mutations = {
   setUser(state, payload) {
     state.user = payload
   },
+  // no use
   setReloadkey(state, payload) {
     state.reloadkey += 1
+  },
+  setAuthError(state, payload) {
+    state.authErrors.push(payload)
+  },
+  clearAuthError(state) {
+    state.authErrors = []
+  },
+  setAddTodoError(state, payload) {
+    state.addTodoErrors.push(payload)
+  },
+  clearAddTodoError(state) {
+    state.addTodoErrors = []
+  },
+
+  setMessage(state, payload) {
+    state.message = payload
+  },
+  clearMessage(state) {
+    state.message = ''
+  },
+  setDoneInsta(state) {
+    state.doneInsta = !state.doneInsta
+  },
+  openDoneInsta(state) {
+    state.doneInsta = true
   },
   // firebase
   ...vuexfireMutations
 }
 
 export const actions = {
-  setUser({ commit }, payload) {
-    commit('setUser', payload)
-  },
+  // setUser({ commit }, payload) {
+  //   commit('setUser', payload)
+  // },
 
-  [INIT_TODO]: firebaseAction(({ bindFirebaseRef }) => {
-    bindFirebaseRef('items', db.ref('imgdatas'), { wait: true })
+  [ADD_REGISTORY]: firebaseAction(async (context, user) => {
+    // console.log('dispatch ADD_REGISTORY')
+    // console.log('disp uid: ' + user.uid)
+    // console.log('disp email: ' + user.email)
+    // console.log('disp name: ' + user.displayName)
+    await db
+      .ref('todoUser')
+      .child(user.uid)
+      .push(user)
   }),
-  [ADD_TODO]: firebaseAction((context, text) => {
-    db.ref('imgdatas').push(text)
+  [GET_REGISTORY]: firebaseAction(({ bindFirebaseRef }, user) => {
+    // console.log('GET_REGISTORY uid: ' + user.uid)
+    bindFirebaseRef('regstar', db.ref('todoUser/' + user.uid), {
+      wait: true
+    })
   }),
-  [REMOVE_TODO]: firebaseAction((context, key) => {
-    db.ref('imgdatas')
-      .child(key)
+
+  [INIT_TODO]: firebaseAction(({ bindFirebaseRef }, user) => {
+    // console.log('INIT_TODO uid: ' + user)
+    bindFirebaseRef('items', db.ref('imgdatas').child(user), {
+      wait: true
+    })
+  }),
+  [ADD_TODO]: firebaseAction(async (context, insdata) => {
+    console.log('ADD_TODO firebase push')
+    await db.ref('imgdatas/' + insdata.user).push(insdata)
+    console.log('ADD_TODO setMessage')
+    await context.commit('setMessage', '追加しました。')
+  }),
+  [REMOVE_TODO]: firebaseAction(async (context, keydata) => {
+    await db
+      .ref('imgdatas/' + keydata.user)
+      .child(keydata.key)
       .remove()
   }),
-  [UPDATEDANE_TODO]: firebaseAction((context, key) => {
-    db.ref('imgdatas')
-      .child(key)
+
+  [UPDATEDANE_TODO]: firebaseAction(async (context, keydata) => {
+    await db
+      .ref('imgdatas/' + keydata.user)
+      .child(keydata.key)
       .update({ done: true })
   }),
-  [CREATE_MYPHOTO]: (context, createDatas) => {
-    console.log('CREATE_MYPHOTO')
+  [EDIT_TODO]: firebaseAction(async (context, keydata) => {
+    // console.log('EDIT_TODO')
+    // console.log('user: ' + keydata.user)
+    // console.log('key: ' + keydata.key)
+    // console.log('title: ' + keydata.title)
+
+    await db
+      .ref('imgdatas/' + keydata.user)
+      .child(keydata.key)
+      .update({ title: keydata.title })
+      .then((res) => {
+        console.log('firebase update: ' + res)
+      })
+      .catch((err) => {
+        console.log('firebase error code: ' + err)
+      })
+  }),
+  // [INIT_TODO]: firebaseAction(({ bindFirebaseRef }) => {
+  //   bindFirebaseRef('items', db.ref('imgdatas'), { wait: true })
+  // }),
+  // [ADD_TODO]: firebaseAction((context, text) => {
+  //   db.ref('imgdatas').push(text)
+  // }),
+  // [REMOVE_TODO]: firebaseAction((context, key) => {
+  //   db.ref('imgdatas')
+  //     .child(key)
+  //     .remove()
+  // }),
+  // [UPDATEDANE_TODO]: firebaseAction((context, key) => {
+  //   db.ref('imgdatas')
+  //     .child(key)
+  //     .update({ done: true })
+  // }),
+
+  [CREATE_MYPHOTO]: async (context, createDatas) => {
+    console.log('CREATE_MYPHOTO start')
     // firebase
     // key: item['.key'],
     // shootDate: '2019-07-20',
@@ -85,27 +180,34 @@ export const actions = {
     //   }
     // }
     const filename = createDatas.filename
-    alert(filename)
-    alert(createDatas.stargeImage)
-    alert(imgDatas.title)
-    firebase
+    // alert(filename)
+    // alert(createDatas.stargeImage)
+    // alert(imgDatas.title)
+    console.log('CREATE_MYPHOTO strage upload')
+    await firebase
       .storage()
       .ref('images/' + filename)
       .put(createDatas.stargeImage)
       .then((fileData) => {
+        console.log('CREATE_MYPHOTO strage getURL')
         return firebase
           .storage()
           .ref('images/' + filename)
           .getDownloadURL()
       })
       .then((url) => {
+        console.log('CREATE_MYPHOTO database update')
         imgDatas.imageUrl = url
         // const updates = {}
         // updates['imgdatas/' + createDatas.key] = imgDatas
         // db.ref().update(updates)
-        db.ref('imgdatas')
+        // db.ref('imgdatas')
+        //   .child(createDatas.key)
+        //   .update(imgDatas)
+        db.ref('imgdatas/' + createDatas.user)
           .child(createDatas.key)
           .update(imgDatas)
+        // context.commit('setMessage', 'インスタを追加しました。')
       })
       .catch((err) => {
         console.log('firebase error code: ' + err)
@@ -117,4 +219,8 @@ export const getters = {
   isAuthenticated(state) {
     return !!state.user
   }
+  // getUser(state) {
+  //   console.log('getUser uid: ' + state.regstar.displayName)
+  //   return !!state.regstar
+  // }
 }

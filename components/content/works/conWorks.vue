@@ -22,29 +22,90 @@
     </div>
     <div v-else>
       <div class="auth">
+        <div class="auth-title">
+          <h6>Firebase Authentication</h6>
+          <h2>Photo Todos</h2>
+        </div>
         <div v-if="isAuthenticated">
           <p>{{ user.email }}でログイン中です。</p>
-          <p>e-mail:{{ user.email }}</p>
-          <p>uid:{{ user.uid }}</p>
-          <p>displayName:{{ user.dispalyName }}</p>
-
-          <button @click="logout">
-            ログアウト
-          </button>
-          <a href="/works">CRTU</a>
+          <!-- <p>e-mail:{{ user.email }}</p> -->
+          <div class="add-btn">
+            <button @click="logout">
+              ログアウト
+            </button>
+          </div>
+          <!-- <a href="/works">CRTU</a> -->
         </div>
-
         <div v-else>
-          <p><input v-model="email" type="text" /></p>
-          <p><input v-model="password" type="password" /></p>
-          <p>
-            <input id="checkbox" v-model="register" type="checkbox" />
-            <label for="checkbox">新規登録</label>
-          </p>
+          <div class="login-form">
+            <form novalidate @submit.prevent="loginCheck">
+              <div v-if="authErrors.length">
+                <p class="error-title">
+                  入力項目を確認してください。
+                </p>
+                <ul>
+                  <li v-for="(error, index) in authErrors" :key="index">
+                    <p class="error-msg">
+                      {{ error }}
+                    </p>
+                  </li>
+                </ul>
+              </div>
+              <p>
+                <input
+                  v-model="email"
+                  type="text"
+                  placeholder="メール"
+                  required
+                  :style="{ background: error.emailBg }"
+                />
+              </p>
+              <p>
+                <input
+                  v-model="password"
+                  type="password"
+                  placeholder="パスワード"
+                  required
+                  :style="{ background: error.passwordBg }"
+                />
+              </p>
+              <p v-if="register">
+                <input
+                  v-model="displayName"
+                  type="text"
+                  placeholder="ユーザー"
+                  required
+                  :style="{ background: error.displayNameBg }"
+                />
+              </p>
 
-          <button @click="login">
-            {{ register ? '新規登録' : 'ログイン' }}
-          </button>
+              <p>
+                <input id="checkbox" v-model="register" type="checkbox" />
+                <label for="checkbox">新規登録</label>
+              </p>
+              <!-- <div v-if="register">
+              <button type="submit" :disabled="!formIsValidSignin">
+                新規登録
+              </button>
+            </div>
+            <div v-else>
+              <button type="submit" :disabled="!formIsValidLogin">
+                ログイン
+              </button>
+            </div> -->
+              <div class="add-btn">
+                <button type="submit">
+                  {{ register ? '新規登録' : 'ログイン' }}
+                </button>
+              </div>
+            </form>
+          </div>
+          <div class="auth-guid">
+            <h5>Demoでログインしてみる。</h5>
+            <p>デモユーザーでログインする場合は、以下を入力してください。</p>
+            <p>メール：demo@gmail.com</p>
+            <p>パスワード：demo1111</p>
+          </div>
         </div>
       </div>
     </div>
@@ -52,7 +113,7 @@
 </template>
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
-// import { mapState, mapGetters } from 'vuex'
+import { ADD_REGISTORY, GET_REGISTORY } from '~/store/actionTypes'
 import firebase from '@/plugins/firebase'
 export default {
   //   props: {
@@ -63,28 +124,41 @@ export default {
   //   }
   data() {
     return {
-      email: '',
-      password: '',
+      errors: [],
+      email: null,
+      password: null,
+      displayName: null,
       isWaiting: false,
-      register: ''
+      register: null,
+      error: {
+        emailBg: '#e3f2fd',
+        passwordBg: '#e3f2fd',
+        displayNameBg: '#e3f2fd'
+      }
     }
   },
   computed: {
     ...mapState(['user']),
+    ...mapState(['regstar']),
+    ...mapState(['authErrors']),
     ...mapGetters(['isAuthenticated'])
   },
   mounted() {
+    this.$store.commit('clearAuthError')
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        console.log('uid: ' + user.uid)
-        console.log('email: ' + user.email)
-        console.log('displayName: ' + user.displayName)
+        // console.log('uid: ' + user.uid)
+        // console.log('email: ' + user.email)
+        // console.log('displayName: ' + user.displayName)
         const loginUser = {
           uid: user.uid,
           email: user.email,
-          displayName: user.displayName
+          displayName: ''
         }
-        this.setUser(loginUser)
+        this.$store.commit('setUser', loginUser)
+        // this.setUser(loginUser)
+        this.$store.dispatch(GET_REGISTORY, loginUser)
+
         console.log('not setTimeout: ' + this.user) // ここだと取得できない
         setTimeout(() => {
           console.log('setTimeout: ' + this.user.email) // ここだと取得できる
@@ -95,40 +169,132 @@ export default {
   },
   methods: {
     ...mapActions(['setUser']),
-    // ...mapActions(['setUser']),
+    loginCheck(e) {
+      this.$store.commit('clearAuthError')
+      this.error.emailBg = '#e3f2fd'
+      this.error.passwordBg = '#e3f2fd'
+      this.error.displayNameBg = '#e3f2fd'
+      // alert('loginCheck')
+      // this.$store.commit('clearAuthError')
+
+      // this.$store.commit('setAuthError', 'passowrd required.')
+      // this.$store.commit('setAuthError', 'Email required.')
+
+      // alert(this.isAuthError)
+
+      // this.errors = []
+      if (!this.password) {
+        this.$store.commit('setAuthError', 'パスワードは必須です。')
+        this.error.passwordBg = '#f8bbd0'
+      } else if (this.password.length < 8) {
+        this.$store.commit('setAuthError', 'パスワードは８文字以上です。')
+        this.error.passwordBg = '#f8bbd0'
+      }
+      if (!this.email) {
+        this.$store.commit('setAuthError', 'メールは必須です。')
+        this.error.emailBg = '#f8bbd0'
+      } else if (!this.validEmail(this.email)) {
+        this.$store.commit('setAuthError', '無効なメール形式です。')
+        this.error.emailBg = '#f8bbd0'
+      }
+      // if (email.length < 4) {
+      //     alert('Please enter an email address.');
+      //     return;
+      //   }
+      if (this.register) {
+        alert('reg')
+        if (!this.displayName) {
+          alert('reg error')
+          this.$store.commit('setAuthError', 'ユーザー名は必須です。')
+          this.error.displayNameBg = '#f8bbd0'
+        } else if (this.displayName.length > 31) {
+          this.$store.commit('setAuthError', 'ユーザー名は３０文字以下です。')
+          this.error.displayNameBg = '#f8bbd0'
+        }
+      }
+      // console.log('error' + this.errors)
+      // if (this.errors.length) this.login()
+      // this.login()
+
+      if (this.authErrors.length) {
+        // alert('error')
+      } else {
+        // alert('normal')
+        this.login()
+      }
+      e.preventDefault()
+    },
     login() {
+      console.log('login')
+      // if (!this.formIsValidSignin) {
+      //   return
+      // }
+      // if (!this.formIsValidLogin) {
+      //   return
+      // }
+      // if (!this.image) {
+      //   return
+      // }
       this.isWaiting = true
       if (this.register) {
+        console.log('signin')
         firebase
           .auth()
           .createUserWithEmailAndPassword(this.email, this.password)
+          .then((res) => {
+            console.log('createUserWithEmailAndPassword')
+            const user = firebase.auth().currentUser
+            console.log('uid: ' + user.uid)
+            console.log('email: ' + user.email)
+            console.log('displayName: ' + this.displayName)
+            return user
+          })
           .then((user) => {
-            // ログインしたら飛ぶページを指定
-            // this.$router.push('/about')
+            console.log('firebase auth add user')
+            console.log('uid: ' + user.uid)
+            console.log('email: ' + user.email)
+            console.log('displayName: ' + this.displayName)
+            this.$store.dispatch(ADD_REGISTORY, {
+              uid: user.uid,
+              email: user.email,
+              displayName: this.displayName
+            })
+          })
+          .then((user) => {
             const lp = '/about'
             this.link_commit(lp)
             this.isWaiting = false
           })
           .catch((error) => {
-            alert('login error' + error)
+            // alert('signin error' + error)
+            console.log('signin error' + error)
             this.isWaiting = false
+            this.$store.commit('setAuthError', error)
           })
       } else {
+        console.log('login email pass')
         firebase
           .auth()
           .signInWithEmailAndPassword(this.email, this.password)
           .then((user) => {
-            // ログインしたら飛ぶページを指定
-            // this.$router.push('/about')
             const lp = '/about'
             this.link_commit(lp)
             this.isWaiting = false
           })
           .catch((error) => {
-            alert('login error' + error)
+            // alert('login error' + error)
+            console.log('login error' + error)
             this.isWaiting = false
+            // this.errors.push('Invalid email .')
+            this.$store.commit('setAuthError', error)
           })
       }
+    },
+    validEmail: (email) => {
+      /* eslint-disable */
+      const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      /* eslint-disable */
+      return re.test(email)
     },
     logout() {
       console.log('logout')
@@ -136,19 +302,26 @@ export default {
         .auth()
         .signOut()
         .then(() => {
-          this.setUser(null)
+          this.$store.commit('setUser', null)
+          // this.setUser(null)
         })
         .catch((error) => {
-          alert('logout error' + error)
+          // alert('logout error' + error)
         })
     },
     link_commit(linkPath) {
       this.active = true
       this.$store.commit('pagePathSet', linkPath)
-      console.log('linkPath: ' + linkPath)
       setTimeout(() => {
-        this.$router.push({ path: linkPath })
+        if (linkPath === '/about') {
+          location.href = linkPath // reload
+        } else {
+          this.$router.push({ path: linkPath }) // non-leload
+        }
       }, 500)
+      // setTimeout(() => {
+      //   this.$router.push({ path: linkPath })
+      // }, 500)
     }
   }
 }
@@ -172,50 +345,58 @@ $duration: 1.4s;
 .auth {
   padding: 2rem;
 }
-// .flex-container {
-//   width: 100%;
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: center;
-//   align-items: flex-start;
-//   @media (min-width: 768px) {
-//     flex-direction: row;
-//   }
-// }
-// h1 {
-//   margin-bottom: 2rem;
-//   color: rgb(31, 84, 209);
-//   font-weight: 600;
-//   font-size: 2rem;
-//   line-height: 2.2rem;
-//   @media (min-width: 992px) {
-//     font-size: 4rem;
-//     line-height: 4.2rem;
-//   }
-// }
-// h3 {
-//   color: rgb(67, 110, 211);
-//   margin-bottom: 2rem;
-//   font-weight: 400;
-//   font-size: 2rem;
-//   line-height: 2.2rem;
-//   @media (min-width: 992px) {
-//     font-size: 2rem;
-//     line-height: 2.2rem;
-//   }
-// }
-// p {
-//   color: #212121;
-//   word-wrap: break-word;
-//   font-weight: 400;
-//   font-size: 1.4rem;
-//   line-height: 1.8rem;
-//   @media (min-width: 992px) {
-//     font-weight: 400;
-//     font-size: 2rem;
-//     line-height: 2.6rem;
-//   }
-// }
+.auth-title{
+margin-bottom: 2rem;
+}
+.auth-guid{
+  margin-top: 2rem;
+}
+.add-btn button{
+    border: none;
+    background-color: $footer-color-color;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    color: #fff;
+     margin-top: 1em;
+     outline: 0;
+}
+.login-form{
+  width: 100%;
+  height: 100%;
+  // overflow: scroll;
+  padding: 1rem;
+  @media (min-width: 992px) {
+  border: 1px solid gray;
+  padding: 2rem;
+}
+}
+
+.error-title{
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1rem;
+    margin-bottom: 1rem;
+    color: rgb(2, 2, 2);
+  @media (min-width: 992px) {
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1rem;
+  }
+}
+.error-msg{
+  font-weight: 600;
+    font-size: 1rem;
+    line-height: 1rem;
+    margin-bottom: 1rem;
+    color: rgb(190, 29, 29);
+    margin-left: 1rem;
+  @media (min-width: 992px) {
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1rem;
+  }
+}
+
+
 .spinner {
   animation: rotator $duration linear infinite;
 }

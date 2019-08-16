@@ -43,8 +43,10 @@ export default {
    */
   
   plugins: [
+    //firebaseを使う
     '~/plugins/firebase',
-    { src: "~plugins/persistedstate.js", ssr: false }
+    //localStorageでstoreを永続化する
+    { src: '~/plugins/localStorage.js', ssr: false }
   ],
   /*
    ** Nuxt.js modules
@@ -55,7 +57,7 @@ export default {
     // ['@nuxtjs/google-analytics', { id: 'UA-xxxxxxxx-5' }],
     // '@nuxtjs/sitemap',
     '@nuxtjs/markdownit',
-    '@nuxtjs/dotenv'
+    '@nuxtjs/dotenv',
   ],
   env: {
     FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,

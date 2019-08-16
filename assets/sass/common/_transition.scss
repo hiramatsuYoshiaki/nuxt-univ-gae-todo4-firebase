@@ -85,6 +85,24 @@
     transform: translateY(2000px);
 }
 
+.fade10-enter-active, .fade10-leave-active {
+    transition: opacity 1s;
+  }
+  .fade10-enter, .fade10-leave-to {
+    opacity: 0;
+  }
+.fade05-enter-active, .fade05-leave-active {
+    transition: opacity .5s;
+  }
+  .fade05-enter, .fade05-leave-to {
+    opacity: 0;
+  }
+.fade02-enter-active, .fade02-leave-active {
+    transition: opacity .2s;
+  }
+  .fade02-enter, .fade02-leave-to {
+    opacity: 0;
+  }
 
 
 
