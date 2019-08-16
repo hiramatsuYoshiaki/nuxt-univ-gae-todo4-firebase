@@ -1,9 +1,13 @@
-# nuxt-univ-create-gae-todo2  
-github repository: nuxt-univ-create-gae-todo-base  
+
+# nuxt-univ-create-gae-todo2 
+clone 
+github repository: nuxt-univ-create-gae-todo-base 
+ 
+host  
+
 gcp project: nuxt-univ-create-gae-todo2  
   
 ### アプリケーションの概要
- 
  Todosアプリケーション
  Vue.jsのフレームワークNuxt.js
  firebaseを使用する
