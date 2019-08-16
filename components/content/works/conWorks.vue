@@ -313,8 +313,15 @@ export default {
       this.active = true
       this.$store.commit('pagePathSet', linkPath)
       setTimeout(() => {
-        this.$router.push({ path: linkPath })
+        if (linkPath === '/about') {
+          location.href = linkPath // reload
+        } else {
+          this.$router.push({ path: linkPath }) // non-leload
+        }
       }, 500)
+      // setTimeout(() => {
+      //   this.$router.push({ path: linkPath })
+      // }, 500)
     }
   }
 }

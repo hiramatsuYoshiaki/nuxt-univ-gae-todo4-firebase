@@ -172,7 +172,7 @@ export default {
     link_commit(linkPath) {
       this.active = true
       this.$store.commit('pagePathSet', linkPath)
-      console.log('linkPath: ' + linkPath)
+      // console.log('linkPath: ' + linkPath)
       setTimeout(() => {
         if (linkPath === '/about') {
           location.href = linkPath // reload

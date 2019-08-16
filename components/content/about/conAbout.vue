@@ -269,28 +269,6 @@
                 </div>
               </div>
             </transition>
-            <!-- <div v-if="item.done" class="action-done">
-              <br />
-              <blockquote
-                class="instagram-media"
-                :data-instgrm-permalink="item.insDaneUrl"
-                data-instgrm-version="12"
-                style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"
-              >
-                <a
-                  :href="item.insUrl"
-                  style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;"
-                  target="_blank"
-                />
-              </blockquote>
-              <script async src="//www.instagram.com/embed.js" />
-
-              <transition name="fade05">
-                <div class="origin-photo">
-                  <img :src="item.imageUrl" alt="img" />
-                </div>
-              </transition>
-            </div> -->
           </div>
         </div>
       </div>
@@ -311,6 +289,7 @@
                 <span class="like-spot-title">
                   {{ item.title }}
                 </span>
+
                 <span
                   class="function-icon-more-vert"
                   @click="moreActive(index)"
@@ -447,6 +426,24 @@
               </blockquote>
               <script async src="//www.instagram.com/embed.js" />
             </div>
+            <transition name="fade05">
+              <div v-if="isFull && index === selectFull" class="action-spot">
+                <div class="full-image">
+                  <div
+                    class="full-image-wrap"
+                    :style="{
+                      backgroundImage: 'url(' + item.imageUrl + ')',
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center'
+                    }"
+                  >
+                    <div class="img-close" @click="isFull = false">
+                      <i class="material-icons"> close </i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </transition>
           </div>
         </div>
       </div>
@@ -469,21 +466,7 @@ import {
   GET_REGISTORY,
   EDIT_TODO
 } from '~/store/actionTypes'
-// import firebase from '@/plugins/firebase'
 export default {
-  // head() {
-  //   return {
-  //     script: [
-  //       { src: 'https//www.instagram.com/embed.js', async: 'true', ssr: false }
-  //     ]
-  //   }
-  // },
-  // props: {
-  //   msg: {
-  //     type: String,
-  //     default: 'about'
-  //   }
-  // },
   data() {
     return {
       text: '',
@@ -504,7 +487,6 @@ export default {
       selectMore: 0,
       isFull: false,
       selectFull: 0,
-      // isfoldeDoneList: false
       error: {
         testBg: '#e3f2fd',
         insUrlBg: '#e3f2fd',
@@ -1121,13 +1103,16 @@ img {
   }
 }
 .new-todo-add,
-.action-spot {
+.action-spot,
+.full-image {
   position: fixed;
   top: 0;
   left: 0;
   z-index: 2;
-  width: 100%;
-  height: 100%;
+  // width: 100%;
+  // height: 100%;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -1150,6 +1135,27 @@ img {
     height: 50%;
   }
 }
+.full-image-wrap {
+  position: relative;
+  // margin: 5rem 2rem 0 2rem;
+  // padding: 2rem;
+  background-color: #212121;
+  // box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.5);
+  // border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  @media (min-width: 992px) {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+
+
 .add-new-form, 
 .add-done-ins-form, 
 .add-done-ins-form{
@@ -1271,6 +1277,22 @@ img {
     color: #212121;
   }
 }
+.img-close {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  cursor: pointer;
+  border: 1px solid gray;
+  border-radius: 3px;
+  i {
+    width: 2rem;
+    height: 2rem;
+    display: block;
+    font-size: 2rem;
+    line-height: 2rem;
+    color: gray;
+  }
+}
 .modal-bg {
   position: fixed;
   top: 0;
@@ -1316,5 +1338,10 @@ img {
   margin-top: .2rem;
   margin-left:-.2rem;
 }
+.testimage{
+  width:5rem;
+  height:auto;
+}
+
 
 </style>
