@@ -1,8 +1,10 @@
+
 # nuxt-univ-create-gae-todo2 
 clone 
 github repository: nuxt-univ-create-gae-todo-base 
  
 host  
+
 gcp project: nuxt-univ-create-gae-todo2  
   
 ### アプリケーションの概要
@@ -13,8 +15,7 @@ gcp project: nuxt-univ-create-gae-todo2
  firebase databaseを使用
  firbase strageを使用
  インスタグラムの埋め込みコードを使用
- 
-  
+
 ```
 $ npx create-nuxt-app <project-name>
  
@@ -223,7 +224,6 @@ $ gcloud app browse
 ```
 $ gcloud app logs tail -s default
 ```
-  
 
 # nuxt.config.js setting
 > nuxt.config.jsでの導入時の設定
