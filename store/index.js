@@ -22,7 +22,14 @@ export const state = () => ({
   authErrors: [],
   addTodoErrors: [],
   message: '',
-  doneInsta: false
+  doneInsta: false,
+  userProf: {
+    name: '',
+    email: '',
+    photoUrl: '',
+    emailVerified: '',
+    uid: ''
+  }
   // isAuthError: false
 })
 export const mutations = {
@@ -60,6 +67,9 @@ export const mutations = {
   },
   openDoneInsta(state) {
     state.doneInsta = true
+  },
+  setUserProf(state, payload) {
+    state.userProf = payload
   },
   // firebase
   ...vuexfireMutations

@@ -9,8 +9,8 @@
           <div class="menu-item-box">
             <div
               class="menu_link"
-              :class="{ menu_item_visible: page === '/works' }"
-              @click="link_commit('/works')"
+              :class="{ menu_item_visible: page === '/auth' }"
+              @click="link_commit('/auth')"
             >
               Auth
             </div>
@@ -76,8 +76,8 @@
             <div class="menu-item-box">
               <a
                 class="menu_link"
-                :class="{ menu_item_visible: page === '/works' }"
-                @click="link_commit('/works')"
+                :class="{ menu_item_visible: page === '/auth' }"
+                @click="link_commit('/auth')"
               >
                 Auth
               </a>

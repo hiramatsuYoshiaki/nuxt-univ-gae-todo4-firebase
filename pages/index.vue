@@ -13,7 +13,7 @@
           <h5>Google Cloud Platform</h5>
           <h5>App Engine</h5>
         </div>
-        <div class="subscription">
+        <!-- <div class="subscription">
           <div class="menu_link todo-demo" @click="link_commit('/about')">
             <h3>TODOS<span>DEMOを見る</span></h3>
             <div class="line" />
@@ -21,6 +21,29 @@
             <p>Database</p>
             <p>Strage</p>
             <div>Used: Firebase</div>
+          </div>
+        </div> -->
+        <div class="subscription">
+          <div class=" todo-demo">
+            <h3>Authentication</h3>
+            <div class="line" />
+            <div>
+              <div class="menu_link " @click="link_commit('/loginEmail')">
+                <p><i class="material-icons">insert_link</i>Email Password</p>
+              </div>
+            </div>
+            <div>
+              <div class="menu_link " @click="link_commit('/emailLink')">
+                <p><i class="material-icons">insert_link</i>Email Link</p>
+              </div>
+            </div>
+
+            <div>
+              <div class="menu_link " @click="link_commit('/loginGoogle')">
+                <p><i class="material-icons">insert_link</i>Google</p>
+              </div>
+            </div>
+            <!-- <div>Used: Firebase</div> -->
           </div>
         </div>
       </div>
@@ -191,13 +214,15 @@ export default {
 .menu_link {
   display: inline-block;
   opacity: 0.75;
-  color: #fff;
+  color: darkblue;
+  opacity: 1;
   // text-transform: uppercase;
   font-size: $nav_font_size;
   font-weight: $nav_font_weight;
   cursor: pointer;
   &:hover {
     opacity: 1;
+    color: #fff;
   }
 }
 .todo-demo {
