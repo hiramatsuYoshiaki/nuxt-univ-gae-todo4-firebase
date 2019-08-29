@@ -26,28 +26,86 @@
           <h6>Firebase Authentication</h6>
           <p>ログインするタイプを選んでください。</p>
         </div>
+
         <div class="login-type-sellect">
+          <!-- email pass -->
           <div class="auth-title login-type" @click="link_commit('loginEmail')">
-            <h2>Email and Password</h2>
-            <h6>メールとパスワードに基づく認証</h6>
-            <p>メールアドレスとパスワードを使用してログインする</p>
+            <div class="login-type-wrap">
+              <h2>Email and Password</h2>
+              <h6>メールとパスワードに基づく認証</h6>
+              <p>メールアドレスとパスワードを使用してログインする</p>
+            </div>
           </div>
           <br />
+          <!-- email link -->
           <div class="auth-title login-type" @click="link_commit('emailLink')">
-            <h2>Email Link</h2>
-            <h6>ユーザーに確認メールを送信する</h6>
-            <p>
-              メールアドレスとパスワードを使用してログインし、確認メールを送信する
-            </p>
+            <div class="login-type-wrap">
+              <h2>Email Link</h2>
+              <h6>ユーザーに確認メールを送信する</h6>
+              <p>
+                メールアドレスとパスワードを使用してログインし、確認メールを送信する
+              </p>
+            </div>
           </div>
           <br />
+          <!-- google         -->
           <div
             class="auth-title login-type"
             @click="link_commit('loginGoogle')"
           >
-            <h2>Google</h2>
-            <h6>フェデレーション ID プロバイダとの統合</h6>
-            <p>Googleアカウントを使用してログインする。</p>
+            <div class="login-type-wrap">
+              <h2>Google</h2>
+              <h6>フェデレーション ID プロバイダとの統合</h6>
+              <p>Googleアカウントを使用してログインする。</p>
+            </div>
+          </div>
+          <br />
+          <!-- Gituub -->
+          <div
+            class="auth-title login-type"
+            @click="link_commit('loginGoogle')"
+          >
+            <div class="login-type-wrap">
+              <h2>GitHub</h2>
+              <h6>フェデレーション ID プロバイダとの統合</h6>
+              <p>GoogleGitHubアカウントを使用してログインする。</p>
+            </div>
+          </div>
+          <br />
+          <!-- User Prof -->
+          <div class="auth-title login-type" @click="link_commit('userProf')">
+            <div class="login-type-wrap">
+              <h2>User Profele Update</h2>
+              <h6>ユーザー情報の変更</h6>
+              <p>User Profele Updateを更新する</p>
+            </div>
+          </div>
+          <br />
+          <!-- User Prof -->
+          <div class="auth-title login-type" @click="link_commit('userMail')">
+            <div class="login-type-wrap">
+              <h2>Email Upadet</h2>
+              <h6>メールアドレス変更</h6>
+              <p>Email を変更する</p>
+            </div>
+          </div>
+          <br />
+          <!-- User Prof -->
+          <div class="auth-title login-type" @click="link_commit('userPass')">
+            <div class="login-type-wrap">
+              <h2>Pass Upadet</h2>
+              <h6>パスワード変更変更</h6>
+              <p>Password を変更する</p>
+            </div>
+          </div>
+          <br />
+          <!-- User Prof -->
+          <div class="auth-title login-type" @click="link_commit('userDel')">
+            <div class="login-type-wrap">
+              <h2>user del</h2>
+              <h6>ユザーを削除する</h6>
+              <p>userを削除する</p>
+            </div>
           </div>
           <br />
         </div>
@@ -320,7 +378,6 @@ $duration: 1.4s;
 .auth {
   display: block;
   width: 100%;
-  padding: 2rem;
   border: 1px solid red;
 }
 .login-type-sellect{
@@ -339,16 +396,26 @@ $duration: 1.4s;
   }
 }
 .login-type{
+  
   width: 100%;
-  height: 100%;
-  padding: 2rem 0.5rem;
-cursor: pointer;
-  @media (min-width: 768px) {
+  padding: 1rem 0.2rem;
+  @media (min-width: 1024px) {
     width: 50%;
     padding: 2rem 2rem;
   }
    border: 1px solid green;
-
+}
+.login-type-wrap{
+    width: 100%;
+    height: 30rem;
+    border-radius: 4px;
+    background-color: rgb(204, 204, 204);
+    cursor: pointer;
+    padding: 1rem 0.5rem;
+    @media (min-width: 1024px){
+        padding: 2rem 2rem;
+        height: 25rem;
+    }
 }
 .auth-title{
 margin-bottom: 2rem;

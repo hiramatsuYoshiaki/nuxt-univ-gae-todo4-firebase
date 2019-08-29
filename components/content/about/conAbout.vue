@@ -7,10 +7,12 @@
     <h2>
       Photo Todos
     </h2>
+    <p>login:{{ displayName }}</p>
     <p>インスタグラムで見る、こんな写真を撮ってみたい！</p>
     <div v-for="(reg, index) in regstar" :key="index">
       <p>{{ reg.displayName }}さんのTodosリスト</p>
     </div>
+
     <!-- <button @click="reload">
       インスタグラムを読み込む
     </button> -->
@@ -493,7 +495,8 @@ export default {
         insDaneUrlBg: '#e3f2fd',
         fileBg: '#e3f2fd',
         editSpotNameBg: '#e3f2fd'
-      }
+      },
+      displayName: ''
     }
   },
   computed: {
@@ -548,13 +551,16 @@ export default {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         console.log('login')
-        // console.log('about uid: ' + user.uid)
-        // console.log('about email: ' + user.email)
-        // console.log('displayName: ' + user.displayName)
+        console.log('about uid: ' + user.uid)
+        console.log('about email: ' + user.email)
+        console.log('displayName: ' + user.displayName)
+        if (user.displayName) {
+          this.displayName = user.displayName
+        }
         const loginUser = {
           uid: user.uid,
           email: user.email,
-          displayName: null
+          displayName: user.displayName
         }
         this.$store.commit('setUser', loginUser)
 
@@ -567,11 +573,18 @@ export default {
           // console.log('setTimeout: ' + this.user.email) // ここだと取得できる
           this.uid = this.user.uid
           this.email = this.user.email
+          // this.displayName = this.user.displayName
           this.$store.dispatch(INIT_TODO, this.user.uid)
           // なにかしらの処理
         })
       } else {
         console.log('logout')
+        // const loginUser = {
+        //   uid: '',
+        //   email: '',
+        //   displayName: ''
+        // }
+        // this.$store.commit('setUser', loginUser)
       }
     })
     // console.log(this.regstar[0].uid)

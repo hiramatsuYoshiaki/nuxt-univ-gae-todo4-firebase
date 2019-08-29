@@ -7,6 +7,8 @@ import {
   CREATE_MYPHOTO,
   ADD_REGISTORY,
   GET_REGISTORY,
+  UPDATEDANE_REGISTORY,
+  REMOVE_REGISTORY,
   EDIT_TODO
 } from './actionTypes'
 import firebase from '@/plugins/firebase'
@@ -28,8 +30,10 @@ export const state = () => ({
     email: '',
     photoUrl: '',
     emailVerified: '',
-    uid: ''
-  }
+    uid: '',
+    pass: ''
+  },
+  singInFinish: true
   // isAuthError: false
 })
 export const mutations = {
@@ -71,6 +75,12 @@ export const mutations = {
   setUserProf(state, payload) {
     state.userProf = payload
   },
+  setUserProfsignInFinish(state, payload) {
+    state.singInFinish = payload
+  },
+  setSignInFinish(state, payload) {
+    state.singInFinish = payload
+  },
   // firebase
   ...vuexfireMutations
 }
@@ -96,7 +106,26 @@ export const actions = {
       wait: true
     })
   }),
-
+  [UPDATEDANE_REGISTORY]: firebaseAction(async (context, user) => {
+    // console.log('UPDATEDANE_REGISTORY')
+    // console.log('UPDATEDANE_REGISTORY key:' + user.key)
+    await db
+      .ref('todoUser/' + user.uid)
+      .child(user.key)
+      .update({
+        displayName: user.displayName,
+        email: user.email,
+        uid: user.uid
+      })
+  }),
+  [REMOVE_REGISTORY]: firebaseAction(async (context, user) => {
+    // console.log('UPDATEDANE_REGISTORY')
+    // console.log('UPDATEDANE_REGISTORY key:' + user.key)
+    await db
+      .ref('todoUser/' + user.uid)
+      .child(user.key)
+      .remove()
+  }),
   [INIT_TODO]: firebaseAction(({ bindFirebaseRef }, user) => {
     // console.log('INIT_TODO uid: ' + user)
     bindFirebaseRef('items', db.ref('imgdatas').child(user), {
@@ -104,9 +133,9 @@ export const actions = {
     })
   }),
   [ADD_TODO]: firebaseAction(async (context, insdata) => {
-    console.log('ADD_TODO firebase push')
+    // console.log('ADD_TODO firebase push')
     await db.ref('imgdatas/' + insdata.user).push(insdata)
-    console.log('ADD_TODO setMessage')
+    // console.log('ADD_TODO setMessage')
     await context.commit('setMessage', '追加しました。')
   }),
   [REMOVE_TODO]: firebaseAction(async (context, keydata) => {

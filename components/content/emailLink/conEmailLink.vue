@@ -20,6 +20,21 @@
         />
       </svg>
     </div>
+    <div v-if="isSignIn" class="sign-in-modal">
+      <div class="sign-in-wrap">
+        <p>ログイン</p>
+        <p>認証リンクを送信しました。</p>
+        <p>電子メールを開いてください。</p>
+        <p>リンクをクリックしてログインしてください。</p>
+        <br />
+        <p>ユーザー アカウント</p>
+        <p>{{ email }}</p>
+        <br />
+        <!-- <p @click="isSignIn = false">
+          <button>Close</button>
+        </p> -->
+      </div>
+    </div>
     <div v-else>
       <div class="auth">
         <div class="auth-title">
@@ -27,14 +42,14 @@
           <h2>Email link</h2>
         </div>
         <div v-if="isAuthenticated">
+          <p>{{ user.displayName }}さん</p>
           <p>{{ user.email }}でログイン中です。</p>
-          <!-- <p>e-mail:{{ user.email }}</p> -->
+
           <div class="add-btn">
             <button @click="logout">
               ログアウト
             </button>
           </div>
-          <!-- <a href="/works">CRTU</a> -->
         </div>
         <div v-else>
           <div class="login-form">
@@ -60,7 +75,7 @@
                   :style="{ background: error.emailBg }"
                 />
               </p>
-              <p>
+              <!-- <p>
                 <input
                   v-model="password"
                   type="password"
@@ -68,8 +83,8 @@
                   required
                   :style="{ background: error.passwordBg }"
                 />
-              </p>
-              <p v-if="register">
+              </p> -->
+              <!-- <p v-if="register">
                 <input
                   v-model="displayName"
                   type="text"
@@ -77,12 +92,12 @@
                   required
                   :style="{ background: error.displayNameBg }"
                 />
-              </p>
+              </p> -->
 
-              <p>
+              <!-- <p>
                 <input id="checkbox" v-model="register" type="checkbox" />
                 <label for="checkbox">新規登録</label>
-              </p>
+              </p> -->
               <!-- <div v-if="register">
               <button type="submit" :disabled="!formIsValidSignin">
                 新規登録
@@ -95,7 +110,8 @@
             </div> -->
               <div class="add-btn">
                 <button type="submit">
-                  {{ register ? '新規登録' : 'ログイン' }}
+                  <!-- {{ register ? '新規登録' : 'ログイン' }} -->
+                  ログイン／サインイン
                 </button>
               </div>
             </form>
@@ -103,17 +119,19 @@
           <div class="auth-guid">
             <h5>Demoでログインしてみる。</h5>
             <p>デモユーザーでログインする場合は、以下を入力してください。</p>
-            <p>メール：demo@gmail.com</p>
-            <p>パスワード：demo1111</p>
+            <p>メール：hworksdemo@gmail.com</p>
+            <!-- <p>パスワード：demo1111</p> -->
           </div>
         </div>
       </div>
     </div>
+    <div v-if="isSignIn" class="modal-bg" />
   </div>
 </template>
 <script>
-import { mapActions, mapState, mapGetters } from 'vuex'
-import { ADD_REGISTORY, GET_REGISTORY } from '~/store/actionTypes'
+import { mapState, mapGetters } from 'vuex'
+import { GET_REGISTORY } from '~/store/actionTypes'
+// import { ADD_REGISTORY, GET_REGISTORY } from '~/store/actionTypes'
 import firebase from '@/plugins/firebase'
 export default {
   //   props: {
@@ -134,11 +152,13 @@ export default {
         emailBg: '#e3f2fd',
         passwordBg: '#e3f2fd',
         displayNameBg: '#e3f2fd'
-      }
+      },
+      isSignIn: false
     }
   },
   computed: {
     ...mapState(['user']),
+    // ...mapState(['singInFinish']),
     ...mapState(['regstar']),
     ...mapState(['authErrors']),
     ...mapGetters(['isAuthenticated'])
@@ -147,16 +167,15 @@ export default {
     this.$store.commit('clearAuthError')
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        // console.log('uid: ' + user.uid)
-        // console.log('email: ' + user.email)
-        // console.log('displayName: ' + user.displayName)
+        console.log('uid: ' + user.uid)
+        console.log('email: ' + user.email)
+        console.log('displayName: ' + user.displayName)
         const loginUser = {
           uid: user.uid,
           email: user.email,
-          displayName: ''
+          displayName: user.displayName
         }
         this.$store.commit('setUser', loginUser)
-        // this.setUser(loginUser)
         this.$store.dispatch(GET_REGISTORY, loginUser)
 
         console.log('not setTimeout: ' + this.user) // ここだと取得できない
@@ -164,16 +183,18 @@ export default {
           console.log('setTimeout: ' + this.user.email) // ここだと取得できる
           // なにかしらの処理
         })
+        this.isWaiting = false
+        this.isSignIn = false
       }
     })
   },
   methods: {
-    ...mapActions(['setUser']),
+    // ...mapActions(['setUser']),
     loginCheck(e) {
       this.$store.commit('clearAuthError')
       this.error.emailBg = '#e3f2fd'
-      this.error.passwordBg = '#e3f2fd'
-      this.error.displayNameBg = '#e3f2fd'
+      // this.error.passwordBg = '#e3f2fd'
+      // this.error.displayNameBg = '#e3f2fd'
       // alert('loginCheck')
       // this.$store.commit('clearAuthError')
 
@@ -183,13 +204,13 @@ export default {
       // alert(this.isAuthError)
 
       // this.errors = []
-      if (!this.password) {
-        this.$store.commit('setAuthError', 'パスワードは必須です。')
-        this.error.passwordBg = '#f8bbd0'
-      } else if (this.password.length < 8) {
-        this.$store.commit('setAuthError', 'パスワードは８文字以上です。')
-        this.error.passwordBg = '#f8bbd0'
-      }
+      // if (!this.password) {
+      //   this.$store.commit('setAuthError', 'パスワードは必須です。')
+      //   this.error.passwordBg = '#f8bbd0'
+      // } else if (this.password.length < 8) {
+      //   this.$store.commit('setAuthError', 'パスワードは８文字以上です。')
+      //   this.error.passwordBg = '#f8bbd0'
+      // }
       if (!this.email) {
         this.$store.commit('setAuthError', 'メールは必須です。')
         this.error.emailBg = '#f8bbd0'
@@ -201,17 +222,16 @@ export default {
       //     alert('Please enter an email address.');
       //     return;
       //   }
-      if (this.register) {
-        alert('reg')
-        if (!this.displayName) {
-          alert('reg error')
-          this.$store.commit('setAuthError', 'ユーザー名は必須です。')
-          this.error.displayNameBg = '#f8bbd0'
-        } else if (this.displayName.length > 31) {
-          this.$store.commit('setAuthError', 'ユーザー名は３０文字以下です。')
-          this.error.displayNameBg = '#f8bbd0'
-        }
-      }
+      // if (this.register) {
+      //   if (!this.displayName) {
+      //     alert('reg error')
+      //     this.$store.commit('setAuthError', 'ユーザー名は必須です。')
+      //     this.error.displayNameBg = '#f8bbd0'
+      //   } else if (this.displayName.length > 31) {
+      //     this.$store.commit('setAuthError', 'ユーザー名は３０文字以下です。')
+      //     this.error.displayNameBg = '#f8bbd0'
+      //   }
+      // }
       // console.log('error' + this.errors)
       // if (this.errors.length) this.login()
       // this.login()
@@ -224,76 +244,155 @@ export default {
       }
       e.preventDefault()
     },
+
     login() {
       console.log('login')
-      firebase.auth().languageCode = 'jp'
-
       this.isWaiting = true
-      if (this.register) {
-        console.log('signin')
-        alert('send email')
-        firebase
-          .auth()
-          .createUserWithEmailAndPassword(this.email, this.password)
-          .then((res) => {
-            console.log('createUserWithEmailAndPassword')
-            const user = firebase.auth().currentUser
-            console.log('uid: ' + user.uid)
-            console.log('email: ' + user.email)
-            console.log('displayName: ' + this.displayName)
-            return user
-          })
-          .then((user) => {
-            console.log('firebase auth add user')
-            console.log('uid: ' + user.uid)
-            console.log('email: ' + user.email)
-            console.log('displayName: ' + this.displayName)
-            this.$store.dispatch(ADD_REGISTORY, {
-              uid: user.uid,
-              email: user.email,
-              displayName: this.displayName
-            })
-            return user
-          })
-          .then((user) => {
-            console.log('user.sendEmailVerification()')
-            const actionCodeSettings = {
-              url: 'http://' + window.location.host + '/about'
-            }
-            user.sendEmailVerification(actionCodeSettings)
-            return user
-          })
-          .then((user) => {
-            //     const lp = '/about'
-            //     const lp = '/emailLink'
-            //     this.link_commit(lp)
-            this.isWaiting = false
-          })
-
-          .catch((error) => {
-            // alert('signin error' + error)
-            console.log('signin error' + error)
-            this.isWaiting = false
-            this.$store.commit('setAuthError', error)
-          })
-      } else {
-        console.log('login email pass')
-        firebase
-          .auth()
-          .signInWithEmailAndPassword(this.email, this.password)
-          .then((user) => {
-            const lp = '/about'
-            this.link_commit(lp)
-            this.isWaiting = false
-          })
-          .catch((error) => {
-            // alert('login error' + error)
-            console.log('login error' + error)
-            this.isWaiting = false
-            // this.errors.push('Invalid email .')
-            this.$store.commit('setAuthError', error)
-          })
+      this.isSignIn = true
+      // if (this.register) {
+      // this.$store.commit('setSignInFinish', false)
+      console.log('signin')
+      alert('send email deep link email: ' + this.email)
+      // const actionCodeSettings = {
+      //   url: 'http://' + window.location.host + '/'
+      // }
+      const actionCodeSettings = {
+        // URL you want to redirect back to. The domain (www.example.com) for this
+        // URL must be whitelisted in the Firebase Console.
+        url: 'http://' + window.location.host + '/finishSignUp',
+        //   url: 'https://www.example.com/finishSignUp?cartId=1234',
+        // This must be true.
+        handleCodeInApp: true
+        //   iOS: {
+        //     bundleId: 'com.example.ios'
+        //   },
+        //   android: {
+        //     packageName: 'com.example.android',
+        //     installApp: true,
+        //     minimumVersion: '12'
+        //   },
+        //   dynamicLinkDomain: 'example.page.link'
       }
+      firebase
+        .auth()
+        .sendSignInLinkToEmail(this.email, actionCodeSettings)
+        .then((res) => {
+          window.localStorage.setItem('emailForSignIn', this.email)
+          this.isWaiting = true
+        })
+        .catch((error) => {
+          console.log('signin  sendSignInLinkToEmail error: ' + error)
+          this.isWaiting = true
+        })
+
+      // firebase
+      //   .auth()
+      //   .createUserWithEmailAndPassword(this.email, this.password)
+      //   .then((res) => {
+      //     console.log('createUserWithEmailAndPassword')
+      //     const user = firebase.auth().currentUser
+      //     console.log('uid: ' + user.uid)
+      //     console.log('email: ' + user.email)
+      //     console.log('displayName: ' + this.displayName)
+      //     return user
+      //   })
+      //   .then((user) => {
+      //     firebase.auth().languageCode = 'jp'
+      //     const actionCodeSettings = {
+      //       url: 'http://' + window.location.host + '/finishSignUp'
+      //     }
+      //     user.sendEmailVerification(actionCodeSettings)
+      //     const userProf = {
+      //       name: this.displayName,
+      //       email: this.email,
+      //       photoUrl: '',
+      //       emailVerified: '',
+      //       uid: '',
+      //       pass: this.password
+      //     }
+      //     this.$store.commit('setUserProf', userProf)
+      //     this.isWaiting = false
+      //   })
+      //   .catch((error) => {
+      //     console.log('signin error' + error)
+      //     this.isWaiting = false
+      //     this.$store.commit('setAuthError', error)
+      //   })
+
+      // console.log('user.sendEmailVerification()')
+      // firebase.auth().languageCode = 'jp'
+      // const actionCodeSettings = {
+      //   url: 'http://' + window.location.host + '/finishSignUp'
+      // }
+      // const user = firebase.auth().currentUser
+      // user
+      //   .sendEmailVerification(actionCodeSettings)
+      //   .then((res) => {
+      //     const userProf = {
+      //       name: this.displayName,
+      //       email: this.email,
+      //       photoUrl: '',
+      //       emailVerified: '',
+      //       uid: '',
+      //       pass: this.password
+      //     }
+      //     this.$store.commit('setUserProf', userProf)
+      //     this.isWaiting = false
+      //   })
+      //   .catch((error) => {
+      //     console.log('signin error' + error)
+      //     this.isWaiting = false
+      //     this.$store.commit('setAuthError', error)
+      //   })
+      // firebase
+      //   .auth()
+      //   .createUserWithEmailAndPassword(this.email, this.password)
+      //   .then((res) => {
+      //     console.log('createUserWithEmailAndPassword')
+      //     const user = firebase.auth().currentUser
+      //     console.log('uid: ' + user.uid)
+      //     console.log('email: ' + user.email)
+      //     console.log('displayName: ' + this.displayName)
+      //     return user
+      //   })
+      //   .then((user) => {
+      //     console.log('firebase auth add user')
+      //     console.log('uid: ' + user.uid)
+      //     console.log('email: ' + user.email)
+      //     console.log('displayName: ' + this.displayName)
+      //     this.$store.dispatch(ADD_REGISTORY, {
+      //       uid: user.uid,
+      //       email: user.email,
+      //       displayName: this.displayName
+      //     })
+      //     return user
+      //   })
+      //   .then((user) => {
+      //     const lp = '/about'
+      //     this.link_commit(lp)
+      //     this.isWaiting = false
+      //   })
+      //   .catch((error) => {
+      //     console.log('signin error' + error)
+      //     this.isWaiting = false
+      //     this.$store.commit('setAuthError', error)
+      //   })
+      // } else {
+      //   console.log('login email pass')
+      //   firebase
+      //     .auth()
+      //     .signInWithEmailAndPassword(this.email, this.password)
+      //     .then((user) => {
+      //       const lp = '/about'
+      //       this.link_commit(lp)
+      //       this.isWaiting = false
+      //     })
+      //     .catch((error) => {
+      //       console.log('login error' + error)
+      //       this.isWaiting = false
+      //       this.$store.commit('setAuthError', error)
+      //     })
+      // }
     },
     validEmail: (email) => {
       /* eslint-disable */
@@ -314,6 +413,7 @@ export default {
           // alert('logout error' + error)
         })
     },
+    
     link_commit(linkPath) {
       this.active = true
       this.$store.commit('pagePathSet', linkPath)
@@ -399,6 +499,43 @@ margin-bottom: 2rem;
     font-size: 1rem;
     line-height: 1rem;
   }
+}
+.sign-in-modal{
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    width: 100vw;
+    // height:100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.sign-in-wrap{
+    position: relative;
+    margin: 7rem 2rem 0 2rem;
+    padding: 2rem;
+    background-color: rgba(250, 250, 250, 1);
+    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+    width: 90%;
+    height: 50%;
+    @media (min-width: 992px) {
+        width: 50%;
+        height: 30%;
+    }
+
+
+}
+.modal-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  // display: none;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 

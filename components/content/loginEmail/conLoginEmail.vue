@@ -28,7 +28,8 @@
           <!-- <h2>Photo Todos</h2> -->
         </div>
         <div v-if="isAuthenticated">
-          <p>{{ user.email }}でログイン中です。</p>
+          <p>{{ displayName }}さん</p>
+          <p>{{ email }}でログイン中です。</p>
           <!-- <p>e-mail:{{ user.email }}</p> -->
           <div class="add-btn">
             <button @click="logout">
@@ -70,7 +71,7 @@
                   :style="{ background: error.passwordBg }"
                 />
               </p>
-              <p v-if="register">
+              <!-- <p v-if="register">
                 <input
                   v-model="displayName"
                   type="text"
@@ -78,7 +79,7 @@
                   required
                   :style="{ background: error.displayNameBg }"
                 />
-              </p>
+              </p> -->
 
               <p>
                 <input id="checkbox" v-model="register" type="checkbox" />
@@ -101,12 +102,12 @@
               </div>
             </form>
           </div>
-          <div class="auth-guid">
+          <!-- <div class="auth-guid">
             <h5>Demoでログインしてみる。</h5>
             <p>デモユーザーでログインする場合は、以下を入力してください。</p>
             <p>メール：demo@gmail.com</p>
             <p>パスワード：demo1111</p>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -148,16 +149,22 @@ export default {
     this.$store.commit('clearAuthError')
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        // console.log('uid: ' + user.uid)
-        // console.log('email: ' + user.email)
-        // console.log('displayName: ' + user.displayName)
+        alert(
+          ' user.uid: ' +
+            user.uid +
+            ' user.email: ' +
+            user.email +
+            ' user.displayName: ' +
+            user.displayName
+        )
+        this.email = user.email
+        this.displayName = user.displayName
         const loginUser = {
           uid: user.uid,
           email: user.email,
           displayName: ''
         }
         this.$store.commit('setUser', loginUser)
-        // this.setUser(loginUser)
         this.$store.dispatch(GET_REGISTORY, loginUser)
 
         console.log('not setTimeout: ' + this.user) // ここだと取得できない
@@ -165,6 +172,17 @@ export default {
           console.log('setTimeout: ' + this.user.email) // ここだと取得できる
           // なにかしらの処理
         })
+      } else {
+        alert('mounted logout now XXX')
+        this.email = null
+        this.displayName = null
+        this.$store.commit('setUser', null)
+        const loginUser = {
+          uid: null,
+          email: null,
+          displayName: null
+        }
+        this.$store.dispatch(GET_REGISTORY, loginUser)
       }
     })
   },
@@ -175,15 +193,7 @@ export default {
       this.error.emailBg = '#e3f2fd'
       this.error.passwordBg = '#e3f2fd'
       this.error.displayNameBg = '#e3f2fd'
-      // alert('loginCheck')
-      // this.$store.commit('clearAuthError')
 
-      // this.$store.commit('setAuthError', 'passowrd required.')
-      // this.$store.commit('setAuthError', 'Email required.')
-
-      // alert(this.isAuthError)
-
-      // this.errors = []
       if (!this.password) {
         this.$store.commit('setAuthError', 'パスワードは必須です。')
         this.error.passwordBg = '#f8bbd0'
@@ -202,21 +212,15 @@ export default {
       //     alert('Please enter an email address.');
       //     return;
       //   }
-      if (this.register) {
-        alert('reg')
-        if (!this.displayName) {
-          alert('reg error')
-          this.$store.commit('setAuthError', 'ユーザー名は必須です。')
-          this.error.displayNameBg = '#f8bbd0'
-        } else if (this.displayName.length > 31) {
-          this.$store.commit('setAuthError', 'ユーザー名は３０文字以下です。')
-          this.error.displayNameBg = '#f8bbd0'
-        }
-      }
-      // console.log('error' + this.errors)
-      // if (this.errors.length) this.login()
-      // this.login()
-
+      // if (this.register) {
+      //   if (!this.displayName) {
+      //     this.$store.commit('setAuthError', 'ユーザー名は必須です。')
+      //     this.error.displayNameBg = '#f8bbd0'
+      //   } else if (this.displayName.length > 31) {
+      //     this.$store.commit('setAuthError', 'ユーザー名は３０文字以下です。')
+      //     this.error.displayNameBg = '#f8bbd0'
+      //   }
+      // }
       if (this.authErrors.length) {
         // alert('error')
       } else {
@@ -227,15 +231,6 @@ export default {
     },
     login() {
       console.log('login')
-      // if (!this.formIsValidSignin) {
-      //   return
-      // }
-      // if (!this.formIsValidLogin) {
-      //   return
-      // }
-      // if (!this.image) {
-      //   return
-      // }
       this.isWaiting = true
       if (this.register) {
         console.log('signin')
@@ -245,33 +240,63 @@ export default {
           .then((res) => {
             console.log('createUserWithEmailAndPassword')
             const user = firebase.auth().currentUser
-            console.log('uid: ' + user.uid)
-            console.log('email: ' + user.email)
-            console.log('displayName: ' + this.displayName)
+            // console.log('uid: ' + user.uid)
+            // console.log('email: ' + user.email)
+            // console.log('displayName: ' + user.displayName)
+            return user
+          })
+          .then((user) => {
+            firebase.auth().languageCode = 'jp'
+            const actionCodeSettings = {
+              url: 'http://' + window.location.host + '/userSet',
+              handleCodeInApp: true
+            }
+            user.sendEmailVerification(actionCodeSettings)
+            // const userProf = {
+            //   name: this.displayName,
+            //   email: this.email,
+            //   photoUrl: '',
+            //   emailVerified: '',
+            //   uid: '',
+            //   pass: this.password
+            // }
+            // this.$store.commit('setUserProf', userProf)
+            this.isWaiting = false
             return user
           })
           .then((user) => {
             console.log('firebase auth add user')
-            console.log('uid: ' + user.uid)
-            console.log('email: ' + user.email)
-            console.log('displayName: ' + this.displayName)
             this.$store.dispatch(ADD_REGISTORY, {
               uid: user.uid,
               email: user.email,
-              displayName: this.displayName
+              displayName: 'New User'
             })
           })
+
           .then((user) => {
             const lp = '/about'
             this.link_commit(lp)
             this.isWaiting = false
           })
           .catch((error) => {
-            // alert('signin error' + error)
             console.log('signin error' + error)
             this.isWaiting = false
             this.$store.commit('setAuthError', error)
           })
+
+        // const actionCodeSettings = {
+        //   url: 'http://' + window.location.host + '/finishEmailSignUp',
+        //   handleCodeInApp: true
+        // }
+        // firebase
+        //   .auth()
+        //   .currentUser.sendEmailVerification(actionCodeSettings)
+        //   .then((res) => {
+        //     console.log('sendEmailVerification')
+        //   })
+        //   .catch((error) => {
+        //     console.log('signin error' + error)
+        //   })
       } else {
         console.log('login email pass')
         firebase
@@ -304,7 +329,6 @@ export default {
         .signOut()
         .then(() => {
           this.$store.commit('setUser', null)
-          // this.setUser(null)
         })
         .catch((error) => {
           // alert('logout error' + error)
@@ -320,9 +344,7 @@ export default {
           this.$router.push({ path: linkPath }) // non-leload
         }
       }, 500)
-      // setTimeout(() => {
-      //   this.$router.push({ path: linkPath })
-      // }, 500)
+     
     }
   }
 }

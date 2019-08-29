@@ -92,17 +92,17 @@ export default {
     ...mapState(['items']),
     ...mapState(['user'])
   },
-  created() {
-    console.log('pages/about.vue created()')
-  },
+  // created() {
+  //   console.log('pages/about.vue created()')
+  // },
   mounted() {
     // console.log('pages/about.vue mounted()')
 
     setTimeout(() => {
       if (!this.isAuthenticated) {
         // ログインしていなかったら飛ぶページを設定
-        this.$store.commit('pagePathSet', '/works')
-        this.$router.push('/works')
+        this.$store.commit('pagePathSet', '/auth')
+        this.$router.push('/auth')
       } else {
         // alert(this.regstar)
         // alert(this.items)
