@@ -102,6 +102,8 @@ export const actions = {
   }),
   [GET_REGISTORY]: firebaseAction(({ bindFirebaseRef }, user) => {
     // console.log('GET_REGISTORY uid: ' + user.uid)
+    // console.log('GET_REGISTORY emai: ' + user.email)
+    // console.log('GET_REGISTORY displayName: ' + user.displayName)
     bindFirebaseRef('regstar', db.ref('todoUser/' + user.uid), {
       wait: true
     })
@@ -115,7 +117,8 @@ export const actions = {
       .update({
         displayName: user.displayName,
         email: user.email,
-        uid: user.uid
+        uid: user.uid,
+        registration: user.registration
       })
   }),
   [REMOVE_REGISTORY]: firebaseAction(async (context, user) => {

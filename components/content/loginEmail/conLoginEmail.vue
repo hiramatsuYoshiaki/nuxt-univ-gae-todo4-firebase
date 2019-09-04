@@ -1,7 +1,8 @@
 <template>
   <div class="content">
     <div v-if="isWaiting">
-      <p>login.....</p>
+      <p>Now login.....</p>
+      <p>ログインしています。</p>
       <svg
         class="spinner"
         width="65px"
@@ -33,7 +34,7 @@
           <!-- <p>e-mail:{{ user.email }}</p> -->
           <div class="add-btn">
             <button @click="logout">
-              ログアウト
+              ログアウト!!!!!!
             </button>
           </div>
           <!-- <a href="/works">CRTU</a> -->
@@ -146,11 +147,12 @@ export default {
     ...mapGetters(['isAuthenticated'])
   },
   mounted() {
+    alert('loginMail mount chek akert')
     this.$store.commit('clearAuthError')
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         alert(
-          ' user.uid: ' +
+          ' mount loginmail user.uid: ' +
             user.uid +
             ' user.email: ' +
             user.email +
@@ -173,22 +175,23 @@ export default {
           // なにかしらの処理
         })
       } else {
-        alert('mounted logout now XXX')
-        this.email = null
-        this.displayName = null
-        this.$store.commit('setUser', null)
-        const loginUser = {
-          uid: null,
-          email: null,
-          displayName: null
-        }
-        this.$store.dispatch(GET_REGISTORY, loginUser)
+        alert('mount loginmail mounted logout now XXX')
+        // this.email = null
+        // this.displayName = null
+        // this.$store.commit('setUser', null)
+        // const loginUser = {
+        //   uid: null,
+        //   email: null,
+        //   displayName: null
+        // }
+        // this.$store.dispatch(GET_REGISTORY, loginUser)
       }
     })
   },
   methods: {
     ...mapActions(['setUser']),
     loginCheck(e) {
+      alert('logincheck')
       this.$store.commit('clearAuthError')
       this.error.emailBg = '#e3f2fd'
       this.error.passwordBg = '#e3f2fd'
@@ -230,6 +233,7 @@ export default {
       e.preventDefault()
     },
     login() {
+      alert('logim mail******** ')
       console.log('login')
       this.isWaiting = true
       if (this.register) {
@@ -261,7 +265,7 @@ export default {
             //   pass: this.password
             // }
             // this.$store.commit('setUserProf', userProf)
-            this.isWaiting = false
+            // this.isWaiting = false
             return user
           })
           .then((user) => {
@@ -269,42 +273,26 @@ export default {
             this.$store.dispatch(ADD_REGISTORY, {
               uid: user.uid,
               email: user.email,
-              displayName: 'New User'
+              displayName: 'New User',
+              registration: false
             })
           })
-
           .then((user) => {
-            const lp = '/about'
+            const lp = '/mypage'
             this.link_commit(lp)
-            this.isWaiting = false
           })
           .catch((error) => {
             console.log('signin error' + error)
             this.isWaiting = false
             this.$store.commit('setAuthError', error)
           })
-
-        // const actionCodeSettings = {
-        //   url: 'http://' + window.location.host + '/finishEmailSignUp',
-        //   handleCodeInApp: true
-        // }
-        // firebase
-        //   .auth()
-        //   .currentUser.sendEmailVerification(actionCodeSettings)
-        //   .then((res) => {
-        //     console.log('sendEmailVerification')
-        //   })
-        //   .catch((error) => {
-        //     console.log('signin error' + error)
-        //   })
       } else {
         console.log('login email pass')
         firebase
           .auth()
           .signInWithEmailAndPassword(this.email, this.password)
           .then((user) => {
-            const lp = '/about'
-            this.link_commit(lp)
+            this.link_commit('/mypage')
             this.isWaiting = false
           })
           .catch((error) => {
@@ -323,26 +311,31 @@ export default {
       return re.test(email)
     },
     logout() {
+      alert('loginMail logout xxxxxxxxxxx')
       console.log('logout')
       firebase
         .auth()
         .signOut()
         .then(() => {
           this.$store.commit('setUser', null)
+          this.link_commit('/auth')
         })
         .catch((error) => {
           // alert('logout error' + error)
         })
+        
     },
+
     link_commit(linkPath) {
+       alert('link_commit path--->' + linkPath)
       this.active = true
       this.$store.commit('pagePathSet', linkPath)
       setTimeout(() => {
-        if (linkPath === '/about') {
-          location.href = linkPath // reload
-        } else {
+        // if (linkPath === '/mypage') {
+        //   location.href = linkPath // reload
+        // } else {
           this.$router.push({ path: linkPath }) // non-leload
-        }
+        // }
       }, 500)
      
     }
@@ -352,6 +345,7 @@ export default {
 <style scoped lang="scss">
 $offset: 187;
 $duration: 1.4s;
+
 .content {
   position: relative;
   width: 100%;
@@ -418,6 +412,8 @@ margin-bottom: 2rem;
     line-height: 1rem;
   }
 }
+
+
 
 
 .spinner {

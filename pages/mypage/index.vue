@@ -20,11 +20,17 @@
     </div>
 
     <!-- <transition name="mainCon" appear> -->
-    <div class="content-main">
-      <!-- <ConAbout /> -->
-      <nuxt-child />
-    </div>
+    <!-- <div class="content-main"> -->
+    <!-- <conMypage /> -->
+    <!-- <nuxt-child /> -->
+    <!-- </div> -->
     <!-- </transition> -->
+
+    <transition name="mainCon" appear>
+      <div class="content-main">
+        <conMypage />
+      </div>
+    </transition>
 
     <transition name="mainCon" appear>
       <div class="content-footer">
@@ -33,9 +39,9 @@
     </transition>
 
     <transition appear name="transitionScreen">
-      <TransitionScreen v-if="page === '/about'" />
+      <TransitionScreen v-if="page === '/mypage'" />
     </transition>
-    <div v-for="reg in regstar" :key="reg.key">
+    <!-- <div v-for="reg in regstar" :key="reg.key">
       <div v-if="!reg.registration" class="registre">
         <div class="message-wrap">
           <p>
@@ -60,19 +66,19 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
-    <div v-if="!loaded" class="loading">
-      <!-- <h1>login ...</h1> -->
-    </div>
+    <!-- <div v-if="!loaded" class="loading"> -->
+    <!-- <h1>login ...</h1> -->
+    <!-- </div> -->
   </div>
 </template>
 <script>
-import { mapState, mapGetters } from 'vuex'
-import firebase from '@/plugins/firebase'
-import { GET_REGISTORY } from '~/store/actionTypes'
+// import { mapState, mapGetters } from 'vuex'
+// import firebase from '@/plugins/firebase'
+// import { GET_REGISTORY } from '~/store/actionTypes'
 import TransitionScreen from '~/components/transition/TransitionScreen.vue'
-// import ConAbout from '~/components/content/about/ConAbout.vue'
+import conMypage from '~/components/content/mypage/conMypage.vue'
 
 import ConHeader from '~/components/content/ConHeader.vue'
 import ContentFooter from '~/components/content/ContentFooter.vue'
@@ -82,7 +88,7 @@ export default {
   //   transition: 'content-slide',
   components: {
     TransitionScreen,
-    // ConAbout,
+    conMypage,
     ConHeader,
     ContentFooter
   },
@@ -104,7 +110,7 @@ export default {
         // `hid` は一意の識別子として使用されます。 `vmid` は動作しないので使わないでください。
         {
           hid: 'description',
-          name: 'about by Nuxt.js',
+          name: 'mypage by Nuxt.js',
           content:
             'このページは、Nuxt.jsアプリケーションのインストールと使い方と設定を紹介しています。'
         }
@@ -115,85 +121,50 @@ export default {
   computed: {
     page() {
       return this.$store.state.page
-    },
-    ...mapGetters(['isAuthenticated']),
-    ...mapState(['regstar']),
-    ...mapState(['items']),
-    ...mapState(['user'])
+    }
+    // ...mapGetters(['isAuthenticated']),
+    // ...mapState(['regstar']),
+    // ...mapState(['items']),
+    // ...mapState(['user'])
   },
-  // created() {
-  //   console.log('pages/about.vue created()')
-  // },
-  mounted() {
-    alert('xxxxx about page mounted')
-    console.log('pages/about.vue mounted()')
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        this.email = user.email
-        this.displayName = user.displayName
-        const loginUser = {
-          uid: user.uid,
-          email: user.email,
-          displayName: user.displayName
-        }
-        this.$store.commit('setUser', loginUser)
-        this.$store.dispatch(GET_REGISTORY, loginUser)
-        // console.log(this.regstar)
 
-        console.log('not setTimeout: ' + this.user) // ここだと取得できない
-        setTimeout(() => {
-          console.log('setTimeout: ' + this.user.email) // ここだと取得できる
-          // なにかしらの処理
-          // for (const regItem of this.regstar) {
-          //   console.log('regstration')
-          //   console.log(regItem)
-          //   console.log(regItem['.key'])
-          // }
-        })
-      } else {
-        const isLogin = window.confirm(
-          'このページは、ログインが必要です。ログインしますか。 about page'
-        )
-        if (isLogin) {
-          this.$store.commit('pagePathSet', '/auth')
-          this.$router.push('/auth')
-        } else {
-          this.$store.commit('pagePathSet', '/')
-          this.$router.push('/')
-        }
+  //   mounted() {
+  //     alert('xxxxx mypage page mounted')
+  //     console.log('pages/mypage.vue mounted()')
+  //     firebase.auth().onAuthStateChanged((user) => {
+  //       if (user) {
+  //         this.email = user.email
+  //         this.displayName = user.displayName
+  //         const loginUser = {
+  //           uid: user.uid,
+  //           email: user.email,
+  //           displayName: user.displayName
+  //         }
+  //         this.$store.commit('setUser', loginUser)
+  //         this.$store.dispatch(GET_REGISTORY, loginUser)
 
-        // alert('mounted logout now XXX')
-        // this.email = null
-        // this.displayName = null
-        // this.$store.commit('setUser', null)
-        // const loginUser = {
-        //   uid: null,
-        //   email: null,
-        //   displayName: null
-        // }
-        // this.$store.dispatch(GET_REGISTORY, loginUser)
-      }
-    })
+  //         console.log('not setTimeout: ' + this.user)
+  //         setTimeout(() => {
+  //           console.log('setTimeout: ' + this.user.email)
 
-    // setTimeout(() => {
-    //   if (!this.isAuthenticated) {
-    //     this.$store.commit('pagePathSet', '/auth')
-    //     this.$router.push('/auth')
-    //   }
-    // }, 0)
-    // console.log('mounted')
-    // firebase.auth().onAuthStateChanged(async (user) => {
-    //   if (user) {
-    //     await console.log('login:' + user)
-    //   } else {
-    //     await console.log('logout: ' + user)
-    //     await this.link_commit('works')
-    //   }
-    // })
-    // setTimeout(() => {
-    this.loaded = true
-    // }, 1000)
-  },
+  //         })
+  //       } else {
+  //         const isLogin = window.confirm(
+  //           'このページは、ログインが必要です。ログインしますか。 mypage page'
+  //         )
+  //         if (isLogin) {
+  //           this.$store.commit('pagePathSet', '/auth')
+  //           this.$router.push('/auth')
+  //         } else {
+  //           this.$store.commit('pagePathSet', '/')
+  //           this.$router.push('/')
+  //         }
+  //       }
+  //     })
+  //     // setTimeout(() => {
+  //     this.loaded = true
+  //     // }, 1000)
+  //   },
   methods: {
     link_commit(linkPath) {
       this.$store.commit('pagePathSet', linkPath)
@@ -263,38 +234,38 @@ export default {
   padding: 0;
   z-index: 1000;
 }
-.registre {
-  @extend %center;
-  flex-direction: column;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  color: #fff;
-  margin: 0;
-  padding: 0;
-  z-index: 900;
-}
-.message-wrap {
-  border: 1px solid #fff;
-  background-color: gray;
-  padding: 1rem;
-  width: 90%;
-  @extend %center;
-  flex-direction: column;
-  @media (min-width: 992px) {
-    width: 70%;
-    padding: 2rem;
-  }
-}
-.add-btn button {
-  border: none;
-  background-color: $footer-color-color;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
-  color: #fff;
-  margin-top: 1em;
-  outline: 0;
-}
+// .registre {
+//   @extend %center;
+//   flex-direction: column;
+//   position: fixed;
+//   top: 0;
+//   left: 0;
+//   width: 100vw;
+//   height: 100%;
+//   background-color: rgba(0, 0, 0, 0.7);
+//   color: #fff;
+//   margin: 0;
+//   padding: 0;
+//   z-index: 900;
+// }
+// .message-wrap {
+//   border: 1px solid #fff;
+//   background-color: gray;
+//   padding: 1rem;
+//   width: 90%;
+//   @extend %center;
+//   flex-direction: column;
+//   @media (min-width: 992px) {
+//     width: 70%;
+//     padding: 2rem;
+//   }
+// }
+// .add-btn button {
+//   border: none;
+//   background-color: $footer-color-color;
+//   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+//   color: #fff;
+//   margin-top: 1em;
+//   outline: 0;
+// }
 </style>

@@ -116,12 +116,6 @@
               </div>
             </form>
           </div>
-          <div class="auth-guid">
-            <h5>Demoでログインしてみる。</h5>
-            <p>デモユーザーでログインする場合は、以下を入力してください。</p>
-            <p>メール：hworksdemo@gmail.com</p>
-            <!-- <p>パスワード：demo1111</p> -->
-          </div>
         </div>
       </div>
     </div>
@@ -185,6 +179,18 @@ export default {
         })
         this.isWaiting = false
         this.isSignIn = false
+      } else {
+        // alert('再ログインしてください。')
+        // this.email = null
+        // this.displayName = null
+        // this.$store.commit('setUser', null)
+        // const loginUser = {
+        //   uid: null,
+        //   email: null,
+        //   displayName: null
+        // }
+        // this.$store.dispatch(GET_REGISTORY, loginUser)
+        // this.link_commit('/auth')
       }
     })
   },
@@ -262,7 +268,7 @@ export default {
         url: 'http://' + window.location.host + '/finishSignUp',
         //   url: 'https://www.example.com/finishSignUp?cartId=1234',
         // This must be true.
-        handleCodeInApp: true
+        handleCodeInApp: false
         //   iOS: {
         //     bundleId: 'com.example.ios'
         //   },
@@ -284,115 +290,6 @@ export default {
           console.log('signin  sendSignInLinkToEmail error: ' + error)
           this.isWaiting = true
         })
-
-      // firebase
-      //   .auth()
-      //   .createUserWithEmailAndPassword(this.email, this.password)
-      //   .then((res) => {
-      //     console.log('createUserWithEmailAndPassword')
-      //     const user = firebase.auth().currentUser
-      //     console.log('uid: ' + user.uid)
-      //     console.log('email: ' + user.email)
-      //     console.log('displayName: ' + this.displayName)
-      //     return user
-      //   })
-      //   .then((user) => {
-      //     firebase.auth().languageCode = 'jp'
-      //     const actionCodeSettings = {
-      //       url: 'http://' + window.location.host + '/finishSignUp'
-      //     }
-      //     user.sendEmailVerification(actionCodeSettings)
-      //     const userProf = {
-      //       name: this.displayName,
-      //       email: this.email,
-      //       photoUrl: '',
-      //       emailVerified: '',
-      //       uid: '',
-      //       pass: this.password
-      //     }
-      //     this.$store.commit('setUserProf', userProf)
-      //     this.isWaiting = false
-      //   })
-      //   .catch((error) => {
-      //     console.log('signin error' + error)
-      //     this.isWaiting = false
-      //     this.$store.commit('setAuthError', error)
-      //   })
-
-      // console.log('user.sendEmailVerification()')
-      // firebase.auth().languageCode = 'jp'
-      // const actionCodeSettings = {
-      //   url: 'http://' + window.location.host + '/finishSignUp'
-      // }
-      // const user = firebase.auth().currentUser
-      // user
-      //   .sendEmailVerification(actionCodeSettings)
-      //   .then((res) => {
-      //     const userProf = {
-      //       name: this.displayName,
-      //       email: this.email,
-      //       photoUrl: '',
-      //       emailVerified: '',
-      //       uid: '',
-      //       pass: this.password
-      //     }
-      //     this.$store.commit('setUserProf', userProf)
-      //     this.isWaiting = false
-      //   })
-      //   .catch((error) => {
-      //     console.log('signin error' + error)
-      //     this.isWaiting = false
-      //     this.$store.commit('setAuthError', error)
-      //   })
-      // firebase
-      //   .auth()
-      //   .createUserWithEmailAndPassword(this.email, this.password)
-      //   .then((res) => {
-      //     console.log('createUserWithEmailAndPassword')
-      //     const user = firebase.auth().currentUser
-      //     console.log('uid: ' + user.uid)
-      //     console.log('email: ' + user.email)
-      //     console.log('displayName: ' + this.displayName)
-      //     return user
-      //   })
-      //   .then((user) => {
-      //     console.log('firebase auth add user')
-      //     console.log('uid: ' + user.uid)
-      //     console.log('email: ' + user.email)
-      //     console.log('displayName: ' + this.displayName)
-      //     this.$store.dispatch(ADD_REGISTORY, {
-      //       uid: user.uid,
-      //       email: user.email,
-      //       displayName: this.displayName
-      //     })
-      //     return user
-      //   })
-      //   .then((user) => {
-      //     const lp = '/about'
-      //     this.link_commit(lp)
-      //     this.isWaiting = false
-      //   })
-      //   .catch((error) => {
-      //     console.log('signin error' + error)
-      //     this.isWaiting = false
-      //     this.$store.commit('setAuthError', error)
-      //   })
-      // } else {
-      //   console.log('login email pass')
-      //   firebase
-      //     .auth()
-      //     .signInWithEmailAndPassword(this.email, this.password)
-      //     .then((user) => {
-      //       const lp = '/about'
-      //       this.link_commit(lp)
-      //       this.isWaiting = false
-      //     })
-      //     .catch((error) => {
-      //       console.log('login error' + error)
-      //       this.isWaiting = false
-      //       this.$store.commit('setAuthError', error)
-      //     })
-      // }
     },
     validEmail: (email) => {
       /* eslint-disable */

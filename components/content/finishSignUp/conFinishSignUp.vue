@@ -131,7 +131,17 @@ export default {
           // なにかしらの処理
         })
       } else {
-        alert('mounted logout now')
+        // alert('再ログインしてください。')
+        // this.email = null
+        // this.displayName = null
+        // this.$store.commit('setUser', null)
+        // const loginUser = {
+        //   uid: null,
+        //   email: null,
+        //   displayName: null
+        // }
+        // this.$store.dispatch(GET_REGISTORY, loginUser)
+        // this.link_commit('/loginEmail')
       }
     })
   },

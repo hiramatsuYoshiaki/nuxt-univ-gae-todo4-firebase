@@ -24,56 +24,21 @@
       <div class="auth">
         <div class="auth-title">
           <h6>Firebase Authentication</h6>
-          <h2>Email User Delete</h2>
-          <div v-if="isAuthenticated">
-            <p>emai: {{ email }}</p>
-            <p>loginUser: {{ displayName }}</p>
-            <p>isAuthenticated: {{ isAuthenticated }}</p>
-            <p>Deleteボタンを押してください。</p>
-
-            <p>database User Prof</p>
-            <div v-for="(reg, index) in regstar" :key="index">
-              <p>DATABASES登録ユーザー名{{ reg.displayName }}さん</p>
-              <p>key: {{ reg['.key'] }}</p>
-            </div>
-
-            <div class="login-form">
-              <form novalidate @submit.prevent="loginCheck">
-                <div v-if="authErrors.length">
-                  <p class="error-title">
-                    入力項目を確認してください。
-                  </p>
-                  <ul>
-                    <li v-for="(error, index) in authErrors" :key="index">
-                      <p class="error-msg">
-                        {{ error }}
-                      </p>
-                    </li>
-                  </ul>
-                </div>
-                <!-- <p>{{ email }}</p>
-            <p>
-              <input
-                v-model="displayName"
-                type="text"
-                placeholder="ユーザー"
-                required
-                :style="{ background: error.displayNameBg }"
-              />
-            </p> -->
-                <div class="add-btn">
-                  <button type="submit">
-                    Delete
-                  </button>
-                </div>
-              </form>
-            </div>
+          <h2>GitHub Login</h2>
+        </div>
+        <div v-if="isAuthenticated">
+          <p>{{ user.displayName }}でログイン中です。</p>
+          <div class="add-btn">
+            <button @click="logout">
+              ログアウト
+            </button>
           </div>
-          <div v-else>
-            <p>アカウントを削除するには、ログインが必要です。</p>
+        </div>
+        <div v-else>
+          <div class="login-form">
             <div class="add-btn">
-              <button @click="link_commit('auth')">
-                ログインページへ
+              <button @click="login">
+                GitHub Login
               </button>
             </div>
           </div>
@@ -84,7 +49,7 @@
 </template>
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
-import { GET_REGISTORY, REMOVE_REGISTORY } from '~/store/actionTypes'
+import { GET_REGISTORY } from '~/store/actionTypes'
 import firebase from '@/plugins/firebase'
 export default {
   //   props: {
@@ -112,98 +77,81 @@ export default {
     ...mapState(['user']),
     ...mapState(['regstar']),
     ...mapState(['authErrors']),
-    ...mapState(['userProf']),
     ...mapGetters(['isAuthenticated'])
   },
   mounted() {
     this.$store.commit('clearAuthError')
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        // alert('mounted login now ok')
-        // alert(
-        //   ' user.email: ' +
-        //     user.email +
-        //     ' user.displayName: ' +
-        //     user.displayName
-        // )
-        this.email = user.email
-        this.displayName = user.displayName
         const loginUser = {
           uid: user.uid,
           email: user.email,
-          displayName: ''
+          displayName: user.displayName
         }
         this.$store.commit('setUser', loginUser)
         this.$store.dispatch(GET_REGISTORY, loginUser)
 
-        console.log('not setTimeout: ' + this.user.email) // ここだと取得できない
+        console.log('not setTimeout: ' + this.user) // ここだと取得できない
         setTimeout(() => {
           console.log('setTimeout: ' + this.user.email) // ここだと取得できる
           // なにかしらの処理
         })
       } else {
-        alert('再ログインしてください。')
-        this.email = null
-        this.displayName = null
-        this.$store.commit('setUser', null)
+        // alert('再ログインしてください。')
+        // this.email = null
+        // this.displayName = null
+        // this.$store.commit('setUser', null)
         // const loginUser = {
         //   uid: null,
         //   email: null,
         //   displayName: null
         // }
         // this.$store.dispatch(GET_REGISTORY, loginUser)
-        this.link_commit('/auth')
+        // this.link_commit('/loginEmail')
       }
     })
   },
   methods: {
-    deleteUser() {
-      const user = firebase.auth().currentUser
-      if (user) {
-        const isDel = window.confirm('削除しますか？')
-        if (isDel) {
-          user
-            .delete()
-            .then(() => {
-              // console.log('User deleted')
-              // console.log('dispatch UPDATEDANE_REGISTORY')
-              //   const user = firebase.auth().currentUser
-              let userkey = null
-              for (const regItem of this.regstar) {
-                // console.log(regItem['.key'])
-                userkey = regItem['.key']
-              }
-              this.$store.dispatch(REMOVE_REGISTORY, {
-                uid: user.uid,
-                email: user.email,
-                displayName: this.displayName,
-                key: userkey
-              })
-            })
-            .then(() => {
-              this.link_commit('/auth')
-            })
-            .catch((error) => {
-              console.log('firebase auth error' + error)
-            })
-        }
-      } else {
-        this.$store.commit('setUser', null)
-      }
-    },
-
     ...mapActions(['setUser']),
-    loginCheck(e) {
-      if (this.authErrors.length) {
-        // alert('error')
+    login() {
+      alert('github login test')
+      this.isWaiting = true
+      if (this.register) {
+        console.log('signin')
       } else {
-        // alert('normal')
-        // this.login()
-        this.deleteUser()
+        console.log('login GitHub Account')
+        const provider = new firebase.auth.GithubAuthProvider()
+        provider.addScope('repo')
+        //   const provider = new firebase.auth.GoogleAuthProvider()
+        firebase
+          .auth()
+          .signInWithPopup(provider)
+          .then((user) => {
+            const lp = '/about'
+            this.link_commit(lp)
+            this.isWaiting = false
+          })
+          .catch((error) => {
+            console.log('login error' + error)
+            this.isWaiting = false
+            this.$store.commit('setAuthError', error)
+          })
       }
-      e.preventDefault()
     },
 
+    logout() {
+      console.log('logout')
+      firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          this.$store.commit('setUser', null)
+          // this.setUser(null)
+        })
+        .catch((error) => {
+          alert('logout error' + error)
+        })
+    },
     link_commit(linkPath) {
       this.active = true
       this.$store.commit('pagePathSet', linkPath)
@@ -214,6 +162,9 @@ export default {
           this.$router.push({ path: linkPath }) // non-leload
         }
       }, 500)
+      // setTimeout(() => {
+      //   this.$router.push({ path: linkPath })
+      // }, 500)
     }
   }
 }
@@ -233,48 +184,9 @@ $duration: 1.4s;
   @media (min-width: 768px) {
     padding: 8rem 8rem;
   }
-  border: 1px solid black;
 }
 .auth {
-  display: block;
-  width: 100%;
   padding: 2rem;
-  border: 1px solid red;
-}
-.login-type-sellect {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  @media (min-width: 768px) {
-    flex-direction: row;
-  }
-}
-.login-type {
-  width: 100%;
-  height: 100%;
-  padding: 1rem 0.2rem;
-  @media (min-width: 768px) {
-    width: 50%;
-    padding: 2rem 2rem;
-  }
-  border: 1px solid green;
-}
-.login-type-wrap {
-  width: 100%;
-  height: 25rem;
-  border-radius: 4px;
-  background-color: rgb(204, 204, 204);
-  cursor: pointer;
-  padding: 1rem 0.5rem;
-  @media (min-width: 768px) {
-    padding: 2rem 2rem;
-    height: 15rem;
-  }
 }
 .auth-title {
   margin-bottom: 2rem;
@@ -293,12 +205,14 @@ $duration: 1.4s;
 .login-form {
   width: 100%;
   height: 100%;
+  // overflow: scroll;
   padding: 1rem;
   @media (min-width: 992px) {
     border: 1px solid gray;
     padding: 2rem;
   }
 }
+
 .error-title {
   font-weight: 600;
   font-size: 1rem;

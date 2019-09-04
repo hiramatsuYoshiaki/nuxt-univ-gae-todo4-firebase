@@ -20,7 +20,7 @@
     </div>
     <transition name="mainCon" appear>
       <div class="content-main">
-        <conUserMailSetting />
+        <conLoginGithub />
       </div>
     </transition>
     <transition name="mainCon" appear>
@@ -29,7 +29,7 @@
       </div>
     </transition>
     <transition appear name="transitionScreen">
-      <TransitionScreen v-if="page === '/userMailSetting'" />
+      <TransitionScreen v-if="page === '/loginGithub'" />
     </transition>
   </div>
 </template>
@@ -37,7 +37,7 @@
 <script>
 import TransitionScreen from '~/components/transition/TransitionScreen.vue'
 
-import conUserMailSetting from '~/components/content/userMailSetting/conUserMailSetting.vue'
+import conLoginGithub from '~/components/content/loginGithub/conLoginGithub.vue'
 import ConHeader from '~/components/content/ConHeader.vue'
 import ContentFooter from '~/components/content/ContentFooter.vue'
 export default {
@@ -45,7 +45,7 @@ export default {
   components: {
     TransitionScreen,
     ConHeader,
-    conUserMailSetting,
+    conLoginGithub,
     ContentFooter
   },
   data() {
@@ -64,7 +64,7 @@ export default {
       meta: [
         {
           hid: 'description',
-          name: 'UserMailSetting by Nuxt.js',
+          name: 'LoginGithub by Nuxt.js',
           content:
             'このページは、Vue.jsフレームワークのNuxt.jsを使って作成したWebサイトの概略を紹介しています。'
         }

@@ -74,7 +74,7 @@
 </template>
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
-import { GET_REGISTORY } from '~/store/actionTypes'
+import { UPDATEDANE_REGISTORY, GET_REGISTORY } from '~/store/actionTypes'
 import firebase from '@/plugins/firebase'
 export default {
   //   props: {
@@ -139,62 +139,98 @@ export default {
           // なにかしらの処理
         })
       } else {
-        alert('再ログインしてください。')
-        this.link_commit('/loginEmail')
+        alert('user mail 再ログインしてください。')
+        this.email = null
+        this.displayName = null
+        this.$store.commit('setUser', null)
+        // const loginUser = {
+        //   uid: null,
+        //   email: null,
+        //   displayName: null
+        // }
+        // this.$store.dispatch(GET_REGISTORY, loginUser)
+        this.link_commit('/auth')
       }
     })
   },
   methods: {
     mailReset() {
-      alert('mail reset')
+      // alert('mail reset')
       const user = firebase.auth().currentUser
+      console.log(`old email: ${user.email}`)
 
       if (user) {
+        alert('メール変更')
         const isOk = window.confirm('メールアドレスを変更しますか？')
         if (isOk) {
           user
             .updateEmail(this.newEmail)
             .then(() => {
-              console.log('email reset send email')
+              console.log('email chenge')
+              const newuser = firebase.auth().currentUser
+              return newuser
+            })
+            .then((newuser) => {
+              console.log('email send new email')
+              // console.log(`new email: ${newuser.email}`)
+              // const actionCodeSettings = {
+              //   url: 'http://' + window.location.host + '/userMailSetting',
+              //   handleCodeInApp: false
+              // }
+              newuser.sendEmailVerification()
+              //   .then(() => {
+              //     console.log('email reset send email')
+              //   })
+              //   .catch((error) => {
+              //     console.log('firebase auth error' + error)
+              //   })
+              return newuser
+            })
+            .then((user) => {
+              console.log('UPDATEDANE_REGISTORY')
+              // const user = firebase.auth().currentUser
+              let userkey = null
+              for (const regItem of this.regstar) {
+                userkey = regItem['.key']
+              }
+              this.$store.dispatch(UPDATEDANE_REGISTORY, {
+                uid: user.uid,
+                email: user.email,
+                displayName: this.displayName,
+                key: userkey,
+                registration: true
+              })
+            })
+            // .then(() => {
+            //   console.log('logout')
+            //   this.logout()
+            // })
+            .then(() => {
+              console.log('go to /about')
+              this.link_commit('/about')
             })
             .catch((error) => {
               console.log('firebase auth error' + error)
               // this.$store.commit('/auth', null)
             })
-          // const actionCodeSettings = {
-          //   url: 'http://' + window.location.host + '/userMailSetting',
-          //   handleCodeInApp: false
-          // }
-          // user
-          //   .sendEmailVerification(actionCodeSettings)
-          //   .then(() => {
-          //     console.log('email reset send email')
-          //   })
-          //   .catch((error) => {
-          //     console.log('firebase auth error' + error)
-          //   })
         }
       } else {
-        this.$store.commit('/auth', null)
+        alert('再ログインしてください。')
+        this.email = null
+        this.displayName = null
+        this.$store.commit('setUser', null)
+        const loginUser = {
+          uid: null,
+          email: null,
+          displayName: null
+        }
+        this.$store.dispatch(GET_REGISTORY, loginUser)
+        this.link_commit('/loginEmail')
       }
-
-      //       user.updateEmail("user@example.com").then(function() {
-      //   // Update successful.
-      // }).catch(function(error) {
-      //   // An error happened.
-      // });
-
-      //       var user = firebase.auth().currentUser;
-
-      // user.sendEmailVerification().then(function() {
-      //   // Email sent.
-      // }).catch(function(error) {
-      //   // An error happened.
-      // });
     },
     ...mapActions(['setUser']),
     loginCheck(e) {
-      alert('loginCheck newEmail: ' + this.newEmail)
+      // alert('loginCheck newEmail: ' + this.newEmail)
       this.$store.commit('clearAuthError')
       this.error.emailBg = '#e3f2fd'
       this.error.passwordBg = '#e3f2fd'
@@ -206,7 +242,7 @@ export default {
       //   this.$store.commit('setAuthError', 'パスワードは８文字以上です。')
       //   this.error.passwordBg = '#f8bbd0'
       // }
-      if (!this.newEmail) {
+      if (!this.newEmail || null) {
         this.$store.commit('setAuthError', 'メールは必須です。')
         this.error.emailBg = '#f8bbd0'
       } else if (!this.validEmail(this.newEmail)) {
@@ -235,172 +271,30 @@ export default {
       if (this.authErrors.length) {
         // alert('error')
       } else {
-        // alert('normal')
-        // this.login()
-        // this.finishSingUp()
-        // this.userSet()
         this.mailReset()
       }
       e.preventDefault()
     },
-    // login() {
-    //   console.log('login')
-    //   this.isWaiting = true
-    //   if (this.register) {
-    //     console.log('signin')
-    //     firebase
-    //       .auth()
-    //       .createUserWithEmailAndPassword(this.email, this.password)
-    //       .then((res) => {
-    //         console.log('createUserWithEmailAndPassword')
-    //         const user = firebase.auth().currentUser
-    //         console.log('uid: ' + user.uid)
-    //         console.log('email: ' + user.email)
-    //         console.log('displayName: ' + this.displayName)
-    //         return user
-    //       })
-    //       .then((user) => {
-    //         console.log('firebase auth add user')
-    //         console.log('uid: ' + user.uid)
-    //         console.log('email: ' + user.email)
-    //         console.log('displayName: ' + this.displayName)
-    //         this.$store.dispatch(ADD_REGISTORY, {
-    //           uid: user.uid,
-    //           email: user.email,
-    //           displayName: this.displayName
-    //         })
-    //       })
-    //       .then((user) => {
-    //         const lp = '/about'
-    //         this.link_commit(lp)
-    //         this.isWaiting = false
-    //       })
-    //       .catch((error) => {
-    //         // alert('signin error' + error)
-    //         console.log('signin error' + error)
-    //         this.isWaiting = false
-    //         this.$store.commit('setAuthError', error)
-    //       })
-    //   } else {
-    //     console.log('login email pass')
-    //     firebase
-    //       .auth()
-    //       .signInWithEmailAndPassword(this.email, this.password)
-    //       .then((user) => {
-    //         const lp = '/about'
-    //         this.link_commit(lp)
-    //         this.isWaiting = false
-    //       })
-    //       .catch((error) => {
-    //         // alert('login error' + error)
-    //         console.log('login error' + error)
-    //         this.isWaiting = false
-    //         // this.errors.push('Invalid email .')
-    //         this.$store.commit('setAuthError', error)
-    //       })
-    //   }
-    // },
+
     validEmail: (email) => {
       /* eslint-disable */
       const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       /* eslint-disable */
       return re.test(email)
     },
-    // logout() {
-    //   console.log('logout')
-    //   firebase
-    //     .auth()
-    //     .signOut()
-    //     .then(() => {
-    //       this.$store.commit('setUser', null)
-    //     })
-    //     .catch((error) => {
-    //     })
-    // },
-    userSet() {
-      alert('userSet displayName: ' + this.newEmail)
-      alert('再認証')
-      // const credential = firebase.auth.EmailAuthProvider.credential(this.email, this.password);
-       
-  // const { user } = await firebase.auth().currentUser.reauthenticateAndRetrieveDataWithCredential(credential);
-      // let user = firebase.auth().currentUser;
-      // let credential;
-      var credential = firebase.auth.EmailAuthProvider.credential(
-          this.email,
-          this.password
-      );
-      firebase.auth().currentUser.reauthenticateWithCredential(credential)
-      // firebase
-      //   .auth()
-      //   .currentUser
-      //   .reauthenticateAndRetrieveDataWithCredential(credential)
-        .then((result) => {
-          console.log('再認証 完了')
-          const user = firebase.auth().currentUser
-          // this.$store.dispatch(ADD_REGISTORY, {
-          //   uid: user.uid,
-          //   email: user.email,
-          //   displayName: this.displayName
-          // })
-          return user
+    logout() {
+      console.log('logout firebase signout')
+      firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          this.$store.commit('setUser', null)
         })
-        .then((user) => {
-          console.log('updateEmai')
-          user.updateEmail(this.newEmail);
-          return user
-        })
-        
-        // .then((user) => {
-        //   console.log('new Email currentUser')
-        //   const newuser = firebase.auth().currentUser
-        //   return newuser
-        // })
-        .then((user) => {
-          console.log('sendEmailVerification')
-          firebase.auth().languageCode = 'jp'
-          const actionCodeSettings = {
-            url: 'http://' + window.location.host + '/userMailSetting',
-            handleCodeInApp: true
-          }
-          console.log('userMailSetting')
-          user.sendEmailVerification(actionCodeSettings)
-        })
-      //   .then((result) => {
-      //     this.link_commit('/about')
-      //   })
         .catch((error) => {
-          console.log('login error' + error)
+           console.log('firebase auth error' + error)
         })
-
-      // メアド変更
-  // await firebase.auth().currentUser.updateEmail(email);
- 
-  // idToken更新
-  // await firebase.auth().currentUser.getIdToken(true);
- 
-  // 確認メールの送信
-  // await firebase.auth().currentUser.sendEmailVerification({
-  //   url: 'https://example.com/setting/email',
-  //   handleCodeInApp: false,
-  // });
-      // firebase
-      //   .auth()
-      //   .currentUser.updateEmail(this.newEmail)
-      //   .then((result) => {
-      //     const user = firebase.auth().currentUser
-      //     this.$store.dispatch(ADD_REGISTORY, {
-      //       uid: user.uid,
-      //       email: user.email,
-      //       displayName: this.displayName
-      //     })
-      //   })
-      //   .then((result) => {
-      //     this.link_commit('/about')
-      //   })
-      //   .catch((error) => {
-      //     console.log('login error' + error)
-      //   })
     },
+
     link_commit(linkPath) {
       this.active = true
       this.$store.commit('pagePathSet', linkPath)
@@ -430,13 +324,13 @@ $duration: 1.4s;
   @media (min-width: 768px) {
     padding: 8rem 8rem;
   }
-  border: 1px solid black;
+  // border: 1px solid black;
 }
 .auth {
   display: block;
   width: 100%;
   padding: 2rem;
-  border: 1px solid red;
+  border: 1px solid #000;
 }
 .login-type-sellect {
   position: relative;

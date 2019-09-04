@@ -37,7 +37,7 @@
 <script>
 import TransitionScreen from '~/components/transition/TransitionScreen.vue'
 
-import conUserPass from '~/components/content/userPass/conUserPass.vue'
+import conUserPass from '~/components/content/UserPass/conUserPass.vue'
 import ConHeader from '~/components/content/ConHeader.vue'
 import ContentFooter from '~/components/content/ContentFooter.vue'
 export default {

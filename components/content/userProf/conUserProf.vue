@@ -105,15 +105,15 @@ export default {
     this.$store.commit('clearAuthError')
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        alert('mounted login now')
-        alert(
-          ' user.uid: ' +
-            user.uid +
-            ' user.email: ' +
-            user.email +
-            ' user.displayName: ' +
-            user.displayName
-        )
+        // alert('mounted login now')
+        // alert(
+        //   ' user.uid: ' +
+        //     user.uid +
+        //     ' user.email: ' +
+        //     user.email +
+        //     ' user.displayName: ' +
+        //     user.displayName
+        // )
         this.email = user.email
         this.displayName = user.displayName
         console.log('uid: ' + user.uid)
@@ -136,7 +136,17 @@ export default {
           // console.log('******this.regstar.key:' + this.regstar['.key'])
         })
       } else {
-        alert('mounted logout now')
+        alert('再ログインしてください。')
+        this.email = null
+        this.displayName = null
+        this.$store.commit('setUser', null)
+        // const loginUser = {
+        //   uid: null,
+        //   email: null,
+        //   displayName: null
+        // }
+        // this.$store.dispatch(GET_REGISTORY, loginUser)
+        this.link_commit('/auth')
       }
     })
   },
@@ -190,78 +200,7 @@ export default {
       }
       e.preventDefault()
     },
-    // login() {
-    //   console.log('login')
-    //   this.isWaiting = true
-    //   if (this.register) {
-    //     console.log('signin')
-    //     firebase
-    //       .auth()
-    //       .createUserWithEmailAndPassword(this.email, this.password)
-    //       .then((res) => {
-    //         console.log('createUserWithEmailAndPassword')
-    //         const user = firebase.auth().currentUser
-    //         console.log('uid: ' + user.uid)
-    //         console.log('email: ' + user.email)
-    //         console.log('displayName: ' + this.displayName)
-    //         return user
-    //       })
-    //       .then((user) => {
-    //         console.log('firebase auth add user')
-    //         console.log('uid: ' + user.uid)
-    //         console.log('email: ' + user.email)
-    //         console.log('displayName: ' + this.displayName)
-    //         this.$store.dispatch(ADD_REGISTORY, {
-    //           uid: user.uid,
-    //           email: user.email,
-    //           displayName: this.displayName
-    //         })
-    //       })
-    //       .then((user) => {
-    //         const lp = '/about'
-    //         this.link_commit(lp)
-    //         this.isWaiting = false
-    //       })
-    //       .catch((error) => {
-    //         // alert('signin error' + error)
-    //         console.log('signin error' + error)
-    //         this.isWaiting = false
-    //         this.$store.commit('setAuthError', error)
-    //       })
-    //   } else {
-    //     console.log('login email pass')
-    //     firebase
-    //       .auth()
-    //       .signInWithEmailAndPassword(this.email, this.password)
-    //       .then((user) => {
-    //         const lp = '/about'
-    //         this.link_commit(lp)
-    //         this.isWaiting = false
-    //       })
-    //       .catch((error) => {
-    //         // alert('login error' + error)
-    //         console.log('login error' + error)
-    //         this.isWaiting = false
-    //         // this.errors.push('Invalid email .')
-    //         this.$store.commit('setAuthError', error)
-    //       })
-    //   }
-    // },
-    // validEmail: (email) => {
-    //   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    //   return re.test(email)
-    // },
-    // logout() {
-    //   console.log('logout')
-    //   firebase
-    //     .auth()
-    //     .signOut()
-    //     .then(() => {
-    //       this.$store.commit('setUser', null)
-    //     })
-    //     .catch((error) => {
-    //     })
-    // },
+
     userSet() {
       // alert('userSet displayName: ' + this.displayName)
       firebase
@@ -271,28 +210,22 @@ export default {
           //   photoURL: "https://example.com/jane-q-user/profile.jpg"
         })
         .then((result) => {
-          console.log('dispatch UPDATEDANE_REGISTORY')
+          // console.log('dispatch UPDATEDANE_REGISTORY')
           const user = firebase.auth().currentUser
-          // this.$store.dispatch(ADD_REGISTORY, {
-          //   uid: user.uid,
-          //   email: user.email,
-          //   displayName: this.displayName
-          // })
           let userkey = null
           for (const regItem of this.regstar) {
-            // console.log(regItem)
-            // console.log(regItem['.key'])
             userkey = regItem['.key']
           }
           this.$store.dispatch(UPDATEDANE_REGISTORY, {
             uid: user.uid,
             email: user.email,
             displayName: this.displayName,
-            key: userkey
+            key: userkey,
+            registration: true
           })
         })
-        .then((result) => {
-          // this.link_commit('/about')
+        .then(() => {
+          this.link_commit('/about')
         })
         .catch((error) => {
           console.log('login error' + error)
@@ -327,13 +260,12 @@ $duration: 1.4s;
   @media (min-width: 768px) {
     padding: 8rem 8rem;
   }
-  border: 1px solid black;
+  // border: 1px solid black;
 }
 .auth {
   display: block;
   width: 100%;
   padding: 2rem;
-  border: 1px solid red;
 }
 .login-type-sellect {
   position: relative;
@@ -356,7 +288,6 @@ $duration: 1.4s;
     width: 50%;
     padding: 2rem 2rem;
   }
-  border: 1px solid green;
 }
 .login-type-wrap {
   width: 100%;
