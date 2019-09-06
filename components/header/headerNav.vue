@@ -260,11 +260,11 @@ export default {
 }
 .nav-menu .center-block {
   @extend %center;
-  width: 25%;
+  width: 10%;
 }
 .nav-menu .right-block {
   @extend %right;
-  width: 50%;
+  width: 65%;
 }
 //logo bar----------------------------------------
 .logo-wrap {

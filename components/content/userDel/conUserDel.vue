@@ -25,33 +25,34 @@
         <div class="auth-title">
           <h6>Firebase Authentication</h6>
           <h2>Email User Delete</h2>
-          <div v-if="isAuthenticated">
-            <p>emai: {{ email }}</p>
-            <p>loginUser: {{ displayName }}</p>
-            <p>isAuthenticated: {{ isAuthenticated }}</p>
-            <p>Deleteボタンを押してください。</p>
+        </div>
 
-            <p>database User Prof</p>
+        <div v-if="isAuthenticated">
+          <p>User: {{ displayName }}</p>
+          <p>emai: {{ email }}</p>
+          <!-- <p>isAuthenticated: {{ isAuthenticated }}</p> -->
+          <p>Deleteボタンを押してください。</p>
+          <!-- <p>database User Prof</p>
             <div v-for="(reg, index) in regstar" :key="index">
               <p>DATABASES登録ユーザー名{{ reg.displayName }}さん</p>
               <p>key: {{ reg['.key'] }}</p>
-            </div>
+            </div> -->
 
-            <div class="login-form">
-              <form novalidate @submit.prevent="loginCheck">
-                <div v-if="authErrors.length">
-                  <p class="error-title">
-                    入力項目を確認してください。
-                  </p>
-                  <ul>
-                    <li v-for="(error, index) in authErrors" :key="index">
-                      <p class="error-msg">
-                        {{ error }}
-                      </p>
-                    </li>
-                  </ul>
-                </div>
-                <!-- <p>{{ email }}</p>
+          <div class="login-form">
+            <form novalidate @submit.prevent="loginCheck">
+              <div v-if="authErrors.length">
+                <p class="error-title">
+                  入力項目を確認してください。
+                </p>
+                <ul>
+                  <li v-for="(error, index) in authErrors" :key="index">
+                    <p class="error-msg">
+                      {{ error }}
+                    </p>
+                  </li>
+                </ul>
+              </div>
+              <!-- <p>{{ email }}</p>
             <p>
               <input
                 v-model="displayName"
@@ -61,21 +62,36 @@
                 :style="{ background: error.displayNameBg }"
               />
             </p> -->
+              <div v-if="!isReset">
                 <div class="add-btn">
                   <button type="submit">
                     Delete
                   </button>
                 </div>
-              </form>
+              </div>
+            </form>
+            <div v-if="isReset">
+              <ul class="guid-msg-wrape">
+                <li v-for="(msg, index) in message" :key="index">
+                  <p class="guid-msg">
+                    {{ msg }}
+                  </p>
+                </li>
+              </ul>
+              <div class="add-btn" @click="link_commit('/auth')">
+                <button>
+                  Close
+                </button>
+              </div>
             </div>
           </div>
-          <div v-else>
-            <p>アカウントを削除するには、ログインが必要です。</p>
-            <div class="add-btn">
-              <button @click="link_commit('auth')">
-                ログインページへ
-              </button>
-            </div>
+        </div>
+        <div v-else>
+          <p>ログインしていません。</p>
+          <div class="add-btn" @click="link_commit('/loginEmail')">
+            <button>
+              Email Password Login
+            </button>
           </div>
         </div>
       </div>
@@ -83,7 +99,8 @@
   </div>
 </template>
 <script>
-import { mapActions, mapState, mapGetters } from 'vuex'
+// import { mapActions, mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { GET_REGISTORY, REMOVE_REGISTORY } from '~/store/actionTypes'
 import firebase from '@/plugins/firebase'
 export default {
@@ -105,27 +122,25 @@ export default {
         emailBg: '#e3f2fd',
         passwordBg: '#e3f2fd',
         displayNameBg: '#e3f2fd'
-      }
+      },
+      isReset: false
     }
   },
   computed: {
     ...mapState(['user']),
     ...mapState(['regstar']),
     ...mapState(['authErrors']),
-    ...mapState(['userProf']),
+    ...mapState(['message']),
     ...mapGetters(['isAuthenticated'])
   },
   mounted() {
+    alert('userDel mounted')
+    // this.isReset = false
     this.$store.commit('clearAuthError')
+    this.$store.commit('clearMessage')
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        // alert('mounted login now ok')
-        // alert(
-        //   ' user.email: ' +
-        //     user.email +
-        //     ' user.displayName: ' +
-        //     user.displayName
-        // )
+        // alert('userDell ログインしています')
         this.email = user.email
         this.displayName = user.displayName
         const loginUser = {
@@ -135,42 +150,30 @@ export default {
         }
         this.$store.commit('setUser', loginUser)
         this.$store.dispatch(GET_REGISTORY, loginUser)
-
-        console.log('not setTimeout: ' + this.user.email) // ここだと取得できない
-        setTimeout(() => {
-          console.log('setTimeout: ' + this.user.email) // ここだと取得できる
-          // なにかしらの処理
-        })
+        // console.log('not setTimeout: ' + this.user.email) // ここだと取得できない
+        // setTimeout(() => {
+        //   console.log('setTimeout: ' + this.user.email) // ここだと取得できる
+        // })
       } else {
-        alert('再ログインしてください。')
+        // alert('再ログインしてください。')
         this.email = null
         this.displayName = null
         this.$store.commit('setUser', null)
-        // const loginUser = {
-        //   uid: null,
-        //   email: null,
-        //   displayName: null
-        // }
-        // this.$store.dispatch(GET_REGISTORY, loginUser)
-        this.link_commit('/auth')
       }
     })
   },
   methods: {
     deleteUser() {
+      this.isReset = false
       const user = firebase.auth().currentUser
       if (user) {
-        const isDel = window.confirm('削除しますか？')
+        const isDel = window.confirm('アカウントを削除しますか？')
         if (isDel) {
           user
             .delete()
             .then(() => {
-              // console.log('User deleted')
-              // console.log('dispatch UPDATEDANE_REGISTORY')
-              //   const user = firebase.auth().currentUser
               let userkey = null
               for (const regItem of this.regstar) {
-                // console.log(regItem['.key'])
                 userkey = regItem['.key']
               }
               this.$store.dispatch(REMOVE_REGISTORY, {
@@ -180,19 +183,28 @@ export default {
                 key: userkey
               })
             })
+
             .then(() => {
-              this.link_commit('/auth')
+              console.log('pass delete ')
+              this.$store.commit('setMessage', 'アカウントを削除しました。')
+              this.isReset = true
             })
+
             .catch((error) => {
-              console.log('firebase auth error' + error)
+              console.log('firebase auth error: ' + error)
             })
         }
       } else {
+        // this.$store.commit('/auth', null)
+        this.email = null
+        this.displayName = null
         this.$store.commit('setUser', null)
+        alert('再ログインしてから、パスの再設定をしてください。')
+        this.link_commit('loginEmail')
       }
     },
 
-    ...mapActions(['setUser']),
+    // ...mapActions(['setUser']),
     loginCheck(e) {
       if (this.authErrors.length) {
         // alert('error')
@@ -208,7 +220,7 @@ export default {
       this.active = true
       this.$store.commit('pagePathSet', linkPath)
       setTimeout(() => {
-        if (linkPath === '/about') {
+        if (linkPath === '/mypage') {
           location.href = linkPath // reload
         } else {
           this.$router.push({ path: linkPath }) // non-leload
@@ -233,13 +245,12 @@ $duration: 1.4s;
   @media (min-width: 768px) {
     padding: 8rem 8rem;
   }
-  border: 1px solid black;
 }
 .auth {
   display: block;
   width: 100%;
   padding: 2rem;
-  border: 1px solid red;
+  // border: 1px solid black;
 }
 .login-type-sellect {
   position: relative;
@@ -262,7 +273,7 @@ $duration: 1.4s;
     width: 50%;
     padding: 2rem 2rem;
   }
-  border: 1px solid green;
+  // border: 1px solid green;
 }
 .login-type-wrap {
   width: 100%;
@@ -289,6 +300,12 @@ $duration: 1.4s;
   color: #fff;
   margin-top: 1em;
   outline: 0;
+  padding: 0 1rem;
+  padding: 0 1rem;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.7;
+  }
 }
 .login-form {
   width: 100%;
@@ -317,6 +334,22 @@ $duration: 1.4s;
   line-height: 1rem;
   margin-bottom: 1rem;
   color: rgb(190, 29, 29);
+  margin-left: 1rem;
+  @media (min-width: 992px) {
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1rem;
+  }
+}
+.guid-msg-wrape {
+  margin-top: 2rem;
+}
+.guid-msg {
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1rem;
+  margin-bottom: 1rem;
+  color: rgb(21, 134, 6);
   margin-left: 1rem;
   @media (min-width: 992px) {
     font-weight: 600;

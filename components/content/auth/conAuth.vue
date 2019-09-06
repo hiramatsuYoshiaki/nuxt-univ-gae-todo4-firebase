@@ -26,12 +26,12 @@
         <div class="auth-title">
           <h6>Firebase Authentication</h6>
           <p>ログインするタイプを選んでください。</p>
-          <div v-if="isAuthenticated">
+          <!-- <div v-if="isAuthenticated">
             <p>{{ user.email }}でログイン中です。</p>
           </div>
           <div v-else>
             <p>ログインしていません。</p>
-          </div>
+          </div> -->
         </div>
 
         <div class="login-type-sellect">
@@ -111,13 +111,12 @@
           <div v-if="isAuthenticated">
             <p>{{ user.email }}でログイン中です。</p>
           </div>
-          <div v-else>
+          <!-- <div v-else>
             <p>ユザー情報変更するには、ログインが必要です。</p>
-          </div>
+          </div> -->
         </div>
         <div class="login-type-sellect">
-          <!-- User Prof -->
-          <div class="auth-title login-type" @click="link_commit('userProf')">
+          <div class="auth-title login-type" @click="link_commit('userSet')">
             <div
               class="login-type-wrap login-type-wrap-active"
               :class="{
@@ -131,7 +130,6 @@
             </div>
           </div>
           <br />
-          <!-- User Prof -->
           <div class="auth-title login-type" @click="link_commit('userMail')">
             <div
               class="login-type-wrap login-type-wrap-active"
@@ -146,7 +144,6 @@
             </div>
           </div>
           <br />
-          <!-- User Prof -->
           <div class="auth-title login-type" @click="link_commit('userPass')">
             <div
               class="login-type-wrap login-type-wrap-active"
@@ -161,7 +158,6 @@
             </div>
           </div>
           <br />
-          <!-- User Prof -->
           <div class="auth-title login-type" @click="link_commit('userDel')">
             <div
               class="login-type-wrap login-type-wrap-active"
@@ -215,7 +211,8 @@ export default {
     ...mapGetters(['isAuthenticated'])
   },
   mounted() {
-    this.$store.commit('clearAuthError')
+    alert('auth mounted')
+    // this.$store.commit('clearAuthError')
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         // console.log('uid: ' + user.uid)
@@ -230,19 +227,19 @@ export default {
         // this.setUser(loginUser)
         this.$store.dispatch(GET_REGISTORY, loginUser)
 
-        console.log('not setTimeout: ' + this.user.email) // ここだと取得できない
-        setTimeout(() => {
-          console.log('setTimeout: ' + this.user.email) // ここだと取得できる
-          // なにかしらの処理
-          const userProf = {
-            name: user.displayName,
-            email: user.email,
-            photoUrl: user.photoURL,
-            emailVerified: user.emailVerified,
-            uid: user.uid
-          }
-          this.$store.commit('setUserProf', userProf)
-        })
+        // console.log('not setTimeout: ' + this.user.email) // ここだと取得できない
+        // setTimeout(() => {
+        //   console.log('setTimeout: ' + this.user.email) // ここだと取得できる
+        //   // なにかしらの処理
+        //   const userProf = {
+        //     name: user.displayName,
+        //     email: user.email,
+        //     photoUrl: user.photoURL,
+        //     emailVerified: user.emailVerified,
+        //     uid: user.uid
+        //   }
+        //   this.$store.commit('setUserProf', userProf)
+        // })
       }
     })
   },

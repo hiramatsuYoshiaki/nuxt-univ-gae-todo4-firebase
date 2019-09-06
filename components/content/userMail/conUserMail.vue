@@ -25,34 +25,36 @@
         <div class="auth-title">
           <h6>Firebase Authentication</h6>
           <h2>User Mail</h2>
-          <p>User Mail Reset ボタンを押してください。</p>
         </div>
-        <div class="login-form">
-          <form novalidate @submit.prevent="loginCheck">
-            <div v-if="authErrors.length">
-              <p class="error-title">
-                入力項目を確認してください。
+        <div v-if="isAuthenticated">
+          <p>User: {{ displayName }}</p>
+          <p>emai: {{ email }}</p>
+          <p>Mail Reset ボタンを押してください。</p>
+          <div class="login-form">
+            <form novalidate @submit.prevent="loginCheck">
+              <div v-if="authErrors.length">
+                <p class="error-title">
+                  入力項目を確認してください。
+                </p>
+                <ul>
+                  <li v-for="(error, index) in authErrors" :key="index">
+                    <p class="error-msg">
+                      {{ error }}
+                    </p>
+                  </li>
+                </ul>
+              </div>
+              <p>Email: {{ email }}</p>
+              <p>
+                <input
+                  v-model="newEmail"
+                  type="text"
+                  placeholder="新しいメールアドレス"
+                  required
+                  :style="{ background: error.emailBg }"
+                />
               </p>
-              <ul>
-                <li v-for="(error, index) in authErrors" :key="index">
-                  <p class="error-msg">
-                    {{ error }}
-                  </p>
-                </li>
-              </ul>
-            </div>
-            <p>Email: {{ email }}</p>
-            <p>User Name: {{ displayName }}</p>
-            <p>
-              <input
-                v-model="newEmail"
-                type="text"
-                placeholder="新しいメールアドレス"
-                required
-                :style="{ background: error.emailBg }"
-              />
-            </p>
-            <!-- <p>
+              <!-- <p>
               <input
                 v-model="password"
                 type="password"
@@ -61,12 +63,35 @@
                 :style="{ background: error.passwordBg }"
               />
             </p> -->
-            <div class="add-btn">
-              <button type="submit">
-                User Mail Reset
-              </button>
+              <div class="add-btn">
+                <button type="submit">
+                  Mail Reset
+                </button>
+              </div>
+            </form>
+            <div v-if="isReset">
+              <ul class="guid-msg-wrape">
+                <li v-for="(msg, index) in message" :key="index">
+                  <p class="guid-msg">
+                    {{ msg }}
+                  </p>
+                </li>
+              </ul>
+              <div class="add-btn" @click="link_commit('/auth')">
+                <button>
+                  Close
+                </button>
+              </div>
             </div>
-          </form>
+          </div>
+        </div>
+        <div v-else>
+          <p>ログインしていません。</p>
+          <div class="add-btn" @click="link_commit('/loginEmail')">
+            <button>
+              Email Password Login
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -96,60 +121,44 @@ export default {
         emailBg: '#e3f2fd',
         passwordBg: '#e3f2fd',
         displayNameBg: '#e3f2fd'
-      }
+      },
+      isReset: false
     }
   },
   computed: {
     ...mapState(['user']),
     ...mapState(['regstar']),
     ...mapState(['authErrors']),
-    ...mapState(['userProf']),
+    ...mapState(['message']),
     ...mapGetters(['isAuthenticated'])
   },
   mounted() {
+    alert('userMail reset mounted')
+    this.isReset = false
     this.$store.commit('clearAuthError')
+    this.$store.commit('clearMessage')
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        alert('mounted login now')
-        alert(
-          ' user.uid: ' +
-            user.uid +
-            ' user.email: ' +
-            user.email +
-            ' user.displayName: ' +
-            user.displayName
-        )
         this.email = user.email
         this.displayName = user.displayName
-        console.log('uid: ' + user.uid)
-        console.log('email: ' + user.email)
-        console.log('displayName: ' + user.displayName)
+
         const loginUser = {
           uid: user.uid,
           email: user.email,
           displayName: ''
         }
         this.$store.commit('setUser', loginUser)
-        // this.setUser(loginUser)
         this.$store.dispatch(GET_REGISTORY, loginUser)
 
-        console.log('not setTimeout: ' + this.user.email) // ここだと取得できない
-        setTimeout(() => {
-          console.log('setTimeout: ' + this.user.email) // ここだと取得できる
-          // なにかしらの処理
-        })
+        // console.log('not setTimeout: ' + this.user.email) // ここだと取得できない
+        // setTimeout(() => {
+        //   console.log('setTimeout: ' + this.user.email) // ここだと取得できる
+        // })
       } else {
-        alert('user mail 再ログインしてください。')
+        // alert('user mail 再ログインしてください。')
         this.email = null
         this.displayName = null
         this.$store.commit('setUser', null)
-        // const loginUser = {
-        //   uid: null,
-        //   email: null,
-        //   displayName: null
-        // }
-        // this.$store.dispatch(GET_REGISTORY, loginUser)
-        this.link_commit('/auth')
       }
     })
   },
@@ -166,24 +175,12 @@ export default {
           user
             .updateEmail(this.newEmail)
             .then(() => {
-              console.log('email chenge')
               const newuser = firebase.auth().currentUser
               return newuser
             })
             .then((newuser) => {
-              console.log('email send new email')
-              // console.log(`new email: ${newuser.email}`)
-              // const actionCodeSettings = {
-              //   url: 'http://' + window.location.host + '/userMailSetting',
-              //   handleCodeInApp: false
-              // }
+              // console.log('email send new email')
               newuser.sendEmailVerification()
-              //   .then(() => {
-              //     console.log('email reset send email')
-              //   })
-              //   .catch((error) => {
-              //     console.log('firebase auth error' + error)
-              //   })
               return newuser
             })
             .then((user) => {
@@ -200,15 +197,30 @@ export default {
                 key: userkey,
                 registration: true
               })
+              console.log('mail reset ')
+              this.$store.commit('setMessage', 'メールアドレスを更新しました。')
+              this.$store.commit(
+                'setMessage',
+                '新しいメールアドレスに、確認メールを送信しました。'
+              )
+              this.$store.commit(
+                'setMessage',
+                '旧メールアドレスに、リカバリーメールを送信しました。'
+              )
+              this.$store.commit(
+                'setMessage',
+                'そのメールリンクをクリックして、もとに戻すことができます。'
+              )
+              this.isReset = true
             })
             // .then(() => {
             //   console.log('logout')
             //   this.logout()
             // })
-            .then(() => {
-              console.log('go to /about')
-              this.link_commit('/about')
-            })
+            // .then(() => {
+            //   console.log('go to /about')
+            //   this.link_commit('/about')
+            // })
             .catch((error) => {
               console.log('firebase auth error' + error)
               // this.$store.commit('/auth', null)
@@ -330,7 +342,6 @@ $duration: 1.4s;
   display: block;
   width: 100%;
   padding: 2rem;
-  border: 1px solid #000;
 }
 .login-type-sellect {
   position: relative;
@@ -353,7 +364,6 @@ $duration: 1.4s;
     width: 50%;
     padding: 2rem 2rem;
   }
-  border: 1px solid green;
 }
 .login-type-wrap {
   width: 100%;
@@ -380,6 +390,11 @@ $duration: 1.4s;
   color: #fff;
   margin-top: 1em;
   outline: 0;
+  padding: 0 1rem;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.7;
+  }
 }
 .login-form {
   width: 100%;
@@ -408,6 +423,22 @@ $duration: 1.4s;
   line-height: 1rem;
   margin-bottom: 1rem;
   color: rgb(190, 29, 29);
+  margin-left: 1rem;
+  @media (min-width: 992px) {
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1rem;
+  }
+}
+.guid-msg-wrape {
+  margin-top: 2rem;
+}
+.guid-msg {
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1rem;
+  margin-bottom: 1rem;
+  color: rgb(21, 134, 6);
   margin-left: 1rem;
   @media (min-width: 992px) {
     font-weight: 600;

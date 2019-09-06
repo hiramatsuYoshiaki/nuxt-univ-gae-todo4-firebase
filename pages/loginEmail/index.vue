@@ -75,32 +75,22 @@ export default {
     page() {
       return this.$store.state.page
     }
-  },
-  methods: {
-    link_commit(linkPath) {
-      this.$store.commit('pagePathSet', linkPath)
-      console.log('linkPath: ' + linkPath)
-      setTimeout(() => {
-        this.$router.push({ path: linkPath })
-      }, 500)
-    }
   }
+  // methods: {
+  //   link_commit(linkPath) {
+  //     this.$store.commit('pagePathSet', linkPath)
+  //     console.log('linkPath: ' + linkPath)
+  //     setTimeout(() => {
+  //       this.$router.push({ path: linkPath })
+  //     }, 500)
+  //   }
+  // }
 }
 </script>
 <style scoped lang="scss">
 %center {
   display: flex;
   justify-content: center;
-  align-items: center;
-}
-%left {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-}
-%right {
-  display: flex;
-  justify-content: flex-end;
   align-items: center;
 }
 .container {

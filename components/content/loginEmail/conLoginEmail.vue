@@ -2,7 +2,8 @@
   <div class="content">
     <div v-if="isWaiting">
       <p>Now login.....</p>
-      <p>ログインしています。</p>
+      <!-- <p>メールを送信しました。</p>
+      <p>メールリンクからユーザー登録をしてください。</p> -->
       <svg
         class="spinner"
         width="65px"
@@ -26,19 +27,58 @@
         <div class="auth-title">
           <h6>Firebase Authentication</h6>
           <h2>Email Password Login</h2>
-          <!-- <h2>Photo Todos</h2> -->
         </div>
         <div v-if="isAuthenticated">
-          <p>{{ displayName }}さん</p>
           <p>{{ email }}でログイン中です。</p>
-          <!-- <p>e-mail:{{ user.email }}</p> -->
+          <div v-if="displayName === '' || displayName === null">
+            <p>ユーザー名が登録されていません。</p>
+            <div class="user-page" @click="link_commit('/userSet')">
+              <i class="material-icons">account_circle</i>
+              ユーザー登録ページへ移動
+              <i class="material-icons arr1 ">double_arrow</i>
+              <i class="material-icons arr2 ">double_arrow</i>
+              <i class="material-icons arr3 ">double_arrow</i>
+            </div>
+          </div>
+          <div v-else>
+            <p>{{ displayName }}さん</p>
+            <div class="user-page" @click="link_commit('/mypage')">
+              <i class="material-icons">account_circle</i> ユーザーページへ移動
+              <i class="material-icons arr1 ">double_arrow</i>
+              <i class="material-icons arr2 ">double_arrow</i>
+              <i class="material-icons arr3 ">double_arrow</i>
+            </div>
+          </div>
+          <div class="user-update">
+            <div class="update-btn">
+              <button @click="link_commit('userSet')">
+                User Prof Update
+              </button>
+            </div>
+            <div class="update-btn">
+              <button @click="link_commit('userMail')">
+                Email Update
+              </button>
+            </div>
+            <div class="update-btn">
+              <button @click="link_commit('userPass')">
+                Pass Update
+              </button>
+            </div>
+            <div class="update-btn">
+              <button @click="link_commit('userDel')">
+                User Delete
+              </button>
+            </div>
+          </div>
+
           <div class="add-btn">
-            <button @click="logout">
-              ログアウト!!!!!!
+            <button @click="logout()">
+              ログアウト
             </button>
           </div>
-          <!-- <a href="/works">CRTU</a> -->
         </div>
+
         <div v-else>
           <div class="login-form">
             <form novalidate @submit.prevent="loginCheck">
@@ -115,7 +155,7 @@
   </div>
 </template>
 <script>
-import { mapActions, mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { ADD_REGISTORY, GET_REGISTORY } from '~/store/actionTypes'
 import firebase from '@/plugins/firebase'
 export default {
@@ -147,18 +187,10 @@ export default {
     ...mapGetters(['isAuthenticated'])
   },
   mounted() {
-    alert('loginMail mount chek akert')
+    alert('loginMail mount+++++ ')
     this.$store.commit('clearAuthError')
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        alert(
-          ' mount loginmail user.uid: ' +
-            user.uid +
-            ' user.email: ' +
-            user.email +
-            ' user.displayName: ' +
-            user.displayName
-        )
         this.email = user.email
         this.displayName = user.displayName
         const loginUser = {
@@ -169,29 +201,21 @@ export default {
         this.$store.commit('setUser', loginUser)
         this.$store.dispatch(GET_REGISTORY, loginUser)
 
-        console.log('not setTimeout: ' + this.user) // ここだと取得できない
-        setTimeout(() => {
-          console.log('setTimeout: ' + this.user.email) // ここだと取得できる
-          // なにかしらの処理
-        })
+        // setTimeout(() => {
+        //   console.log('setTimeout: ' + this.user.email) // ここだと取得できる
+        //   // なにかしらの処理
+        // })
       } else {
-        alert('mount loginmail mounted logout now XXX')
-        // this.email = null
-        // this.displayName = null
-        // this.$store.commit('setUser', null)
-        // const loginUser = {
-        //   uid: null,
-        //   email: null,
-        //   displayName: null
-        // }
-        // this.$store.dispatch(GET_REGISTORY, loginUser)
+        alert('loginMail mount+++++　onAuthStateChanged　not user ')
+        this.email = null
+        this.displayName = null
+        this.$store.commit('setUser', null)
       }
     })
   },
   methods: {
-    ...mapActions(['setUser']),
+    // ...mapActions(['setUser']),
     loginCheck(e) {
-      alert('logincheck')
       this.$store.commit('clearAuthError')
       this.error.emailBg = '#e3f2fd'
       this.error.passwordBg = '#e3f2fd'
@@ -233,8 +257,6 @@ export default {
       e.preventDefault()
     },
     login() {
-      alert('logim mail******** ')
-      console.log('login')
       this.isWaiting = true
       if (this.register) {
         console.log('signin')
@@ -244,28 +266,15 @@ export default {
           .then((res) => {
             console.log('createUserWithEmailAndPassword')
             const user = firebase.auth().currentUser
-            // console.log('uid: ' + user.uid)
-            // console.log('email: ' + user.email)
-            // console.log('displayName: ' + user.displayName)
             return user
           })
           .then((user) => {
             firebase.auth().languageCode = 'jp'
             const actionCodeSettings = {
               url: 'http://' + window.location.host + '/userSet',
-              handleCodeInApp: true
+              handleCodeInApp: false
             }
             user.sendEmailVerification(actionCodeSettings)
-            // const userProf = {
-            //   name: this.displayName,
-            //   email: this.email,
-            //   photoUrl: '',
-            //   emailVerified: '',
-            //   uid: '',
-            //   pass: this.password
-            // }
-            // this.$store.commit('setUserProf', userProf)
-            // this.isWaiting = false
             return user
           })
           .then((user) => {
@@ -278,9 +287,13 @@ export default {
             })
           })
           .then((user) => {
-            const lp = '/mypage'
-            this.link_commit(lp)
+            this.isWaiting = false
           })
+          // .then((user) => {
+          //   const lp = '/mypage'
+          //   this.link_commit(lp)
+          // })
+
           .catch((error) => {
             console.log('signin error' + error)
             this.isWaiting = false
@@ -292,7 +305,7 @@ export default {
           .auth()
           .signInWithEmailAndPassword(this.email, this.password)
           .then((user) => {
-            this.link_commit('/mypage')
+            // this.link_commit('/mypage')
             this.isWaiting = false
           })
           .catch((error) => {
@@ -311,19 +324,20 @@ export default {
       return re.test(email)
     },
     logout() {
-      alert('loginMail logout xxxxxxxxxxx')
-      console.log('logout')
+      alert('logout button push')
       firebase
         .auth()
         .signOut()
         .then(() => {
+          this.email = null
+          this.displayName = null
+          this.password = null
           this.$store.commit('setUser', null)
-          this.link_commit('/auth')
+          console.log('logout firebase')
         })
         .catch((error) => {
-          // alert('logout error' + error)
+          alert('logout error: ' + error)
         })
-        
     },
 
     link_commit(linkPath) {
@@ -375,6 +389,78 @@ margin-bottom: 2rem;
     color: #fff;
      margin-top: 1em;
      outline: 0;
+     opacity: 1;
+     &:hover{
+    opacity: .7;
+  }
+}
+.update-btn button{
+    border: none;
+    background-color: gray;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    border-radius: 10px;
+    padding: 0 2rem;
+    color: #fff;
+     margin-top: 1em;
+     outline: 0;
+     opacity: 1;
+     &:hover{
+    opacity: .7;
+  }
+}
+.user-page{
+  // border:1px solid #000;
+  // border-radius: 6px;
+  color: $footer-color-color;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  .arr1{
+    opacity:0;
+    transition-duration:.5s;
+    transition-property:opacity;
+  }
+  .arr2{
+    opacity:0;
+    transition-duration:.7s;
+    transition-property:opacity;
+  }
+  .arr3{
+    opacity:0;
+    transition-duration:.9s;
+    transition-property:opacity;
+  }
+  &:hover{
+    .arr1, .arr2, .arr3{
+      opacity:1;
+    }
+  }
+  i {
+    width: 2rem;
+    height: 2rem;
+    display: inline-block;
+    font-size: 2rem;
+    line-height: 2rem;
+    color: $footer-color-color;
+    vertical-align: middle;
+  }
+  // .arr1{
+    
+  // }
+  // .arr2{
+  //   opacity:0;
+  //   transition-duration:.7s;
+  //   transition-property:opacity;
+  // }
+  // .arr3{
+  //   opacity:0;
+  //   transition-duration:.9s;
+  //   transition-property:opacity;
+  // }
+  // .arr{
+  //   &:hover{
+  //     opacity:1;
+  //   }
+  // }
 }
 .login-form{
   width: 100%;

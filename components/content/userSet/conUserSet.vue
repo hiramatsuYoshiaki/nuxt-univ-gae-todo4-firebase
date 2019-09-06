@@ -25,47 +25,71 @@
         <div class="auth-title">
           <h6>Firebase Authentication</h6>
           <h2>User Set</h2>
-
-          <p>User Set ボタンを押してください。</p>
         </div>
-        <div class="login-form">
-          <form novalidate @submit.prevent="loginCheck">
-            <div v-if="authErrors.length">
-              <p class="error-title">
-                入力項目を確認してください。
+        <div v-if="isAuthenticated">
+          <p>emai: {{ email }}</p>
+          <p>User Set ボタンを押してください。</p>
+          <div class="login-form">
+            <form novalidate @submit.prevent="loginCheck">
+              <div v-if="authErrors.length">
+                <p class="error-title">
+                  入力項目を確認してください。
+                </p>
+                <ul>
+                  <li v-for="(error, index) in authErrors" :key="index">
+                    <p class="error-msg">
+                      {{ error }}
+                    </p>
+                  </li>
+                </ul>
+              </div>
+              <p>メール： {{ email }}</p>
+              <p>ユーザー名： {{ displayName }}</p>
+              <p>
+                <input
+                  v-model="displayName"
+                  type="text"
+                  placeholder="ユーザー名"
+                  required
+                  :style="{ background: error.displayNameBg }"
+                />
               </p>
-              <ul>
-                <li v-for="(error, index) in authErrors" :key="index">
-                  <p class="error-msg">
-                    {{ error }}
+              <div class="add-btn">
+                <button type="submit">
+                  User Set
+                </button>
+              </div>
+            </form>
+            <div v-if="isUpdate">
+              <ul class="guid-msg-wrape">
+                <li v-for="(msg, index) in message" :key="index">
+                  <p class="guid-msg">
+                    {{ msg }}
                   </p>
                 </li>
               </ul>
+              <div class="add-btn" @click="link_commit('/auth')">
+                <button>
+                  Close
+                </button>
+              </div>
             </div>
-            <p>メール： {{ email }}</p>
-            <p>ユーザー名： {{ displayName }}</p>
-            <p>
-              <input
-                v-model="displayName"
-                type="text"
-                placeholder="ユーザー名"
-                required
-                :style="{ background: error.displayNameBg }"
-              />
-            </p>
-            <div class="add-btn">
-              <button type="submit">
-                User Set
-              </button>
-            </div>
-          </form>
+          </div>
+        </div>
+        <div v-else>
+          <p>ログインしていません。</p>
+          <div class="add-btn" @click="link_commit('/loginEmail')">
+            <button>
+              Email Password Login
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import { mapActions, mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { UPDATEDANE_REGISTORY, GET_REGISTORY } from '~/store/actionTypes'
 import firebase from '@/plugins/firebase'
 export default {
@@ -87,29 +111,25 @@ export default {
         emailBg: '#e3f2fd',
         passwordBg: '#e3f2fd',
         displayNameBg: '#e3f2fd'
-      }
+      },
+      isUpdate: false
     }
   },
   computed: {
     ...mapState(['user']),
     ...mapState(['regstar']),
     ...mapState(['authErrors']),
-    ...mapState(['userProf']),
+    // ...mapState(['userProf']),
+    ...mapState(['message']),
     ...mapGetters(['isAuthenticated'])
   },
   mounted() {
+    alert('userSet mounted')
+    this.isUpdate = false
     this.$store.commit('clearAuthError')
+    this.$store.commit('clearMessage')
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        // alert('mounted login now')
-        // alert(
-        //   ' user.uid: ' +
-        //     user.uid +
-        //     ' user.email: ' +
-        //     user.email +
-        //     ' user.displayName: ' +
-        //     user.displayName
-        // )
         this.email = user.email
         this.displayName = user.displayName
         const loginUser = {
@@ -118,31 +138,20 @@ export default {
           displayName: ''
         }
         this.$store.commit('setUser', loginUser)
-        // this.setUser(loginUser)
         this.$store.dispatch(GET_REGISTORY, loginUser)
-
-        console.log('not setTimeout: ' + this.user.email) // ここだと取得できない
-        setTimeout(() => {
-          console.log('setTimeout: ' + this.user.email) // ここだと取得できる
-          // なにかしらの処理
-        })
+        // setTimeout(() => {
+        //   console.log('setTimeout: ' + this.user.email) // ここだと取得できる
+        // })
       } else {
-        alert('再ログインしてください。')
+        // alert('再ログインしてください。')
         this.email = null
         this.displayName = null
         this.$store.commit('setUser', null)
-        // const loginUser = {
-        //   uid: null,
-        //   email: null,
-        //   displayName: null
-        // }
-        // this.$store.dispatch(GET_REGISTORY, loginUser)
-        this.link_commit('/auth')
       }
     })
   },
   methods: {
-    ...mapActions(['setUser']),
+    // ...mapActions(['setUser']),
     loginCheck(e) {
       this.$store.commit('clearAuthError')
       this.error.emailBg = '#e3f2fd'
@@ -194,39 +203,46 @@ export default {
 
     userSet() {
       // alert('userSet displayName: ' + this.displayName)
-      firebase
-        .auth()
-        .currentUser.updateProfile({
-          displayName: this.displayName
-          //   photoURL: "https://example.com/jane-q-user/profile.jpg"
-        })
-        .then((result) => {
-          // console.log('dispatch UPDATEDANE_REGISTORY')
-          const user = firebase.auth().currentUser
-          let userkey = null
-          for (const regItem of this.regstar) {
-            userkey = regItem['.key']
-          }
-          this.$store.dispatch(UPDATEDANE_REGISTORY, {
-            uid: user.uid,
-            email: user.email,
-            displayName: this.displayName,
-            key: userkey,
-            registration: true
+      const user = firebase.auth().currentUser
+      if (user) {
+        user
+          .updateProfile({
+            displayName: this.displayName
           })
-        })
-        .then(() => {
-          this.link_commit('/about')
-        })
-        .catch((error) => {
-          console.log('login error' + error)
-        })
+          .then((result) => {
+            let userkey = null
+            for (const regItem of this.regstar) {
+              userkey = regItem['.key']
+            }
+            this.$store.dispatch(UPDATEDANE_REGISTORY, {
+              uid: user.uid,
+              email: user.email,
+              displayName: this.displayName,
+              key: userkey,
+              registration: true
+            })
+          })
+          .then(() => {
+            // this.link_commit('/loginEmail')
+            console.log('user set ok ')
+            this.$store.commit('setMessage', 'ユーザー情報を更新しました。')
+            this.isUpdate = true
+          })
+          .catch((error) => {
+            console.log('login error' + error)
+          })
+      } else {
+        alert('再ログインしてから、ユーザー情報をしてください。')
+        this.email = null
+        this.displayName = null
+        this.$store.commit('setUser', null)
+      }
     },
     link_commit(linkPath) {
       this.active = true
       this.$store.commit('pagePathSet', linkPath)
       setTimeout(() => {
-        if (linkPath === '/about') {
+        if (linkPath === '/mypage') {
           location.href = linkPath // reload
         } else {
           this.$router.push({ path: linkPath }) // non-leload
@@ -306,6 +322,11 @@ $duration: 1.4s;
   color: #fff;
   margin-top: 1em;
   outline: 0;
+  padding: 0 1rem;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.7;
+  }
 }
 .login-form {
   width: 100%;
@@ -334,6 +355,22 @@ $duration: 1.4s;
   line-height: 1rem;
   margin-bottom: 1rem;
   color: rgb(190, 29, 29);
+  margin-left: 1rem;
+  @media (min-width: 992px) {
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1rem;
+  }
+}
+.guid-msg-wrape {
+  margin-top: 2rem;
+}
+.guid-msg {
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1rem;
+  margin-bottom: 1rem;
+  color: rgb(21, 134, 6);
   margin-left: 1rem;
   @media (min-width: 992px) {
     font-weight: 600;

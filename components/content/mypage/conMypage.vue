@@ -568,9 +568,9 @@ export default {
       } else {
         alert('mypage mounted logout now')
         // const loginUser = {
-        //   uid: '',
-        //   email: '',
-        //   displayName: ''
+        //   uid: null,
+        //   email: null,
+        //   displayName: null
         // }
         // this.$store.commit('setUser', loginUser)
       }
