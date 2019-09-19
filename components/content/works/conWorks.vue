@@ -44,9 +44,9 @@
                   入力項目を確認してください。
                 </p>
                 <ul>
-                  <li v-for="(error, index) in authErrors" :key="index">
+                  <li v-for="(authError, index) in authErrors" :key="index">
                     <p class="error-msg">
-                      {{ error }}
+                      {{ authError }}
                     </p>
                   </li>
                 </ul>

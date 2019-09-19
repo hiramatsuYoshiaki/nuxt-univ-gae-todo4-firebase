@@ -25,14 +25,14 @@ export const state = () => ({
   addTodoErrors: [],
   message: [],
   doneInsta: false,
-  userProf: {
-    name: '',
-    email: '',
-    photoUrl: '',
-    emailVerified: '',
-    uid: '',
-    pass: ''
-  },
+  // userProf: {
+  //   name: '',
+  //   email: '',   
+  //   photoUrl: '',
+  //   emailVerified: '',
+  //   uid: '',
+  //   pass: ''
+  // },
   singInFinish: true
   // isAuthError: false
 })
@@ -72,9 +72,9 @@ export const mutations = {
   openDoneInsta(state) {
     state.doneInsta = true
   },
-  setUserProf(state, payload) {
-    state.userProf = payload
-  },
+  // setUserProf(state, payload) {
+  //   state.userProf = payload
+  // },
   setUserProfsignInFinish(state, payload) {
     state.singInFinish = payload
   },

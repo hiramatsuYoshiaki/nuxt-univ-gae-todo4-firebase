@@ -127,8 +127,8 @@ export default {
           .auth()
           .signInWithPopup(provider)
           .then((user) => {
-            const lp = '/about'
-            this.link_commit(lp)
+            // const lp = '/mypage'
+            // this.link_commit(lp)
             this.isWaiting = false
           })
           .catch((error) => {
@@ -156,7 +156,7 @@ export default {
       this.active = true
       this.$store.commit('pagePathSet', linkPath)
       setTimeout(() => {
-        if (linkPath === '/about') {
+        if (linkPath === '/mypage') {
           location.href = linkPath // reload
         } else {
           this.$router.push({ path: linkPath }) // non-leload

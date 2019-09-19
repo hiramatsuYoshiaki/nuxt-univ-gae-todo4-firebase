@@ -37,9 +37,9 @@
                   入力項目を確認してください。
                 </p>
                 <ul>
-                  <li v-for="(error, index) in authErrors" :key="index">
+                  <li v-for="(authError, index) in authErrors" :key="index">
                     <p class="error-msg">
-                      {{ error }}
+                      {{ authError }}
                     </p>
                   </li>
                 </ul>
@@ -180,8 +180,8 @@ export default {
             // console.log('pass reset loginEmail go to')
             // this.link_commit('loginEmail')
             // })
-            .catch((error) => {
-              console.log('firebase auth error' + error)
+            .catch((err) => {
+              console.log('firebase auth error' + err)
             })
         }
       } else {
@@ -262,8 +262,8 @@ export default {
           this.password = null
           this.$store.commit('setUser', null)
         })
-        .catch((error) => {
-          alert('logout error: ' + error)
+        .catch((err) => {
+          alert('logout error: ' + err)
         })
     },
     link_commit(linkPath) {

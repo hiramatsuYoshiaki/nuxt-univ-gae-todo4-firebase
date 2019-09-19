@@ -38,9 +38,12 @@
                     入力項目を確認してください。
                   </p>
                   <ul>
-                    <li v-for="(error, index) in addTodoErrors" :key="index">
+                    <li
+                      v-for="(authError, index) in addTodoErrors"
+                      :key="index"
+                    >
                       <p class="error-msg">
-                        {{ error }}
+                        {{ authError }}
                       </p>
                     </li>
                   </ul>
@@ -159,11 +162,11 @@
                         </p>
                         <ul>
                           <li
-                            v-for="(error, index) in addTodoErrors"
+                            v-for="(addTodoError, index) in addTodoErrors"
                             :key="index"
                           >
                             <p class="error-msg">
-                              {{ error }}
+                              {{ addTodoError }}
                             </p>
                           </li>
                         </ul>
@@ -234,11 +237,11 @@
                         </p>
                         <ul>
                           <li
-                            v-for="(error, index) in addTodoErrors"
+                            v-for="(addTodoError, index) in addTodoErrors"
                             :key="index"
                           >
                             <p class="error-msg">
-                              {{ error }}
+                              {{ addTodoError }}
                             </p>
                           </li>
                         </ul>
@@ -349,11 +352,11 @@
                           </p>
                           <ul>
                             <li
-                              v-for="(error, index) in addTodoErrors"
+                              v-for="(addTodoError, index) in addTodoErrors"
                               :key="index"
                             >
                               <p class="error-msg">
-                                {{ error }}
+                                {{ addTodoError }}
                               </p>
                             </li>
                           </ul>
@@ -449,29 +452,45 @@
         </div>
       </div>
     </section>
-    <div v-for="reg in regstar" :key="reg.key">
-      <div v-if="!reg.registration" class="registration">
-        <div class="message-wrap">
-          <p>
-            メールを確認してください。
-          </p>
-          <br />
-          <h3>ユーザー登録が完了していません。</h3>
-          <br />
-          <p>
-            サインインしたメールアドレスに、メールが送信されました。
-          </p>
-          <p>
-            リンクをクリックして、ユーザー登録を完了してください。
-          </p>
-          <p>
-            または、ユーザー登録ページがら登録してください。
-          </p>
-          <div class="add-btn">
-            <button @click="link_commit('/userProf')">
-              戻る
-            </button>
+    <div v-if="regstar.lenght">
+      <div v-for="reg in regstar" :key="reg.key">
+        <div v-if="!reg.registration" class="registration">
+          <div class="message-wrap">
+            <p>
+              メールを確認してください。
+            </p>
+            <br />
+            <h4>ユーザー登録が完了していません。</h4>
+            <br />
+            <p>
+              サインインしたメールアドレスに、メールが送信されました。
+            </p>
+            <p>
+              リンクをクリックして、ユーザー登録を完了してください。
+            </p>
+            <p>
+              または、ユーザー登録ページがら登録してください。
+            </p>
+            <div class="add-btn">
+              <button @click="link_commit('/userSet')">
+                戻る
+              </button>
+            </div>
           </div>
+        </div>
+      </div>
+    </div>
+    <div v-sles class="registration">
+      <div class="message-wrap">
+        <h4>ユーザー登録が完了していません。</h4>
+        <br />
+        <p>
+          ユーザー登録ページがら登録してください。
+        </p>
+        <div class="add-btn">
+          <button @click="link_commit('/userSet')">
+            戻る
+          </button>
         </div>
       </div>
     </div>

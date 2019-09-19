@@ -37,7 +37,6 @@
                 <p><i class="material-icons">insert_link</i>Email Link</p>
               </div>
             </div>
-
             <div>
               <div class="menu_link " @click="link_commit('/loginGoogle')">
                 <p><i class="material-icons">insert_link</i>Google</p>

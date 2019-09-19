@@ -49,7 +49,7 @@
 </template>
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
-import { GET_REGISTORY } from '~/store/actionTypes'
+import { ADD_REGISTORY, GET_REGISTORY } from '~/store/actionTypes'
 import firebase from '@/plugins/firebase'
 export default {
   //   props: {
@@ -83,31 +83,33 @@ export default {
     this.$store.commit('clearAuthError')
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
+        console.log(user.uid)
+        console.log(user.email)
+        console.log(user.displayName)
         const loginUser = {
           uid: user.uid,
           email: user.email,
           displayName: user.displayName
         }
-        this.$store.commit('setUser', loginUser)
-        this.$store.dispatch(GET_REGISTORY, loginUser)
+        // this.$store.commit('setUser', loginUser)
+        // this.$store.dispatch(GET_REGISTORY, loginUser)
 
-        console.log('not setTimeout: ' + this.user) // ここだと取得できない
+        // console.log('not setTimeout: ' + this.user.email) // ここだと取得できない
         setTimeout(() => {
-          console.log('setTimeout: ' + this.user.email) // ここだと取得できる
-          // なにかしらの処理
+          this.$store.commit('setUser', loginUser)
+          this.$store.dispatch(GET_REGISTORY, loginUser)
+
+          // console.log('loginUser: ' + loginUser.displayName) // ここだと取得できる
+          // console.log('loginUser: ' + loginUser.uid) // ここだと取得できる
+          // for (const regItem of this.regstar) {
+          //   console.log('uid: ' + regItem.uid) // ここだと取得できる
+          // }
         })
       } else {
-        // alert('再ログインしてください。')
-        // this.email = null
-        // this.displayName = null
-        // this.$store.commit('setUser', null)
-        // const loginUser = {
-        //   uid: null,
-        //   email: null,
-        //   displayName: null
-        // }
-        // this.$store.dispatch(GET_REGISTORY, loginUser)
-        // this.link_commit('/loginEmail')
+        alert('loginMail mount+++++　onAuthStateChanged　not user ')
+        this.email = null
+        this.displayName = null
+        this.$store.commit('setUser', null)
       }
     })
   },
@@ -121,14 +123,44 @@ export default {
         // https://support.google.com/accounts/answer/27441?hl=ja
       } else {
         console.log('login email pass')
+        // const regstars = this.regstar
         const provider = new firebase.auth.GoogleAuthProvider()
         firebase
           .auth()
           .signInWithPopup(provider)
-          .then((user) => {
-            const lp = '/about'
-            this.link_commit(lp)
+          .then(() => {
+            // const lp = '/about'
+            // this.link_commit(lp)
+            const user = firebase.auth().currentUser
+            if (user) {
+              console.log('user.uid:' + user.uid)
+              const loginUser = {
+                uid: user.uid,
+                email: user.email,
+                displayName: user.displayName
+              }
+              this.$store.dispatch(GET_REGISTORY, loginUser)
+            }
             this.isWaiting = false
+            return user
+          })
+          .then((user) => {
+            let regUid = null
+            for (const regst of this.regstar) {
+              regUid = regst.uid
+            }
+            console.log('regUid:' + regUid)
+            if (regUid) {
+              console.log('firebase auth update user')
+            } else {
+              console.log('firebase auth add user')
+              this.$store.dispatch(ADD_REGISTORY, {
+                uid: user.uid,
+                email: '',
+                displayName: user.displayName,
+                registration: false
+              })
+            }
           })
           .catch((error) => {
             // alert('login error' + error)
