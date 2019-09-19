@@ -9,8 +9,8 @@
           <div class="menu-item-box">
             <div
               class="menu_link"
-              :class="{ menu_item_visible: page === '/works' }"
-              @click="link_commit('/works')"
+              :class="{ menu_item_visible: page === '/auth' }"
+              @click="link_commit('/auth')"
             >
               Auth
             </div>
@@ -19,8 +19,8 @@
           <div class="menu-item-box">
             <div
               class="menu_link"
-              :class="{ menu_item_visible: page === '/about' }"
-              @click="link_commit('/about')"
+              :class="{ menu_item_visible: page === '/mypage' }"
+              @click="link_commit('/mypage')"
             >
               CRUD
             </div>
@@ -76,8 +76,8 @@
             <div class="menu-item-box">
               <a
                 class="menu_link"
-                :class="{ menu_item_visible: page === '/works' }"
-                @click="link_commit('/works')"
+                :class="{ menu_item_visible: page === '/auth' }"
+                @click="link_commit('/auth')"
               >
                 Auth
               </a>
@@ -86,8 +86,8 @@
             <div class="menu-item-box">
               <a
                 class="menu_link"
-                :class="{ menu_item_visible: page === '/about' }"
-                @click="link_commit('/about')"
+                :class="{ menu_item_visible: page === '/mypage' }"
+                @click="link_commit('/mypage')"
               >
                 CRUD
               </a>
@@ -105,26 +105,48 @@
               <div class="menu_underline" />
             </div>
 
-            <!-- <div class="menu-item-box">
+            <div v-if="isAuthenticated" class="menu-item-box">
               <a
                 class="menu_link"
-                :class="{ menu_item_visible: page === '/login' }"
-                @click="link_commit('/login')"
+                :class="{ menu_item_visible: page === '/auth' }"
+                @click="link_commit('/auth')"
               >
-                <div v-if="isUser">
+                logoff
+                <!-- <div v-if="isAuthenticated">
                   logoff
                   <img
                     :src="userPhotoUrl"
                     alt="user image"
                     class="image-mask"
-                  >
+                  />
                 </div>
                 <div v-else>
                   Login
-                </div>
+                </div> -->
               </a>
               <div class="menu_underline" />
-            </div> -->
+            </div>
+            <div v-if="!isAuthenticated" class="menu-item-box">
+              <a
+                class="menu_link"
+                :class="{ menu_item_visible: page === '/auth' }"
+                @click="link_commit('/auth')"
+              >
+                login
+                <!-- <div v-if="isAuthenticated">
+                  logoff
+                  <img
+                    :src="userPhotoUrl"
+                    alt="user image"
+                    class="image-mask"
+                  />
+                </div>
+                <div v-else>
+                  Login
+                </div> -->
+              </a>
+              <div class="menu_underline" />
+            </div>
           </div>
         </div>
       </div>
@@ -144,6 +166,8 @@
   </div>
 </template>
 <script>
+// import { mapActions, mapState, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
   // transition: 'a-slide',
   //   props: {
@@ -160,13 +184,18 @@ export default {
   computed: {
     page() {
       return this.$store.state.page
-    }
+    },
     //   isUser() {
     //     return this.$store.state.isLogin
     //   },
     //   userPhotoUrl() {
     //     return this.$store.state.PhotoUrl
     //   }
+    // ...mapState(['user']),
+    // ...mapState(['regstar']),
+    // ...mapState(['authErrors']),
+    // ...mapState(['userProf']),
+    ...mapGetters(['isAuthenticated'])
   },
   methods: {
     link_commit(linkPath) {
@@ -174,11 +203,11 @@ export default {
       this.$store.commit('pagePathSet', linkPath)
       // console.log('linkPath: ' + linkPath)
       setTimeout(() => {
-        if (linkPath === '/about') {
-          location.href = linkPath // reload
-        } else {
-          this.$router.push({ path: linkPath }) // non-leload
-        }
+        // if (linkPath === '/mypage') {
+        //   location.href = linkPath // reload
+        // } else {
+        this.$router.push({ path: linkPath }) // non-leload
+        // }
       }, 500)
     }
   }
@@ -231,11 +260,11 @@ export default {
 }
 .nav-menu .center-block {
   @extend %center;
-  width: 25%;
+  width: 10%;
 }
 .nav-menu .right-block {
   @extend %right;
-  width: 50%;
+  width: 65%;
 }
 //logo bar----------------------------------------
 .logo-wrap {

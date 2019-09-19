@@ -18,13 +18,11 @@
         :page-discription-detail="pageDiscriptionDetail"
       />
     </div>
-
-    <!-- <transition name="mainCon" appear> -->
-    <div class="content-main">
-      <!-- <ConAbout /> -->
-      <nuxt-child />
-    </div>
-    <!-- </transition> -->
+    <transition name="mainCon" appear>
+      <div class="content-main">
+        <conMypage />
+      </div>
+    </transition>
 
     <transition name="mainCon" appear>
       <div class="content-footer">
@@ -33,27 +31,21 @@
     </transition>
 
     <transition appear name="transitionScreen">
-      <TransitionScreen v-if="page === '/about'" />
+      <TransitionScreen v-if="page === '/mypage'" />
     </transition>
-    <div v-if="!loaded" class="loading">
-      <!-- <h1>login ...</h1> -->
-    </div>
   </div>
 </template>
 <script>
-import { mapState, mapGetters } from 'vuex'
 import TransitionScreen from '~/components/transition/TransitionScreen.vue'
-// import ConAbout from '~/components/content/about/ConAbout.vue'
+import conMypage from '~/components/content/mypage/conMypage.vue'
 
 import ConHeader from '~/components/content/ConHeader.vue'
 import ContentFooter from '~/components/content/ContentFooter.vue'
-// import firebase from '@/plugins/firebase'
 export default {
   layout: 'topPage',
-  //   transition: 'content-slide',
   components: {
     TransitionScreen,
-    // ConAbout,
+    conMypage,
     ConHeader,
     ContentFooter
   },
@@ -75,63 +67,68 @@ export default {
         // `hid` は一意の識別子として使用されます。 `vmid` は動作しないので使わないでください。
         {
           hid: 'description',
-          name: 'about by Nuxt.js',
+          name: 'mypage by Nuxt.js',
           content:
             'このページは、Nuxt.jsアプリケーションのインストールと使い方と設定を紹介しています。'
         }
       ]
     }
   },
-
   computed: {
     page() {
       return this.$store.state.page
-    },
-    ...mapGetters(['isAuthenticated']),
-    ...mapState(['regstar']),
-    ...mapState(['items']),
-    ...mapState(['user'])
-  },
-  created() {
-    console.log('pages/about.vue created()')
-  },
-  mounted() {
-    // console.log('pages/about.vue mounted()')
-
-    setTimeout(() => {
-      if (!this.isAuthenticated) {
-        // ログインしていなかったら飛ぶページを設定
-        this.$store.commit('pagePathSet', '/works')
-        this.$router.push('/works')
-      } else {
-        // alert(this.regstar)
-        // alert(this.items)
-        // alert(this.user.uid)
-        // console.log(this.regstar)
-        // this.loaded = true
-      }
-    }, 0)
-    // console.log('mounted')
-    // firebase.auth().onAuthStateChanged(async (user) => {
-    //   if (user) {
-    //     await console.log('login:' + user)
-    //   } else {
-    //     await console.log('logout: ' + user)
-    //     await this.link_commit('works')
-    //   }
-    // })
-    // setTimeout(() => {
-    this.loaded = true
-    // }, 1000)
-  },
-  methods: {
-    link_commit(linkPath) {
-      this.$store.commit('pagePathSet', linkPath)
-      setTimeout(() => {
-        this.$router.push({ path: linkPath })
-      }, 500)
     }
+    // ...mapGetters(['isAuthenticated']),
+    // ...mapState(['regstar']),
+    // ...mapState(['items']),
+    // ...mapState(['user'])
   }
+
+  //   mounted() {
+  //     alert('xxxxx mypage page mounted')
+  //     console.log('pages/mypage.vue mounted()')
+  //     firebase.auth().onAuthStateChanged((user) => {
+  //       if (user) {
+  //         this.email = user.email
+  //         this.displayName = user.displayName
+  //         const loginUser = {
+  //           uid: user.uid,
+  //           email: user.email,
+  //           displayName: user.displayName
+  //         }
+  //         this.$store.commit('setUser', loginUser)
+  //         this.$store.dispatch(GET_REGISTORY, loginUser)
+
+  //         console.log('not setTimeout: ' + this.user)
+  //         setTimeout(() => {
+  //           console.log('setTimeout: ' + this.user.email)
+
+  //         })
+  //       } else {
+  //         const isLogin = window.confirm(
+  //           'このページは、ログインが必要です。ログインしますか。 mypage page'
+  //         )
+  //         if (isLogin) {
+  //           this.$store.commit('pagePathSet', '/auth')
+  //           this.$router.push('/auth')
+  //         } else {
+  //           this.$store.commit('pagePathSet', '/')
+  //           this.$router.push('/')
+  //         }
+  //       }
+  //     })
+  //     // setTimeout(() => {
+  //     this.loaded = true
+  //     // }, 1000)
+  //   },
+  // methods: {
+  //   link_commit(linkPath) {
+  //     this.$store.commit('pagePathSet', linkPath)
+  //     setTimeout(() => {
+  //       this.$router.push({ path: linkPath })
+  //     }, 500)
+  //   }
+  // }
 }
 </script>
 <style scoped lang="scss">
@@ -161,26 +158,20 @@ export default {
 .content-header {
   width: 100vw;
   height: 35vh;
-  // padding: 1rem 1rem;
-  // border: 1px solid yellow;
 }
 .content-main {
-  // height: 75vh;
   width: 100vw;
   background-color: $main-contents-color;
   color: $main-contents-text;
-  // padding-bottom:20rem;
-  // padding-left: 2rem;
-  // border: 1px solid orangered;
 }
 .content-footer {
   width: 100vw;
   @extend %center;
   flex-direction: column;
-  // border: 1px solid red;
 }
 .loading {
   @extend %center;
+  flex-direction: column;
   position: fixed;
   top: 0;
   left: 0;

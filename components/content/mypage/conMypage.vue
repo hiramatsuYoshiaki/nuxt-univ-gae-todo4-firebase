@@ -1,16 +1,17 @@
 <template>
   <div class="content">
-    <!-- <p>e-mail:{{ email }}</p>
-    <p>uid:{{ uid }}</p> -->
-
     <h6>Firebase CRUD</h6>
     <h2>
-      Photo Todos
+      My Photo Todos
     </h2>
+    <p>こんにちは、{{ displayName }} さん</p>
+    <p>メール：{{ email }}</p>
+
     <p>インスタグラムで見る、こんな写真を撮ってみたい！</p>
     <div v-for="(reg, index) in regstar" :key="index">
       <p>{{ reg.displayName }}さんのTodosリスト</p>
     </div>
+
     <!-- <button @click="reload">
       インスタグラムを読み込む
     </button> -->
@@ -37,9 +38,12 @@
                     入力項目を確認してください。
                   </p>
                   <ul>
-                    <li v-for="(error, index) in addTodoErrors" :key="index">
+                    <li
+                      v-for="(authError, index) in addTodoErrors"
+                      :key="index"
+                    >
                       <p class="error-msg">
-                        {{ error }}
+                        {{ authError }}
                       </p>
                     </li>
                   </ul>
@@ -158,11 +162,11 @@
                         </p>
                         <ul>
                           <li
-                            v-for="(error, index) in addTodoErrors"
+                            v-for="(addTodoError, index) in addTodoErrors"
                             :key="index"
                           >
                             <p class="error-msg">
-                              {{ error }}
+                              {{ addTodoError }}
                             </p>
                           </li>
                         </ul>
@@ -233,11 +237,11 @@
                         </p>
                         <ul>
                           <li
-                            v-for="(error, index) in addTodoErrors"
+                            v-for="(addTodoError, index) in addTodoErrors"
                             :key="index"
                           >
                             <p class="error-msg">
-                              {{ error }}
+                              {{ addTodoError }}
                             </p>
                           </li>
                         </ul>
@@ -348,11 +352,11 @@
                           </p>
                           <ul>
                             <li
-                              v-for="(error, index) in addTodoErrors"
+                              v-for="(addTodoError, index) in addTodoErrors"
                               :key="index"
                             >
                               <p class="error-msg">
-                                {{ error }}
+                                {{ addTodoError }}
                               </p>
                             </li>
                           </ul>
@@ -448,6 +452,48 @@
         </div>
       </div>
     </section>
+    <div v-if="regstar.lenght">
+      <div v-for="reg in regstar" :key="reg.key">
+        <div v-if="!reg.registration" class="registration">
+          <div class="message-wrap">
+            <p>
+              メールを確認してください。
+            </p>
+            <br />
+            <h4>ユーザー登録が完了していません。</h4>
+            <br />
+            <p>
+              サインインしたメールアドレスに、メールが送信されました。
+            </p>
+            <p>
+              リンクをクリックして、ユーザー登録を完了してください。
+            </p>
+            <p>
+              または、ユーザー登録ページがら登録してください。
+            </p>
+            <div class="add-btn">
+              <button @click="link_commit('/userSet')">
+                戻る
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-sles class="registration">
+      <div class="message-wrap">
+        <h4>ユーザー登録が完了していません。</h4>
+        <br />
+        <p>
+          ユーザー登録ページがら登録してください。
+        </p>
+        <div class="add-btn">
+          <button @click="link_commit('/userSet')">
+            戻る
+          </button>
+        </div>
+      </div>
+    </div>
 
     <div v-if="isAddList || isAction || isEdit || isFull" class="modal-bg" />
   </div>
@@ -493,7 +539,8 @@ export default {
         insDaneUrlBg: '#e3f2fd',
         fileBg: '#e3f2fd',
         editSpotNameBg: '#e3f2fd'
-      }
+      },
+      displayName: ''
     }
   },
   computed: {
@@ -504,57 +551,23 @@ export default {
     ...mapState(['message']),
     ...mapState(['doneInsta'])
   },
-  created() {
-    // firebase
-    // this.$store.dispatch(INIT_TODO)
-    // console.log('conponents/content/about/conAbout.vue created()')
-    // if (process.browser) {
-    // window.addEventListener('scroll', this.handleScroll)
-    // }
-    // sample code1-----------------------------------
-    // var iframe = document.createElement('iframe');
-    // iframe.onload = function() { alert('myframe is loaded'); }; // before setting 'src'
-    // iframe.src = '...';
-    // document.body.appendChild(iframe); // add it to wherever you need it in the document
-    // sample code1-----------------------------------
-    // sample code2-----------------------------------
-    //   var iframe = document.createElement('iframe');
-    // iframe.addEventListener('load', function() { console.log('loaded!'); });
-    // document.getElementsByTagName('body')[0].appendChild(iframe);
-    // sample code2-----------------------------------
-    // test code
-    // const iframe = document.createElement('iframe')
-    // iframe.addEventListener('load', this.iframeLoaded)
-    // if (process.browser) {
-    //   document
-    //     .createElement('iframe')
-    //     .iframe.addEventListener('load', this.iframeLoaded)
-    // }
-    // if (process.browser) {
-    //   require('external_library')
-    // document
-    //   .createElement('iframe')
-    //   .iframe.addEventListener('load', this.iframeLoaded)
-    // }
-  },
-  // destroyed () {
-  //   window.removeEventListener('scroll', this.handleScroll);
-  // },
+
   mounted() {
+    alert('mypage mounted')
     this.$store.commit('clearAddTodoError')
     this.$store.commit('clearMessage')
-    // console.log('conponents/content/about/conAbout.vue mounteded()')
+    // console.log('conponents/content/mypage/conMypage.vue mounteded()')
     // this.$store.commit('clearAuthError')
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        console.log('login')
-        // console.log('about uid: ' + user.uid)
-        // console.log('about email: ' + user.email)
-        // console.log('displayName: ' + user.displayName)
+        alert('mypage mounted user login ')
+        if (user.displayName) {
+          this.displayName = user.displayName
+        }
         const loginUser = {
           uid: user.uid,
           email: user.email,
-          displayName: null
+          displayName: user.displayName
         }
         this.$store.commit('setUser', loginUser)
 
@@ -567,11 +580,18 @@ export default {
           // console.log('setTimeout: ' + this.user.email) // ここだと取得できる
           this.uid = this.user.uid
           this.email = this.user.email
+          // this.displayName = this.user.displayName
           this.$store.dispatch(INIT_TODO, this.user.uid)
           // なにかしらの処理
         })
       } else {
-        console.log('logout')
+        alert('mypage mounted logout now')
+        // const loginUser = {
+        //   uid: null,
+        //   email: null,
+        //   displayName: null
+        // }
+        // this.$store.commit('setUser', loginUser)
       }
     })
     // console.log(this.regstar[0].uid)
@@ -580,7 +600,7 @@ export default {
     // this.$store.dispatch(INIT_TODO, this.user.uid)
     // this.$store.dispatch(INIT_TODO, this.regstar)
     // console.log('mounted')
-    // location.href = '/about'
+    // location.href = '/mypage'
     // this.$nextTick(() => {
     //   this.$nuxt.$loading.start()
     //   setTimeout(() => this.$nuxt.$loading.finish(), 10000)
@@ -696,7 +716,7 @@ export default {
         user: this.user.uid
       })
       location.reload(true)
-      // location.href = '/about'
+      // location.href = '/mypage'
     },
 
     onFileChange(e) {
@@ -778,7 +798,7 @@ export default {
       this.text = ''
       this.insUrl = ''
       this.isAction = false
-      // location.href = '/about'
+      // location.href = '/mypage'
       // location.reload(true)
       await this.openDone()
       console.log('openDone()')
@@ -870,6 +890,12 @@ export default {
       }
       this.isEdit = false
       location.reload(true)
+    },
+    link_commit(linkPath) {
+      this.$store.commit('pagePathSet', linkPath)
+      setTimeout(() => {
+        this.$router.push({ path: linkPath })
+      }, 500)
     }
     // reload() {
     //   location.reload(true)
@@ -880,6 +906,21 @@ export default {
 </script>
 
 <style scoped lang="scss">
+%center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+%left {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+%right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
 .content {
   position: relative;
   width: 100vw;
@@ -1341,6 +1382,41 @@ img {
 .testimage{
   width:5rem;
   height:auto;
+}
+
+.registration {
+  @extend %center;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  margin: 0;
+  padding: 0;
+}
+.message-wrap {
+  border: 1px solid #fff;
+  background-color: gray;
+  padding: 1rem;
+  width: 90%;
+  @extend %center;
+  flex-direction: column;
+  @media (min-width: 992px) {
+    width: 70%;
+    padding: 2rem;
+  }
+}
+.add-btn button {
+  border: none;
+  background-color: $footer-color-color;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  color: #fff;
+  margin-top: 1em;
+  outline: 0;
 }
 
 

@@ -1,7 +1,9 @@
 <template>
   <div class="content">
     <div v-if="isWaiting">
-      <p>login.....</p>
+      <p>Now login.....</p>
+      <!-- <p>メールを送信しました。</p>
+      <p>メールリンクからユーザー登録をしてください。</p> -->
       <svg
         class="spinner"
         width="65px"
@@ -24,18 +26,59 @@
       <div class="auth">
         <div class="auth-title">
           <h6>Firebase Authentication</h6>
-          <h2>Photo Todos</h2>
+          <h2>Email Password Login</h2>
         </div>
         <div v-if="isAuthenticated">
-          <p>{{ user.email }}でログイン中です。</p>
-          <!-- <p>e-mail:{{ user.email }}</p> -->
+          <p>{{ email }}でログイン中です。</p>
+          <div v-if="displayName === '' || displayName === null">
+            <p>ユーザー名が登録されていません。</p>
+            <div class="user-page" @click="link_commit('/userSet')">
+              <i class="material-icons">account_circle</i>
+              ユーザー登録ページへ移動
+              <i class="material-icons arr1 ">double_arrow</i>
+              <i class="material-icons arr2 ">double_arrow</i>
+              <i class="material-icons arr3 ">double_arrow</i>
+            </div>
+          </div>
+          <div v-else>
+            <p>{{ displayName }}さん</p>
+            <div class="user-page" @click="link_commit('/mypage')">
+              <i class="material-icons">account_circle</i> ユーザーページへ移動
+              <i class="material-icons arr1 ">double_arrow</i>
+              <i class="material-icons arr2 ">double_arrow</i>
+              <i class="material-icons arr3 ">double_arrow</i>
+            </div>
+          </div>
+          <div class="user-update">
+            <div class="update-btn">
+              <button @click="link_commit('userSet')">
+                User Prof Update
+              </button>
+            </div>
+            <div class="update-btn">
+              <button @click="link_commit('userMail')">
+                Email Update
+              </button>
+            </div>
+            <div class="update-btn">
+              <button @click="link_commit('userPass')">
+                Pass Update
+              </button>
+            </div>
+            <div class="update-btn">
+              <button @click="link_commit('userDel')">
+                User Delete
+              </button>
+            </div>
+          </div>
+
           <div class="add-btn">
-            <button @click="logout">
+            <button @click="logout()">
               ログアウト
             </button>
           </div>
-          <!-- <a href="/works">CRTU</a> -->
         </div>
+
         <div v-else>
           <div class="login-form">
             <form novalidate @submit.prevent="loginCheck">
@@ -69,7 +112,7 @@
                   :style="{ background: error.passwordBg }"
                 />
               </p>
-              <p v-if="register">
+              <!-- <p v-if="register">
                 <input
                   v-model="displayName"
                   type="text"
@@ -77,7 +120,7 @@
                   required
                   :style="{ background: error.displayNameBg }"
                 />
-              </p>
+              </p> -->
 
               <p>
                 <input id="checkbox" v-model="register" type="checkbox" />
@@ -100,19 +143,19 @@
               </div>
             </form>
           </div>
-          <div class="auth-guid">
+          <!-- <div class="auth-guid">
             <h5>Demoでログインしてみる。</h5>
             <p>デモユーザーでログインする場合は、以下を入力してください。</p>
             <p>メール：demo@gmail.com</p>
             <p>パスワード：demo1111</p>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import { mapActions, mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { ADD_REGISTORY, GET_REGISTORY } from '~/store/actionTypes'
 import firebase from '@/plugins/firebase'
 export default {
@@ -144,45 +187,40 @@ export default {
     ...mapGetters(['isAuthenticated'])
   },
   mounted() {
+    alert('loginMail mount+++++ ')
     this.$store.commit('clearAuthError')
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        // console.log('uid: ' + user.uid)
-        // console.log('email: ' + user.email)
-        // console.log('displayName: ' + user.displayName)
+        this.email = user.email
+        this.displayName = user.displayName
         const loginUser = {
           uid: user.uid,
           email: user.email,
-          displayName: ''
+          displayName: user.displayName
         }
         this.$store.commit('setUser', loginUser)
-        // this.setUser(loginUser)
         this.$store.dispatch(GET_REGISTORY, loginUser)
 
-        console.log('not setTimeout: ' + this.user) // ここだと取得できない
-        setTimeout(() => {
-          console.log('setTimeout: ' + this.user.email) // ここだと取得できる
-          // なにかしらの処理
-        })
+        // setTimeout(() => {
+        //   console.log('setTimeout: ' + this.user.email) // ここだと取得できる
+        //   // なにかしらの処理
+        // })
+      } else {
+        alert('loginMail mount+++++　onAuthStateChanged　not user ')
+        this.email = null
+        this.displayName = null
+        this.$store.commit('setUser', null)
       }
     })
   },
   methods: {
-    ...mapActions(['setUser']),
+    // ...mapActions(['setUser']),
     loginCheck(e) {
       this.$store.commit('clearAuthError')
       this.error.emailBg = '#e3f2fd'
       this.error.passwordBg = '#e3f2fd'
       this.error.displayNameBg = '#e3f2fd'
-      // alert('loginCheck')
-      // this.$store.commit('clearAuthError')
 
-      // this.$store.commit('setAuthError', 'passowrd required.')
-      // this.$store.commit('setAuthError', 'Email required.')
-
-      // alert(this.isAuthError)
-
-      // this.errors = []
       if (!this.password) {
         this.$store.commit('setAuthError', 'パスワードは必須です。')
         this.error.passwordBg = '#f8bbd0'
@@ -201,21 +239,15 @@ export default {
       //     alert('Please enter an email address.');
       //     return;
       //   }
-      if (this.register) {
-        alert('reg')
-        if (!this.displayName) {
-          alert('reg error')
-          this.$store.commit('setAuthError', 'ユーザー名は必須です。')
-          this.error.displayNameBg = '#f8bbd0'
-        } else if (this.displayName.length > 31) {
-          this.$store.commit('setAuthError', 'ユーザー名は３０文字以下です。')
-          this.error.displayNameBg = '#f8bbd0'
-        }
-      }
-      // console.log('error' + this.errors)
-      // if (this.errors.length) this.login()
-      // this.login()
-
+      // if (this.register) {
+      //   if (!this.displayName) {
+      //     this.$store.commit('setAuthError', 'ユーザー名は必須です。')
+      //     this.error.displayNameBg = '#f8bbd0'
+      //   } else if (this.displayName.length > 31) {
+      //     this.$store.commit('setAuthError', 'ユーザー名は３０文字以下です。')
+      //     this.error.displayNameBg = '#f8bbd0'
+      //   }
+      // }
       if (this.authErrors.length) {
         // alert('error')
       } else {
@@ -225,16 +257,6 @@ export default {
       e.preventDefault()
     },
     login() {
-      console.log('login')
-      // if (!this.formIsValidSignin) {
-      //   return
-      // }
-      // if (!this.formIsValidLogin) {
-      //   return
-      // }
-      // if (!this.image) {
-      //   return
-      // }
       this.isWaiting = true
       if (this.register) {
         console.log('signin')
@@ -244,29 +266,35 @@ export default {
           .then((res) => {
             console.log('createUserWithEmailAndPassword')
             const user = firebase.auth().currentUser
-            console.log('uid: ' + user.uid)
-            console.log('email: ' + user.email)
-            console.log('displayName: ' + this.displayName)
+            return user
+          })
+          .then((user) => {
+            firebase.auth().languageCode = 'jp'
+            const actionCodeSettings = {
+              url: 'http://' + window.location.host + '/userSet',
+              handleCodeInApp: false
+            }
+            user.sendEmailVerification(actionCodeSettings)
             return user
           })
           .then((user) => {
             console.log('firebase auth add user')
-            console.log('uid: ' + user.uid)
-            console.log('email: ' + user.email)
-            console.log('displayName: ' + this.displayName)
             this.$store.dispatch(ADD_REGISTORY, {
               uid: user.uid,
               email: user.email,
-              displayName: this.displayName
+              displayName: 'New User',
+              registration: false
             })
           })
           .then((user) => {
-            const lp = '/about'
-            this.link_commit(lp)
             this.isWaiting = false
           })
+          // .then((user) => {
+          //   const lp = '/mypage'
+          //   this.link_commit(lp)
+          // })
+
           .catch((error) => {
-            // alert('signin error' + error)
             console.log('signin error' + error)
             this.isWaiting = false
             this.$store.commit('setAuthError', error)
@@ -277,8 +305,7 @@ export default {
           .auth()
           .signInWithEmailAndPassword(this.email, this.password)
           .then((user) => {
-            const lp = '/about'
-            this.link_commit(lp)
+            // this.link_commit('/mypage')
             this.isWaiting = false
           })
           .catch((error) => {
@@ -297,31 +324,34 @@ export default {
       return re.test(email)
     },
     logout() {
-      console.log('logout')
+      alert('logout button push')
       firebase
         .auth()
         .signOut()
         .then(() => {
+          this.email = null
+          this.displayName = null
+          this.password = null
           this.$store.commit('setUser', null)
-          // this.setUser(null)
+          console.log('logout firebase')
         })
         .catch((error) => {
-          // alert('logout error' + error)
+          alert('logout error: ' + error)
         })
     },
+
     link_commit(linkPath) {
+       alert('link_commit path--->' + linkPath)
       this.active = true
       this.$store.commit('pagePathSet', linkPath)
       setTimeout(() => {
-        if (linkPath === '/about') {
-          location.href = linkPath // reload
-        } else {
+        // if (linkPath === '/mypage') {
+        //   location.href = linkPath // reload
+        // } else {
           this.$router.push({ path: linkPath }) // non-leload
-        }
+        // }
       }, 500)
-      // setTimeout(() => {
-      //   this.$router.push({ path: linkPath })
-      // }, 500)
+     
     }
   }
 }
@@ -329,6 +359,7 @@ export default {
 <style scoped lang="scss">
 $offset: 187;
 $duration: 1.4s;
+
 .content {
   position: relative;
   width: 100%;
@@ -358,6 +389,78 @@ margin-bottom: 2rem;
     color: #fff;
      margin-top: 1em;
      outline: 0;
+     opacity: 1;
+     &:hover{
+    opacity: .7;
+  }
+}
+.update-btn button{
+    border: none;
+    background-color: gray;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    border-radius: 10px;
+    padding: 0 2rem;
+    color: #fff;
+     margin-top: 1em;
+     outline: 0;
+     opacity: 1;
+     &:hover{
+    opacity: .7;
+  }
+}
+.user-page{
+  // border:1px solid #000;
+  // border-radius: 6px;
+  color: $footer-color-color;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  .arr1{
+    opacity:0;
+    transition-duration:.5s;
+    transition-property:opacity;
+  }
+  .arr2{
+    opacity:0;
+    transition-duration:.7s;
+    transition-property:opacity;
+  }
+  .arr3{
+    opacity:0;
+    transition-duration:.9s;
+    transition-property:opacity;
+  }
+  &:hover{
+    .arr1, .arr2, .arr3{
+      opacity:1;
+    }
+  }
+  i {
+    width: 2rem;
+    height: 2rem;
+    display: inline-block;
+    font-size: 2rem;
+    line-height: 2rem;
+    color: $footer-color-color;
+    vertical-align: middle;
+  }
+  // .arr1{
+    
+  // }
+  // .arr2{
+  //   opacity:0;
+  //   transition-duration:.7s;
+  //   transition-property:opacity;
+  // }
+  // .arr3{
+  //   opacity:0;
+  //   transition-duration:.9s;
+  //   transition-property:opacity;
+  // }
+  // .arr{
+  //   &:hover{
+  //     opacity:1;
+  //   }
+  // }
 }
 .login-form{
   width: 100%;
@@ -395,6 +498,8 @@ margin-bottom: 2rem;
     line-height: 1rem;
   }
 }
+
+
 
 
 .spinner {
