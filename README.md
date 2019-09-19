@@ -1,42 +1,52 @@
+# nuxt-univ-gae-todo4-firebase
 
-# nuxt-univ-gae-todo2-firebase 
-clone 
-github repository: nuxt-univ-gae-todo2 
- 
+clone
+github repository: nuxt-univ-gae-todo4
+
 host  
-gcp project: nuxt-univ-create-gae-todo2-firebase  
-  
+gcp project: nuxt-univ-create-gae-todo4-firebase
+
 ### アプリケーションの概要
- Todosアプリケーション
- Vue.jsのフレームワークNuxt.js
- firebaseを使用する
- Google認証する(email password)
- firebase databaseを使用
- firbase strageを使用
- インスタグラムの埋め込みコードを使用
+
+Todos アプリケーション
+Vue.js のフレームワーク Nuxt.js
+firebase を使用する
+Google 認証する(email password)
+firebase database を使用
+firbase strage を使用
+インスタグラムの埋め込みコードを使用
 
 ```
 $ npx create-nuxt-app <project-name>
- 
-create-nuxt-app v2.8.0 
-Generating Nuxt.js project in  D:\develop-github\nuxt\create-nuxt-univ\nuxt-univ-create-gae-hosting\nuxt-univ-gae-app 
-? Project name nuxt-univ-gae-app 
-? Project description My spectacular Nuxt.js project 
-? Author name hiramatsu 
-? Choose the package manager Npm 
-? Choose UI framework None 
-? Choose custom server framework None (Recommended) 
-? Choose Nuxt.js modules Axios 
-? Choose linting tools ESLint, Prettier 
-? Choose test framework None 
-? Choose rendering mode Universal (SSR) 
+
+create-nuxt-app v2.8.0
+Generating Nuxt.js project in  D:\develop-github\nuxt\create-nuxt-univ\nuxt-univ-create-gae-hosting\nuxt-univ-gae-app
+? Project name nuxt-univ-gae-app
+? Project description My spectacular Nuxt.js project
+? Author name hiramatsu
+? Choose the package manager Npm
+? Choose UI framework None
+? Choose custom server framework None (Recommended)
+? Choose Nuxt.js modules Axios
+? Choose linting tools ESLint, Prettier
+? Choose test framework None
+? Choose rendering mode Universal (SSR)
 ```
 
 ## Build Setup
 
-``` bash
+```bash
 # install dependencies
 $ npm run install
+
+# create setting .env
+#FIREBASE_API_KEY='xxxxxxxx'
+#FIREBASE_AUTH_DOMAIN='xxxxxx'
+#FIREBASE_DATABASEURL='xxxxx'
+#FIREBASE_PROJECTID='xxxx'
+#FIREBASE_STORAGEBUCKET='xxxxx'
+
+$  New-Item .env
 
 # serve with hot reload at localhost:3000
 $ npm run dev
@@ -52,8 +62,11 @@ $ npm run generate
 For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
 
 # Google Cloud Platform
-## app.yaml設置
+
+## app.yaml 設置
+
 ユニバーサル Nuxt アプリケーションを App Engine にデプロイするために追加する必要があるのは、app.yaml というファイルだけです。ルートプロジェクトディレクトリにその名前の新しいファイルを作成し、次の内容を追加します:
+
 ```
 runtime: nodejs10
 
@@ -78,25 +91,33 @@ env_variables:
   NODE_ENV: 'production'
 
 ```
- 
+
 ## App Engine
- 1. GCPのコンソールから新しいプロジェクトを作成する。
- ```
- プロジェクト名: nuxt-univ-gae-app
- ```
- 2. リージョンの選択する。
- ```
- リージョンを選択してください。: asia-northeast1
- ```
- 3. 使用言語を選択する。
- ```
- node.js
- ```
- 4. Cloud SDK を初期化する。
+
+1.  GCP のコンソールから新しいプロジェクトを作成する。
+
+```
+プロジェクト名: nuxt-univ-gae-app
+```
+
+2.  リージョンの選択する。
+
+```
+リージョンを選択してください。: asia-northeast1
+```
+
+3.  使用言語を選択する。
+
+```
+node.js
+```
+
+4.  Cloud SDK を初期化する。
+
 ```
  $ gcloud init
- 
- 
+
+
 Welcome! This command will take you through the configuration of gcloud.
 
 Settings from your current configuration [default] are:
@@ -178,15 +199,19 @@ Some things to try next:
 * Run `gcloud --help` to see the Cloud Platform services you can interact with. And run `gcloud help COMMAND` to get help on any gcloud command.
 * Run `gcloud topic --help` to learn about advanced features of the SDK like arg files and output formatting
 ```
+
 5. ビルドする。
+
 ```
 $ npm run build
 ```
+
 6. デプロイする。
+
 ```
  $ gcloud app deploy
-  
-   
+
+
 Services to deploy:
 
 descriptor:      [D:\develop-github\nuxt\create-nuxt-univ\nuxt-univ-create-gae-hosting\nuxt-univ-gae-app\app.yaml]
@@ -215,23 +240,31 @@ You can stream logs from the command line by running:
 To view your application in the web browser run:
   $ gcloud app browse
 ```
+
 7. ブラウザで確認する。
+
 ```
 $ gcloud app browse
 ```
+
 8. うまく表示されない場合は、ログを確認する。
+
 ```
 $ gcloud app logs tail -s default
 ```
 
 # nuxt.config.js setting
-> nuxt.config.jsでの導入時の設定
+
+> nuxt.config.js での導入時の設定
+
 # eslint
+
 フォーマットエラー対応
-✖ 7 problems (7 errors, 0 warnings) 
-  7 errors, 0 warnings potentially fixable with the `--fix` option. 
-  
-Solved adding fix option in nuxt.config.jsfile: 
+✖ 7 problems (7 errors, 0 warnings)
+7 errors, 0 warnings potentially fixable with the `--fix` option.
+
+Solved adding fix option in nuxt.config.jsfile:
+
 ```
 extend(config, ctx) {
     if (ctx.dev && ctx.isClient) {
@@ -247,22 +280,30 @@ extend(config, ctx) {
     }
 }
 ```
-ex.https://github.com/nuxt/nuxt.js/issues/1628 
+
+ex.https://github.com/nuxt/nuxt.js/issues/1628
+
 ```
 options: {
 fix: true
        }
 ```
- 
- ***
-# Firebaseの設定
-# dotenv を使って環境変数を設定し、Firebaseのconfigで使う。
-1. dotenvをインストール 
+
+---
+
+# Firebase の設定
+
+# dotenv を使って環境変数を設定し、Firebase の config で使う。
+
+1. dotenv をインストール
+
 ```
 $ npm i @nuxtjs/dotenv
 ```
-2. nuxt.config.jsを編集する 
-`nuxt.config.js`
+
+2. nuxt.config.js を編集する
+   `nuxt.config.js`
+
 ```
 export default {
   modules: [
@@ -277,8 +318,10 @@ export default {
   },
 }
 ```
-3. .envをルートディレクトリに作りキーを設定する。 
-`.env`
+
+3. .env をルートディレクトリに作りキーを設定する。
+   `.env`
+
 ```
 FIREBASE_API_KEY='<key>'
 FIREBASE_AUTH_DOMAIN='oauth3.firebaseapp.com'
@@ -286,15 +329,17 @@ FIREBASE_DATABASEURL='https://oauth3.firebaseio.com'
 FIREBASE_PROJECTID='oauth3'
 FIREBASE_STORAGEBUCKET='oauth3.appspot.com'
 ```
-4. Firebase configにprocess.envを使って設定をする。
-`plugins/firebase.js`
+
+4. Firebase config に process.env を使って設定をする。
+   `plugins/firebase.js`
+
 ```
 import firebase from 'firebase/app'
 import 'firebase/database'
 import 'firebase/firestore'
 import 'firebase/auth'
 import 'firebase/storage'
- 
+
 const config = {
   apiKey: process.env.FIREBASE_API_KEY,
   authDomain: process.env.FIREBASE_AUTH_DOMAIN,
@@ -302,27 +347,30 @@ const config = {
   projectId: process.env.FIREBASE_PROJECTID,
   storageBucket: process.env.FIREBASE_STORAGEBUCKET
 }
- 
+
 if (firebase.apps.length === 0) {
   firebase.initializeApp(config)
 }
- 
+
 export default firebase
 
 ```
-  
 
-## firesbase Vuexfire 
-参考サイト 
-https://qiita.com/h-orito/items/10119bcd202b596b8b6d 
-https://qiita.com/wataruoguchi/items/8fdda8e9754658be06be 
- 
+## firesbase Vuexfire
+
+参考サイト
+https://qiita.com/h-orito/items/10119bcd202b596b8b6d
+https://qiita.com/wataruoguchi/items/8fdda8e9754658be06be
+
 1. Firebase と VuexFire をインストールする。
+
 ```
 $ npm install vue firebase vuexfire@next --save
 ```
-2. nuxt.config.jsを設定しプラグインを使えるようにする。
-`nuxt.config`
+
+2. nuxt.config.js を設定しプラグインを使えるようにする。
+   `nuxt.config`
+
 ```
 export default {
 plugins: [
@@ -330,8 +378,10 @@ plugins: [
   ],
 }
 ```
-3. NuxtのpuluginディレクトリにFirebase.jsを作る。
-`plugins/firebase.js`
+
+3. Nuxt の pulugin ディレクトリに Firebase.js を作る。
+   `plugins/firebase.js`
+
 ```
 import firebase from 'firebase/app'
 import 'firebase/database'
@@ -352,16 +402,19 @@ if (firebase.apps.length === 0) {
 
 export default firebase
 ```
-4. store/actionType.jsに追加削除の関数を設定する。
-`store/actionTypes.js`
+
+4. store/actionType.js に追加削除の関数を設定する。
+   `store/actionTypes.js`
+
 ```
 export const ADD_TODO = 'ADD_TODO'
 export const REMOVE_TODO = 'REMOVE_TODO'
 export const INIT_TODO = 'INIT_TODO'
 ```
 
-5. store/index.jsにvuexfireを使うように編集する。
-`store/index.js`
+5. store/index.js に vuexfire を使うように編集する。
+   `store/index.js`
+
 ```
 import firebase from '@/plugins/firebase'
 import { vuexfireMutations, firebaseAction } from 'vuexfire'
@@ -372,7 +425,7 @@ const itemsRef = db.ref('todos')
 console.log('db: ' + itemsRef)
 
 export const state = () => ({
-  items: [], 
+  items: [],
 })
 
 export const mutations = {
@@ -398,8 +451,10 @@ export const getters = {
 }
 
 ```
-6. pages/indexでFirebaseからデータを表示する。
-`pagese/index.vue`
+
+6. pages/index で Firebase からデータを表示する。
+   `pagese/index.vue`
+
 ```
 <template>
   <div class="container">
@@ -450,12 +505,16 @@ export default {
 </script>
 
 ```
-## firebase strageを使う
+
+## firebase strage を使う
 
 ## auth
+
 https://qiita.com/yusuke-asaoka/items/54dd6c933bb07787cbd1
-1. google認証
-`pages/index.vue`
+
+1. google 認証
+   `pages/index.vue`
+
 ```
 <template>
   <div class="container">
@@ -477,7 +536,7 @@ https://qiita.com/yusuke-asaoka/items/54dd6c933bb07787cbd1
             </button>
           </div>
         </div>
-      </section> 
+      </section>
     </div>
   </div>
 </template>
@@ -519,8 +578,10 @@ export default {
 }
 </script>
 ```
+
 2. パスワード認証
-`pages/index.vue`
+   `pages/index.vue`
+
 ```
 <template>
   <div class="container">
@@ -625,17 +686,19 @@ export default {
 }
 </script>
 ```
-  
-    
 
+# css プロパティ
 
-# cssプロパティ 
-sass を利用したい場合は node-sass および sass-loader パッケージをインストールしてください。 
-1. install 
+sass を利用したい場合は node-sass および sass-loader パッケージをインストールしてください。
+
+1. install
+
 ```
 npm install --save-dev node-sass sass-loader
 ```
-2. nuxt.config　setting 
+
+2. nuxt.config 　 setting
+
 ```
 export default {
   css: [
@@ -644,22 +707,29 @@ export default {
   ]
 }
 ```
-3. component style setting 
-~~~
+
+3. component style setting
+
+```
     <style scoped lang="scss">
     </style>
-~~~
- 
-# SASS変数をvueファイルで使う 
-importの記述なしで使う。
-1. install 
+```
+
+# SASS 変数を vue ファイルで使う
+
+import の記述なしで使う。
+
+1. install
+
 ```
 npm install --save @nuxtjs/style-resources
 ```
+
 `注意`
- --save-dev にするとgoogle app engineへデプロイ時にnot foundでエラーになる。package.jsonのdevDependenciesではエラー 
-  
-2. nuxt.config setting 
+--save-dev にすると google app engine へデプロイ時に not found でエラーになる。package.json の devDependencies ではエラー
+
+2. nuxt.config setting
+
 ```
 modules: [
     '@nuxtjs/style-resources',
@@ -670,7 +740,9 @@ modules: [
     ],
   },
 ```
-3. usage 
+
+3. usage
+
 ```
 <style scoped lang="scss">
 //@import "../../../assets/scss/common/data/thema.scss";
@@ -679,9 +751,13 @@ modules: [
 }
 </style>
 ```
+
 # autoprefixer の設定をカスタマイズする
-Nuxt.js で CSS(Sass) をコンパイルすると、 autoprefixer がベンダープレフィクスを自動で適用してくれます。 
-1. nuxt.config setting 
+
+Nuxt.js で CSS(Sass) をコンパイルすると、 autoprefixer がベンダープレフィクスを自動で適用してくれます。
+
+1. nuxt.config setting
+
 ```
 build: {
   postcss: [
@@ -693,35 +769,45 @@ build: {
 }
 
 ```
-2. autoprefixer デフォルト設定 
+
+2. autoprefixer デフォルト設定
+
 ```
 1%, last 2 versions, Firefox ESR
 ```
-1%:1%以上のシェアがあるブラウザ 
-last 2 versions:最後の2バージョンのブラウザ 
-Firefox ESR:最新のFirefox ESR版  
+
+1%:1%以上のシェアがあるブラウザ
+last 2 versions:最後の 2 バージョンのブラウザ
+Firefox ESR:最新の Firefox ESR 版  
 3.対応ブラウザの確認
-https://browserl.ist/?q=%3E+1%25%2C+last+2+versions%2C+Firefox+ESR 
-  
-参考ページ:https://parashuto.com/rriver/tools/using-custom-data-for-autoprefixer 
+https://browserl.ist/?q=%3E+1%25%2C+last+2+versions%2C+Firefox+ESR
+
+参考ページ:https://parashuto.com/rriver/tools/using-custom-data-for-autoprefixer
 
 # Google Analytics
-1. install 
+
+1. install
+
 ```
 npm install --save @nuxtjs/google-analytics
 ```
-2.アナリティクスのトラッキング IDを設定する 
+
+2.アナリティクスのトラッキング ID を設定する
+
 ```
 modules: [
   ['@nuxtjs/google-analytics', { id: 'UA-xxxxx-x' }],
 ],
 ```
+
 # Google Serch Colsole
-1. Google Serch Colsoleからメタタグを取得
+
+1. Google Serch Colsole からメタタグを取得
 2. nuxt.config setting
+
 ```
 head: {
-   
+
     meta: [
       { name: "google-site-verification",
         content: "TaWpD9i4R5GSPzJjnTc8--t-g8bbDKbfxQX-e1kgio0" },
@@ -729,13 +815,18 @@ head: {
   },
 ```
 
-# Nuxt.jsで静的ファイル生成時にサイトマップも自動生成する方法
-npm run generateで静的ウェブサイトを生成 
-1. install 
+# Nuxt.js で静的ファイル生成時にサイトマップも自動生成する方法
+
+npm run generate で静的ウェブサイトを生成
+
+1. install
+
 ```
 npm install --save @nuxtjs/sitemap
 ```
-2. nuxt.config.js setting 
+
+2. nuxt.config.js setting
+
 ```
 modules: [
     '@nuxtjs/sitemap',
@@ -760,52 +851,58 @@ modules: [
     ]
   },
 ```
+
 各パラメーターについて
 path
 生成されるサイトマップファイルの名前。
-generateオプションでdirを変更していなければ、distフォルダの中に生成される。
+generate オプションで dir を変更していなければ、dist フォルダの中に生成される。
 
 hostname
 サイト名。
 
 generate
-nuxt generate時に静的なサイトマップファイルを生成するかの設定。
-ここをtrueにしておかないとサイトマップファイルが生成されないので注意。
+nuxt generate 時に静的なサイトマップファイルを生成するかの設定。
+ここを true にしておかないとサイトマップファイルが生成されないので注意。
 
 exclude
-サイトマップに含めたくないRULを指定できる。
+サイトマップに含めたくない RUL を指定できる。
 管理者ページなどがある場合に使用する。
 
 routes
-サイトマップに含めるURLを追加する。
-基本的にはgenerateオプションのroutesと同じように記述すればOK
-上のコードはAPIから記事の一覧を取得して、記事毎のURLをroutesに追加する例。
+サイトマップに含める URL を追加する。
+基本的には generate オプションの routes と同じように記述すれば OK
+上のコードは API から記事の一覧を取得して、記事毎の URL を routes に追加する例。
 
+---
 
-
-***
 # markdown
-1. markdown-itをインストール 
+
+1. markdown-it をインストール
+
 ```
 $ npm i @nuxtjs/markdownit
 ```
-2. nuxt.configに設定を追記 
+
+2. nuxt.config に設定を追記
+
 ```
 markdownit: {
     preset: 'default'
-    injected: true, 
-    breaks: true, 
-    html: true, 
+    injected: true,
+    breaks: true,
+    html: true,
     linkify: true,
-    typography: true, 
+    typography: true,
     xhtmlOut: true,
     langPrefix: 'language-',
     quotes: '“”‘’',
     highlight: function (/*str, lang*/) { return ''; },
   },
 ```
+
 3. $md を使ってパースする場合
-オプションのinjected:trueに設定すると、$mdという変数が使えます。
+オプションのinjected:trueに設定すると、$md という変数が使えます。
+
 ```
 <template>
   <div v-html="$md.render(model)"></div>
@@ -821,7 +918,9 @@ export default {
 }
 </script>
 ```
-4. .mdファイルを使ってパースする場合
+
+4. .md ファイルを使ってパースする場合
+
 ```
 <template>
   <div v-html="sample"></div>
@@ -839,21 +938,30 @@ export default {
   }
 </script>
 ```
-ex:https://techblog.scouter.co.jp/entry/2019/01/24/190000 
+
+ex:https://techblog.scouter.co.jp/entry/2019/01/24/190000
 
 # eslintrc.js
-## console.logの使用
+
+## console.log の使用
+
 `eslintrc.js`
+
 ```
     rules: {
         'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
         'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
     }
 ```
+
 # layouts
-> layouts ディレクトリ関連 
+
+> layouts ディレクトリ関連
+
 ## カスタムレイアウト
-1. layouts ディレクトリに新規レイアウト(layouts/topPage.vue)を作成を作成する。 
+
+1. layouts ディレクトリに新規レイアウト(layouts/topPage.vue)を作成を作成する。
+
 ```
     <template>
     <div class="topPage">
@@ -874,7 +982,9 @@ ex:https://techblog.scouter.co.jp/entry/2019/01/24/190000
     </style>
 
 ```
+
 2. ページ (pages/works/index.vue ) で、カスタムレイアウトを使うことを伝えます
+
 ```
 <script>
 export default {
@@ -884,20 +994,28 @@ export default {
 
 ```
 
-***
-# components
-> componentsディレクトリ関連 
+---
 
-***
+# components
+
+> components ディレクトリ関連
+
+---
+
 # page
-> pageディレクトリ関連 
+
+> page ディレクトリ関連
+
 ## transition プロパティ
-1. 特定のページ遷移のトランジション 
+
+1. 特定のページ遷移のトランジション
+
 ```
 export default {
   transition: 'content'
 }
 ```
+
 ```
 //コンテンツ全体をスライド
 .content-slide-enter-active, .content-slide-leave-active {
@@ -907,7 +1025,9 @@ export default {
     transform: translateX(100vw) ;
 }
 ```
-2. すべてのページ遷移のトランジション 
+
+2. すべてのページ遷移のトランジション
+
 ```
 //アプリケーションのすべてのページでフェードさせるトランジション
  .page-enter-active, .page-leave-active {
@@ -918,8 +1038,11 @@ export default {
  }
 
 ```
+
 ## head メソッド
-1. 個別のページへのHTMLのheadタグを設定する 
+
+1. 個別のページへの HTML の head タグを設定する
+
 ```
 <script>
 export default {
@@ -942,11 +1065,17 @@ export default {
 }
 </script>
 ```
-***
+
+---
+
 # store
-> storeディレクトリ関連  
+
+> store ディレクトリ関連
+
 ## モジュールモード
+
 `store/index.js`
+
 ```
 export const state = () => ({
   page: 'home'
@@ -959,7 +1088,9 @@ export const mutations = {
   },
 }
 ```
+
 `pages/works/index.vue`
+
 ```
 <template>
   <div class="container">
@@ -996,145 +1127,168 @@ export const mutations = {
 </script>
 ```
 
-# GitHub 
-## GitHub リポジトリの作成 
-1. GitHub ログイン後のトップページから、Repositories の New ボタンをクリックします。 
-2. Create a new repository の画面に遷移するので、リポジトリ名、ライセンス等を入力。Initialize this repository with a READMEはチェックせず画面下のほうにある Create repository ボタンをクリックします。 
- 
-## プロジェクトを GitHub に Push する 
-1. git add -A 
-2. git commit -m "first commit" 
-3. git remote add origin https://github.com/hiramatsuYoshiaki/プロジェクト名 
-4. git push -u origin master 
+# GitHub
 
-## 現在のブランチから派生ブランチを作成してGitHubへPushする。  
-1. git branch new-branch 
-2. git checkout new-branch 
-3. git branch 
-   * new-branch 
-     master 
-4. git add -A 
-5. git commit -m 'new branch commit' 
-6. git push --set-upstream origin new-branch 
-   (もしくは、　git push -u origin new-branch) 
+## GitHub リポジトリの作成
 
-## GitHubリポジトリをcloneしてローカルプロジェクト作る 
-1. リモートリポジトリをcloneする。 
+1. GitHub ログイン後のトップページから、Repositories の New ボタンをクリックします。
+2. Create a new repository の画面に遷移するので、リポジトリ名、ライセンス等を入力。Initialize this repository with a README はチェックせず画面下のほうにある Create repository ボタンをクリックします。
+
+## プロジェクトを GitHub に Push する
+
+1. git add -A
+2. git commit -m "first commit"
+3. git remote add origin https://github.com/hiramatsuYoshiaki/プロジェクト名
+4. git push -u origin master
+
+## 現在のブランチから派生ブランチを作成して GitHub へ Push する。
+
+1. git branch new-branch
+2. git checkout new-branch
+3. git branch
+   - new-branch
+     master
+4. git add -A
+5. git commit -m 'new branch commit'
+6. git push --set-upstream origin new-branch
+   (もしくは、　 git push -u origin new-branch)
+
+## GitHub リポジトリを clone してローカルプロジェクト作る
+
+1. リモートリポジトリを clone する。
+
 ```
-    git clone https://github.com/hiramatsuYoshiaki/nuxt-univ-create-gae-hosting.git  
+    git clone https://github.com/hiramatsuYoshiaki/nuxt-univ-create-gae-hosting.git
 ```
-2. インストールする  
+
+2. インストールする
+
 ```
-    npm install  
+    npm install
 ```
-3. サーバーを立ち上げて確認    
+
+3. サーバーを立ち上げて確認
+
 ```
    npm run dev
 ```
-4. ローカルサーバーへアクセス 
+
+4. ローカルサーバーへアクセス
+
 ```
-   http://localhost:3000/で確認する。 
+   http://localhost:3000/で確認する。
 ```
 
-## ローカルプロジェクトをGitHubへpushする。 
+## ローカルプロジェクトを GitHub へ push する。
+
 ```
 1. 現在のブランチを確認する。
-   git branch  
-   * master  
+   git branch
+   * master
 ```
-2. masterから新しいbranchを作る  
+
+2. master から新しい branch を作る
+
 ```
-　　git branch new-branch   
+　　git branch new-branch
 ```
-3. 新しいbranchに移動し開発を行う。 
-``` 
-   git checkout new-branch  
-   ```
-4. cloneしたリポジトリから別のリモートリポジトリのURLを変更する場合  
+
+3. 新しい branch に移動し開発を行う。
+
+```
+   git checkout new-branch
+```
+
+4. clone したリポジトリから別のリモートリポジトリの URL を変更する場合
+
 ```
     git remote -v
-    origin  https://github.com/hiramatsuYoshiaki/vue-cli3-unit.git (fetch)  
-    origin  https://github.com/hiramatsuYoshiaki/vue-cli3-unit.git (push)  
-    git remote rm originで現在のリモートリポジトリを削除する  
-    git remote add originで新しいリモートリポジトリを追加する   
+    origin  https://github.com/hiramatsuYoshiaki/vue-cli3-unit.git (fetch)
+    origin  https://github.com/hiramatsuYoshiaki/vue-cli3-unit.git (push)
+    git remote rm originで現在のリモートリポジトリを削除する
+    git remote add originで新しいリモートリポジトリを追加する
     git remote add origin https://github.com/hiramatsuYoshiaki/vue-cli3-unit-alprime.git
 ```
-5. コミットしてGitHubにpushする  
-```
-   git add　-A  
-   git commit -m "コメント"  
-   git push -u origin new-branch  
-```  
 
-## localでいままで作業していたbranchを削除する 
-  1.これで削除できます。これはしなくてもいいですが、開発が進んでいくとbranchが増えてbranch一覧がごちゃごちゃしてくるのでやったほうがいいです。  
-  ```
-  git branch -d new-branch  
-  ```
+5. コミットして GitHub に push する
 
-## 他の人の開発分を取り込む 
-1. masterに他の人が追加した分を自分のところに取り込みます。 
 ```
-  git pull origin master  
+   git add　-A
+   git commit -m "コメント"
+   git push -u origin new-branch
 ```
-   
-# vuex-persistedstateを使う 
+
+## local でいままで作業していた branch を削除する
+
+1.これで削除できます。これはしなくてもいいですが、開発が進んでいくと branch が増えて branch 一覧がごちゃごちゃしてくるのでやったほうがいいです。
+
+```
+git branch -d new-branch
+```
+
+## 他の人の開発分を取り込む
+
+1. master に他の人が追加した分を自分のところに取り込みます。
+
+```
+  git pull origin master
+```
+
+# vuex-persistedstate を使う
+
 1. インストール
-`
-$ npm install -S vuex-persistedstate
-`
- 
-2. plugins/persistedstate.jsを作る 
-`persistedstate.js`
-`
-import createPersistedState from "vuex-persistedstate";
-    
+   `$ npm install -S vuex-persistedstate`
+
+2. plugins/persistedstate.js を作る
+   `persistedstate.js`
+   `
+   import createPersistedState from "vuex-persistedstate";
+
 export default ({store, isHMR}) => {
-  // In case of HMR, mutation occurs before nuxReady, so previously saved state
-  // gets replaced with original state received from server. So, we've to skip HMR.
-  // Also nuxtReady event fires for HMR as well, which results multiple registration of
-  // vuex-persistedstate plugin
-  if (isHMR) return;
-    
-  if (process.client) {
-    window.onNuxtReady((nuxt) => {
-      createPersistedState()(store); // vuex plugins can be connected to store, even after creation
-    });
-  }
+// In case of HMR, mutation occurs before nuxReady, so previously saved state
+// gets replaced with original state received from server. So, we've to skip HMR.
+// Also nuxtReady event fires for HMR as well, which results multiple registration of
+// vuex-persistedstate plugin
+if (isHMR) return;
+  
+ if (process.client) {
+window.onNuxtReady((nuxt) => {
+createPersistedState()(store); // vuex plugins can be connected to store, even after creation
+});
+}
 };
- 
-`
-3. nuxt.config.jsを編集
-`nuxt.config.js`
-`
-plugins: [
-    { src: "~plugins/persistedstate.js", ssr: false }
-  ]
-`
- 
-### localStorageでstoreを永続化する 
- nuxt.jsで再読込しても入力中の内容を保持できる。
-### localstorageに保存が可能になるとどうなる 
-1. 再読込しても、storeの状態を保つことができます。 
-2. 入力中のフォームの内容や、画面の状態を復元することができます。 
-3. store中のstateはlocalstorageを消し去らないと新しい値とかを追加しても状態が変わらなくなってしまいます。 
-### Nuxtの利点であるSSRもできるという点とは相性が悪い 
-SSR実行時のnodeにはlocalstorageがありませんから、window.localstorageはさわれません。
-そのため、今回のプラグインも{... , ssr; false}として、SSR時は起動しないようにする必要があります。
 
-# Vueにコンポーネントの再レンダリングを強制する正しい方法 
-https://michaelnthiessen.com/force-re-render/ 
+`
 
-# @nuxtjs/date-fns 
-データフォーマト 
-https://github.com/nuxt-community/date-fns-module 
+3. nuxt.config.js を編集
+   `nuxt.config.js`
+   `plugins: [ { src: "~plugins/persistedstate.js", ssr: false } ]`
+
+### localStorage で store を永続化する
+
+nuxt.js で再読込しても入力中の内容を保持できる。
+
+### localstorage に保存が可能になるとどうなる
+
+1. 再読込しても、store の状態を保つことができます。
+2. 入力中のフォームの内容や、画面の状態を復元することができます。
+3. store 中の state は localstorage を消し去らないと新しい値とかを追加しても状態が変わらなくなってしまいます。
+
+### Nuxt の利点である SSR もできるという点とは相性が悪い
+
+SSR 実行時の node には localstorage がありませんから、window.localstorage はさわれません。
+そのため、今回のプラグインも{... , ssr; false}として、SSR 時は起動しないようにする必要があります。
+
+# Vue にコンポーネントの再レンダリングを強制する正しい方法
+
+https://michaelnthiessen.com/force-re-render/
+
+# @nuxtjs/date-fns
+
+データフォーマト
+https://github.com/nuxt-community/date-fns-module
 
 # Instagram 埋め込みコードの構造を解析してみた
- インスタグラムの埋め込みコードを使った、ウェブサイトへの表示
- https://qiita.com/h5y1m141@github/items/403dee38e88570185949
- 
 
-
-
-
-
+インスタグラムの埋め込みコードを使った、ウェブサイトへの表示
+https://qiita.com/h5y1m141@github/items/403dee38e88570185949

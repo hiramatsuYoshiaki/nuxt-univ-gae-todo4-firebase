@@ -27,7 +27,7 @@ export const state = () => ({
   doneInsta: false,
   // userProf: {
   //   name: '',
-  //   email: '',   
+  //   email: '',
   //   photoUrl: '',
   //   emailVerified: '',
   //   uid: '',
